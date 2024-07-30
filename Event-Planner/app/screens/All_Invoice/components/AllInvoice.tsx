@@ -12,6 +12,20 @@ import Feather from "react-native-vector-icons/Feather";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import * as Sharing from "expo-sharing";
 import * as Print from "expo-print";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+
+// Define types for navigation
+type RootStackParamList = {
+  AllInvoices: undefined;
+  CreateInvoice: undefined;
+  // Add other screens here if you have them
+};
+
+type NavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  "AllInvoices"
+>;
 
 type Invoice = {
   id: string;
@@ -97,10 +111,10 @@ const InvoiceItem: React.FC<{ item: Invoice }> = ({ item }) => {
         </View>
       </View>
       <View style={styles.icons}>
-        <TouchableOpacity onPress={handlePrint}>
+        <TouchableOpacity onPress={handlePrint} style={styles.iconContainer}>
           <Feather name="printer" size={24} style={styles.icon} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={handleShare}>
+        <TouchableOpacity onPress={handleShare} style={styles.iconContainer}>
           <MaterialCommunityIcons name="share" size={24} style={styles.icon} />
         </TouchableOpacity>
       </View>
@@ -177,6 +191,7 @@ const Header: React.FC<{ onSearch: (query: string) => void }> = ({
 
 const AllInvoices: React.FC = () => {
   const [filteredInvoices, setFilteredInvoices] = useState(invoices);
+  const navigation = useNavigation<NavigationProp>();
 
   const handleSearch = (query: string) => {
     const filtered = invoices.filter((invoice) =>
@@ -188,8 +203,10 @@ const AllInvoices: React.FC = () => {
   return (
     <View style={styles.container}>
       <Header onSearch={handleSearch} />
-      <Text style={styles.totalSales}>Total Sales</Text>
-      <Text style={styles.totalAmount}>₹82,500</Text>
+      <View style={styles.totalSalesContainer}>
+        <Text style={styles.totalSales}>Total Sales</Text>
+        <Text style={styles.totalAmount}>₹82,500</Text>
+      </View>
       <View style={styles.invoicesHeader}>
         <Text style={styles.invoicesListText}>Invoices List</Text>
         <TouchableOpacity style={styles.sortByContainer}>
@@ -202,7 +219,10 @@ const AllInvoices: React.FC = () => {
         renderItem={({ item }) => <InvoiceItem item={item} />}
         keyExtractor={(item) => item.id}
       />
-      <TouchableOpacity style={styles.createInvoiceButton}>
+      <TouchableOpacity
+        style={styles.createInvoiceButton}
+        onPress={() => navigation.navigate("CreateInvoice")}
+      >
         <Text style={styles.createInvoiceButtonText}>+ Create Invoice</Text>
       </TouchableOpacity>
     </View>
@@ -228,7 +248,7 @@ const styles = StyleSheet.create({
     fontFamily: "Arial",
     color: "#051650",
     flex: 1,
-    textAlign: "left", // Align to the left
+    textAlign: "left",
   },
   searchInput: {
     flex: 1,
@@ -243,27 +263,31 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
+  totalSalesContainer: {
+    alignItems: "center", // Center the content horizontally
+    marginVertical: 16, // Adjust spacing as needed
+  },
   totalSales: {
     fontSize: 24,
     fontWeight: "bold",
-    textAlign: "center",
-    marginVertical: 16,
+    color: "#000",
   },
   totalAmount: {
     fontSize: 32,
     fontWeight: "bold",
-    textAlign: "center",
-    marginBottom: 16,
+    color: "#051650",
+    marginTop: 4, // Adjust spacing as needed
   },
   invoicesHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 16,
+    marginVertical: 16,
   },
   invoicesListText: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "bold",
+    color: "#051650",
   },
   sortByContainer: {
     flexDirection: "row",
@@ -271,86 +295,98 @@ const styles = StyleSheet.create({
   },
   sortByText: {
     fontSize: 16,
+    color: "#000",
     marginRight: 8,
     fontWeight: "bold",
   },
   invoiceItem: {
     backgroundColor: "#fff",
-    padding: 16,
     borderRadius: 8,
-    marginBottom: 16,
-    borderWidth: 1,
-    borderColor: "#ddd",
+    padding: 16,
+    marginVertical: 8,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
     elevation: 1,
   },
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 8,
+  },
   statusContainer: {
-    backgroundColor: "#d4edda",
-    paddingVertical: 4, // Adjust padding for smaller height
-    paddingHorizontal: 8, // Adjust padding for smaller width
+    backgroundColor: "#e0f7fa",
     borderRadius: 4,
-    marginBottom: 8, // Add margin to separate from name
-    alignSelf: "flex-start",
+    padding: 8,
   },
   status: {
     fontSize: 14,
     fontWeight: "bold",
-    color: "#155724",
+    color: "#00796b",
   },
   nameAmountContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 8,
+    alignItems: "center",
+    flex: 1,
   },
   name: {
-    fontSize: 18,
+    fontSize: 16,
+    color: "#000",
     fontWeight: "bold",
   },
   amount: {
-    fontSize: 18,
+    fontSize: 16,
+    color: "#03AC13",
     fontWeight: "bold",
-    color: "#051650",
   },
   dateBalanceContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    width: "100%",
+    flex: 1,
   },
   date: {
     fontSize: 14,
-    color: "#6c757d",
+    color: "#000",
   },
   balanceInput: {
-    fontSize: 14,
-    color: "#6c757d",
     backgroundColor: "#f5f5f5",
-    paddingVertical: 2,
-    paddingHorizontal: 6,
     borderRadius: 4,
+    paddingHorizontal: 8,
+    fontSize: 14,
+    color: "#051650",
+    borderColor: "#ddd",
+    borderWidth: 1,
+    width: 120,
+    textAlign: "right",
   },
   icons: {
     flexDirection: "row",
     justifyContent: "center",
-    marginTop: 16,
+    marginTop: 8,
+  },
+  iconContainer: {
+    marginHorizontal: 16,
   },
   icon: {
-    color: "#000",
-    marginHorizontal: 12,
+    color: "#051650",
   },
   createInvoiceButton: {
+    position: "absolute",
+    bottom: 16,
+    right: 16,
     backgroundColor: "#051650",
     paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 4,
-    alignItems: "center",
-    marginTop: 16,
+    paddingHorizontal: 580, // Adjusted for a better button size
+    borderRadius: 8,
   },
   createInvoiceButtonText: {
     color: "#fff",
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
   },
-  row: {},
 });
 
 export default AllInvoices;

@@ -1,23 +1,29 @@
+import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import AllInvoices from "../../app/screens/All_Invoice/components/AllInvoice"; // Adjust the import path if needed
+import CreateInvoice from "../../app/screens/All_Invoice/components/CreateInvoice"; // Adjust the import path if needed
 
-import SignupScreen from '../../app/screens/SignUp/components/SignupScreen';
-import React from 'react';
-import { SafeAreaView, StatusBar, StyleSheet } from 'react-native';
+const Stack = createNativeStackNavigator();
 
-
-const App = () => {
+function App() {
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" />
-      <SignupScreen/>
-    
-    </SafeAreaView>
+    <NavigationContainer independent={true}>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="AllInvoices"
+          component={AllInvoices}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="CreateInvoice"
+          component={CreateInvoice}
+          options={{ headerShown: false }}
+        />
+        {/* Add other screens here */}
+      </Stack.Navigator>
+    </NavigationContainer>
   );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
+}
 
 export default App;
