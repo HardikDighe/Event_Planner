@@ -1,5 +1,5 @@
 
-import SignupScreen from '../../app/screens/SignUp/components/SignupScreen';
+import SignupScreen from '../../../../app/screens/SignUp/components/SignupScreen';
 import React from 'react';
 import { SafeAreaView, StatusBar, StyleSheet } from 'react-native';
 
