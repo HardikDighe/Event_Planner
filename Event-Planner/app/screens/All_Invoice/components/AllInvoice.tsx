@@ -375,17 +375,19 @@ const styles = StyleSheet.create({
   },
   createInvoiceButton: {
     position: "absolute",
-    bottom: 16,
-    right: 16,
+    bottom: 15,
+    left: "13%",
     backgroundColor: "#051650",
-    paddingVertical: 12,
-    paddingHorizontal: 580, // Adjusted for a better button size
+    paddingVertical: 8,
+    paddingHorizontal: 100, // Adjusted for a better button size
     borderRadius: 8,
   },
+
   createInvoiceButtonText: {
     color: "#fff",
     fontSize: 16,
     fontWeight: "bold",
+    alignItems: "center",
   },
 });
 

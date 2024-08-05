@@ -1,29 +1,35 @@
+// index.tsx
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import AllInvoices from "../../../../app/screens/All_Invoice/components/AllInvoice"; // Adjust the import path if needed
-import CreateInvoice from "../../../../app/screens/All_Invoice/components/CreateInvoice"; // Adjust the import path if needed
+import CreateInvoice from "../../../screens/All_Invoice/components/CreateInvoice";
+import AddItem from "../../../screens/AddItem/components/AddItem";
+import { RootStackParamList } from "../../../screens/Dashboard/components/types"; // Adjust the import path
+import AllInvoices from "../../../screens/All_Invoice/components/AllInvoice";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { TouchableOpacityBase } from "react-native";
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
-function App() {
+const App = () => {
   return (
     <NavigationContainer independent={true}>
-      <Stack.Navigator>
+      <Stack.Navigator initialRouteName="AllInvoices">
         <Stack.Screen
           name="AllInvoices"
           component={AllInvoices}
           options={{ headerShown: false }}
         />
+
         <Stack.Screen
           name="CreateInvoice"
           component={CreateInvoice}
           options={{ headerShown: false }}
         />
-        {/* Add other screens here */}
+        <Stack.Screen name="AddItem" component={AddItem} />
       </Stack.Navigator>
     </NavigationContainer>
   );
-}
+};
 
 export default App;
