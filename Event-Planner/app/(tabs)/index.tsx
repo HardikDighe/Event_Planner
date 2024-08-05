@@ -1,17 +1,23 @@
+
+import SignupScreen from '../../app/screens/SignUp/components/SignupScreen';
 import React from 'react';
-import { Text, View } from 'react-native'
-import CreateQuotationMain from '../screens/CreateQuotation/components/CreateQuotationMain';
+import { SafeAreaView, StatusBar, StyleSheet } from 'react-native';
 
-export default function HomeScreen() {
 
+const App = () => {
   return (
-    <View style={{ flex: 1 }}>
-
-      <CreateQuotationMain />
-
-    </View> 
+    <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="dark-content" />
+      <SignupScreen/>
+    
+    </SafeAreaView>
   );
+};
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
 
-}
-
+export default App;
