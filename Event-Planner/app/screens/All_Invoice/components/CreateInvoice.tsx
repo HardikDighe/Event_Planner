@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import {
   View,
   Text,
-  TextInput,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
@@ -12,7 +11,10 @@ import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
 import * as Print from "expo-print";
-import { AntDesign, Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
+import { Picker } from "@react-native-picker/picker";
+import { TextInput as PaperInput } from "react-native-paper";
 
 interface FormData {
   customer: string;
@@ -22,9 +24,12 @@ interface FormData {
   gstinNumber: string;
   dateTime: Date;
   venueDetails: string;
+  invoiceNumber: string;
 }
 
 const CreateInvoice: React.FC = () => {
+  const navigation = useNavigation(); // Get navigation object
+
   const [formData, setFormData] = useState<FormData>({
     customer: "",
     phoneNumber: "",
@@ -33,13 +38,19 @@ const CreateInvoice: React.FC = () => {
     gstinNumber: "",
     dateTime: new Date(),
     venueDetails: "",
+    invoiceNumber: "01",
   });
 
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
   const [focusedField, setFocusedField] = useState<string | null>(null);
 
   const handleInputChange = (name: keyof FormData, value: string) => {
-    setFormData({ ...formData, [name]: value });
+    if (name === "dateTime") {
+      const dateValue = new Date(value);
+      setFormData({ ...formData, [name]: dateValue });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   const handleDateChange = (
@@ -58,6 +69,7 @@ const CreateInvoice: React.FC = () => {
   const handleViewAsPDF = async () => {
     const html = `
       <h1>Invoice</h1>
+      <p><strong>Invoice Number:</strong> ${formData.invoiceNumber}</p>
       <p><strong>Customer:</strong> ${formData.customer}</p>
       <p><strong>Phone Number:</strong> ${formData.phoneNumber}</p>
       <p><strong>Address:</strong> ${formData.address}</p>
@@ -103,144 +115,159 @@ const CreateInvoice: React.FC = () => {
     console.log("Add item clicked");
   };
 
+  const handleBack = () => {
+    navigation.goBack(); // Navigate back to previous screen
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color="white" />
+        <TouchableOpacity style={styles.backButton} onPress={handleBack}>
+          <Ionicons name="arrow-back" size={24} color="#051650" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Create Invoice</Text>
         <TouchableOpacity style={styles.shareButton} onPress={handleShare}>
-          <Ionicons name="share-social" size={24} color="white" />
+          <Ionicons name="share-social" size={24} color="#051650" />
         </TouchableOpacity>
       </View>
       <ScrollView contentContainerStyle={styles.body}>
         <View style={styles.row}>
           <View style={styles.column}>
             <Text style={styles.label}>Invoice Number</Text>
-            <Text style={styles.value}>02</Text>
+            <Picker
+              selectedValue={formData.invoiceNumber}
+              onValueChange={(itemValue) =>
+                handleInputChange("invoiceNumber", itemValue)
+              }
+              style={styles.picker}
+            >
+              <Picker.Item label="01" value="01" />
+              <Picker.Item label="02" value="02" />
+              <Picker.Item label="03" value="03" />
+              {/* Add more options as needed */}
+            </Picker>
           </View>
           <View style={styles.column}>
             <Text style={styles.label}>Date</Text>
-            <Text style={styles.value}>28/05/2024</Text>
+            <TouchableOpacity
+              style={styles.dateButton}
+              onPress={() => setShowDatePicker(true)}
+            >
+              <Text style={styles.dateText}>
+                {formData.dateTime.toDateString()}
+              </Text>
+            </TouchableOpacity>
+            {showDatePicker && (
+              <DateTimePicker
+                value={formData.dateTime}
+                mode="date"
+                display="default"
+                onChange={handleDateChange}
+              />
+            )}
           </View>
         </View>
         <View style={styles.form}>
-          <Text style={styles.label}>Customer</Text>
-          <TextInput
+          <PaperInput
+            mode="outlined"
+            label="Customer"
+            value={formData.customer}
+            onChangeText={(text) => handleInputChange("customer", text)}
             style={[
               styles.input,
               focusedField === "customer" && styles.inputFocused,
             ]}
-            placeholder="Enter customer name"
-            value={formData.customer}
-            onChangeText={(text) => handleInputChange("customer", text)}
             onFocus={() => setFocusedField("customer")}
             onBlur={() => setFocusedField(null)}
           />
-          <Text style={styles.label}>Phone Number</Text>
-          <TextInput
+          <PaperInput
+            mode="outlined"
+            label="Phone Number"
+            value={formData.phoneNumber}
+            onChangeText={(text) => handleInputChange("phoneNumber", text)}
+            keyboardType="phone-pad"
             style={[
               styles.input,
               focusedField === "phoneNumber" && styles.inputFocused,
             ]}
-            placeholder="Enter phone number"
-            keyboardType="phone-pad"
-            value={formData.phoneNumber}
-            onChangeText={(text) => handleInputChange("phoneNumber", text)}
             onFocus={() => setFocusedField("phoneNumber")}
             onBlur={() => setFocusedField(null)}
           />
-          <Text style={styles.label}>Address</Text>
-          <TextInput
+          <PaperInput
+            mode="outlined"
+            label="Address"
+            value={formData.address}
+            onChangeText={(text) => handleInputChange("address", text)}
             style={[
               styles.input,
               focusedField === "address" && styles.inputFocused,
             ]}
-            placeholder="Enter address"
-            value={formData.address}
-            onChangeText={(text) => handleInputChange("address", text)}
             onFocus={() => setFocusedField("address")}
             onBlur={() => setFocusedField(null)}
           />
-          <Text style={styles.label}>Email Id</Text>
-          <TextInput
+          <PaperInput
+            mode="outlined"
+            label="Email Id"
+            value={formData.emailId}
+            onChangeText={(text) => handleInputChange("emailId", text)}
+            keyboardType="email-address"
             style={[
               styles.input,
               focusedField === "emailId" && styles.inputFocused,
             ]}
-            placeholder="Enter email ID"
-            keyboardType="email-address"
-            value={formData.emailId}
-            onChangeText={(text) => handleInputChange("emailId", text)}
             onFocus={() => setFocusedField("emailId")}
             onBlur={() => setFocusedField(null)}
           />
-          <Text style={styles.label}>GSTIN Number</Text>
-          <TextInput
+          <PaperInput
+            mode="outlined"
+            label="GSTIN Number"
+            value={formData.gstinNumber}
+            onChangeText={(text) => handleInputChange("gstinNumber", text)}
             style={[
               styles.input,
               focusedField === "gstinNumber" && styles.inputFocused,
             ]}
-            placeholder="Enter GSTIN number"
-            value={formData.gstinNumber}
-            onChangeText={(text) => handleInputChange("gstinNumber", text)}
             onFocus={() => setFocusedField("gstinNumber")}
             onBlur={() => setFocusedField(null)}
           />
           <Text style={styles.label}>Date & Time</Text>
-          <TouchableOpacity
-            style={styles.dateButton}
-            onPress={() => setShowDatePicker(true)}
-          >
-            <Text style={styles.dateText}>
-              {formData.dateTime.toDateString()}
-            </Text>
-          </TouchableOpacity>
-          {showDatePicker && (
-            <DateTimePicker
-              value={formData.dateTime}
-              mode="date"
-              display="default"
-              onChange={handleDateChange}
-            />
-          )}
-          <Text style={styles.label}>Venue Details</Text>
-          <TextInput
+          <PaperInput
+            style={[
+              styles.input,
+              focusedField === "dateTime" && styles.inputFocused,
+            ]}
+            value={formData.dateTime.toDateString()} // Convert Date to string
+            onChangeText={(text) => handleInputChange("dateTime", text)}
+            onFocus={() => setFocusedField("dateTime")}
+            onBlur={() => setFocusedField(null)}
+          />
+          <PaperInput
+            mode="outlined"
+            label="Venue Details"
+            value={formData.venueDetails}
+            onChangeText={(text) => handleInputChange("venueDetails", text)}
             style={[
               styles.input,
               focusedField === "venueDetails" && styles.inputFocused,
             ]}
-            placeholder="Enter venue details"
-            value={formData.venueDetails}
-            onChangeText={(text) => handleInputChange("venueDetails", text)}
             onFocus={() => setFocusedField("venueDetails")}
             onBlur={() => setFocusedField(null)}
           />
-          <TouchableOpacity
-            style={styles.addItemButton}
-            onPress={handleAddItem}
-          >
-            <Text style={styles.addItemText}>+Add Item</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.buttonsContainer}>
-          <TouchableOpacity
-            style={[styles.button, styles.viewAsPdfButton]}
-            onPress={handleViewAsPDF}
-          >
-            <Text style={[styles.buttonText, styles.viewAsPdfButtonText]}>
-              View as PDF
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.button, styles.saveButton]}
-            onPress={handleSave}
-          >
-            <Text style={[styles.buttonText, styles.saveButtonText]}>Save</Text>
-          </TouchableOpacity>
+          <View style={styles.addItemWrapper}>
+            <TouchableOpacity style={styles.addButton} onPress={handleAddItem}>
+              <Text style={styles.addButtonText}>+Add Item</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </ScrollView>
+      <View style={styles.footer}>
+        <TouchableOpacity style={[styles.saveButton, styles.footerButton]} onPress={handleSave}>
+          <Text style={styles.saveButtonText}>Save</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.pdfButton, styles.footerButton]} onPress={handleViewAsPDF}>
+          <Text style={styles.pdfButtonText}>View as PDF</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -248,112 +275,128 @@ const CreateInvoice: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#fff",
   },
   header: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
-    backgroundColor: "#2c3e50",
-    paddingHorizontal: 16,
-    paddingVertical: 10,
+    backgroundColor: "#f5f5f5",
+    padding: 10,
   },
   backButton: {
-    padding: 5,
-  },
-  shareButton: {
-    padding: 5,
+    marginRight: 10,
   },
   headerTitle: {
-    color: "white",
-    fontSize: 20,
+    flex: 1,
+    fontSize: 18,
     fontWeight: "bold",
+    color: "#051650",
+  },
+  shareButton: {
+    marginLeft: "auto",
   },
   body: {
-    padding: 16,
+    paddingHorizontal: 10,
+    paddingBottom: 20,
   },
   row: {
     flexDirection: "row",
     justifyContent: "space-between",
+    marginBottom: 10,
   },
   column: {
     flex: 1,
+    marginHorizontal: 5,
   },
   label: {
+    fontSize: 16,
     fontWeight: "bold",
-    marginBottom: 4,
+    marginBottom: 5,
+    color: "#051650",
   },
-  value: {
-    fontSize: 16,
-  },
-  form: {
-    marginBottom: 32,
-  },
-  input: {
-    backgroundColor: "#fff",
-    borderColor: "#ced4da",
+  picker: {
     borderWidth: 1,
-    borderRadius: 4,
-    padding: 12,
-    marginBottom: 16,
-    fontSize: 16,
-  },
-  inputFocused: {
-    borderColor: "#007BFF",
-    borderWidth: 2,
+    borderColor: "#ccc",
+    borderRadius: 5,
   },
   dateButton: {
-    backgroundColor: "#fff",
-    borderColor: "#ced4da",
     borderWidth: 1,
-    borderRadius: 4,
-    padding: 12,
-    marginBottom: 16,
-    alignItems: "center",
+    borderColor: "#ccc",
+    borderRadius: 5,
+    padding: 10,
+    backgroundColor: "#f5f5f5",
   },
   dateText: {
     fontSize: 16,
-    color: "#333",
   },
-  addItemButton: {
-    backgroundColor: "#f5f5f5",
-    borderColor: "#000",
-    borderWidth: 1,
-    borderRadius: 30,
-    padding: 12,
-    alignItems: "center",
-    marginBottom: 16,
-    paddingHorizontal: 10,
-    width: 200,
-    justifyContent: "center",
-    alignSelf: "center",
+  form: {
+    marginBottom: 20,
   },
-  addItemText: {
-    fontSize: 16,
-    color: "#333",
-  },
-  buttonsContainer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-  },
-  button: {
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 4,
-  },
-  viewAsPdfButton: {
+  input: {
+    marginBottom: 10,
     backgroundColor: "#fff",
   },
-  viewAsPdfButtonText: {
-    color: "red",
+  inputFocused: {
+    borderColor: "#051650",
+  },
+  addItemWrapper: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginVertical: 10,
+  },
+  addButton: {
+    backgroundColor: "#051650",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+  },
+  addButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  footer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    position: "absolute",
+    bottom: 0,
+    width: "100%",
+    backgroundColor: "#f5f5f5",
+    padding: 10,
+  },
+  footerButton: {
+    flex: 1,
+    marginHorizontal: 5,
+    justifyContent: "center",
+    alignItems: "center",
   },
   saveButton: {
+    paddingVertical: 15,
+    paddingHorizontal: 44,
     backgroundColor: "#051650",
+    borderRadius: 4,
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
   saveButtonText: {
     color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
   },
-  buttonText: {
+  pdfButton: {
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    backgroundColor: "#f5f5f5",
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: "#051650",
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  pdfButtonText: {
+    color: "darkred",
     fontSize: 16,
     fontWeight: "bold",
   },
