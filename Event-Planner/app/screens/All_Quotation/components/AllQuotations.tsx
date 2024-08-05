@@ -1,5 +1,3 @@
-// AllQuotation.tsx
-
 import React, { useState } from "react";
 import {
   View,
@@ -20,7 +18,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 // Define types for navigation
 type RootStackParamList = {
   AllQuotation: undefined;
-  CreateQuotation: undefined; // Add the new screen here
+  CreateQuotation: undefined; // Add your CreateQuotation screen here
 };
 
 type NavigationProp = NativeStackNavigationProp<
@@ -207,7 +205,12 @@ const AllQuotation: React.FC = () => {
       <Header quotations={quotations} onSearch={handleSearch} />
       <View style={styles.quotationsHeader}>
         <Text style={styles.quotationsListText}>Quotations List</Text>
-        <TouchableOpacity style={styles.sortByContainer}>
+        <TouchableOpacity
+          style={styles.sortByContainer}
+          onPress={() => {
+            // Sort logic here
+          }}
+        >
           <Text style={styles.sortByText}>Sort By</Text>
           <Icon name="sort" size={24} color="#000" />
         </TouchableOpacity>
@@ -219,9 +222,9 @@ const AllQuotation: React.FC = () => {
       />
       <TouchableOpacity
         style={styles.createQuotationButton}
-        onPress={() => navigation.navigate("CreateQuotation")} // Navigate to Create Quotation
+        onPress={() => navigation.navigate("CreateQuotation")}
       >
-        <Text style={styles.createQuotationButtonText}>Create Quotation</Text>
+        <Text style={styles.createQuotationButtonText}>+ Create Quotation</Text>
       </TouchableOpacity>
     </View>
   );
@@ -230,27 +233,32 @@ const AllQuotation: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 16,
     backgroundColor: "#fff",
   },
   headerContainer: {
     flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: 16,
-    paddingVertical: 12,
     backgroundColor: "#f5f5f5",
+    paddingBottom: 8,
+    paddingHorizontal: 16,
+    paddingTop: 16,
   },
   headerText: {
+    fontSize: 24,
+    fontFamily: "Arial",
+    color: "#051650",
     flex: 1,
-    fontSize: 20,
-    fontWeight: "bold",
-    textAlign: "center",
+    textAlign: "left",
   },
   searchInput: {
     flex: 1,
-    fontSize: 16,
-    padding: 8,
-    backgroundColor: "#f5f5f5",
+    fontSize: 18,
+    paddingHorizontal: 8,
+    backgroundColor: "#fff",
     borderRadius: 4,
+    borderWidth: 1,
+    borderColor: "#ddd",
   },
   headerIcons: {
     flexDirection: "row",
@@ -260,13 +268,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    backgroundColor: "#f5f5f5",
+    marginVertical: 16,
   },
   quotationsListText: {
     fontSize: 18,
     fontWeight: "bold",
+    color: "#051650",
   },
   sortByContainer: {
     flexDirection: "row",
@@ -274,72 +281,83 @@ const styles = StyleSheet.create({
   },
   sortByText: {
     fontSize: 16,
+    color: "#000",
     marginRight: 8,
+    fontWeight: "bold",
   },
   quotationItem: {
+    backgroundColor: "#fff",
     padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: "#f5f5f5",
+    borderRadius: 8,
+    marginBottom: 16,
+    elevation: 2,
   },
   row: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
+    marginBottom: 8,
   },
   statusContainer: {
-    flex: 1,
+    backgroundColor: "#d3d3d3",
+    padding: 4,
+    borderRadius: 4,
   },
   status: {
-    fontSize: 16,
-    fontWeight: "bold",
+    fontSize: 12,
+    color: "#000",
   },
   nameAmountContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
-    flex: 1,
+    width: "100%",
   },
   name: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
+    color: "#051650",
   },
   amount: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
+    color: "lightgreen",
   },
   dateBalanceContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
-    flex: 1,
+    width: "100%",
   },
   date: {
-    fontSize: 16,
+    fontSize: 14,
+    color: "#000",
   },
   balanceInput: {
-    fontSize: 16,
-    color: "#000",
+    backgroundColor: "#bbdffb",
+    borderRadius: 4,
+    paddingHorizontal: 8,
+    fontSize: 14,
+    color: "#051650",
+    borderColor: "#ddd",
+    borderWidth: 1,
+    width: 120,
+    textAlign: "right",
   },
   icons: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingVertical: 8,
+    justifyContent: "center",
+    marginTop: 16,
   },
   iconContainer: {
-    padding: 8,
+    marginHorizontal: 8,
   },
   icon: {
     color: "#000",
   },
   createQuotationButton: {
-    position: "absolute",
-    bottom: 16,
-    right: 16,
-    backgroundColor: "#4CAF50",
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 50,
+    backgroundColor: "#051650",
+    padding: 16,
+    borderRadius: 8,
+    alignItems: "center",
+    marginTop: 16,
   },
   createQuotationButtonText: {
     color: "#fff",
