@@ -2,7 +2,7 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import CreateInvoice from "../../../screens/All_Invoice/components/CreateInvoice";
+import CreateInvoice from "../../CreateInvoice/components/CreateInvoice";
 import AddItem from "../../../screens/AddItem/components/AddItem";
 import { RootStackParamList } from "../../../screens/Dashboard/components/types"; // Adjust the import path
 import AllInvoices from "../../../screens/All_Invoice/components/AllInvoice";

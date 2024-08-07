@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-nati
 import { StackScreenProps } from '@react-navigation/stack';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { RootStackParamList } from '../../../../app/screens/Dashboard/components/types';
-import RevenueGraph from './RevenueGraph'; // Import the new component
+import RevenueGraph from '../../RevenueGraph/components/RevenueGraph'; // Import the new component
 
 type Props = StackScreenProps<RootStackParamList, 'Dashboard'>;
 

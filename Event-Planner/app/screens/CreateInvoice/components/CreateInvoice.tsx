@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import {
   View,
   Text,
-  StyleSheet,
   ScrollView,
   TouchableOpacity,
   Platform,
@@ -16,7 +15,8 @@ import { useNavigation, NavigationProp } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 import { TextInput as PaperInput } from "react-native-paper";
-import { RootStackParamList } from "../../../screens/Dashboard/components/types"; // Adjust the import path
+import { RootStackParamList } from "../../Dashboard/components/types"; // Adjust the import path
+import styles from "../../../../../Event-Planner/app/screens/CreateInvoice/styles/styles";
 
 interface FormData {
   customer: string;
@@ -270,6 +270,7 @@ const CreateInvoice: React.FC = () => {
                 background: "white",
               },
             }}
+            onPressIn={() => setShowDatePicker(true)}
           />
           <PaperInput
             mode="outlined"
@@ -286,141 +287,23 @@ const CreateInvoice: React.FC = () => {
             }}
           />
         </View>
-        <TouchableOpacity style={styles.addItemButton} onPress={handleAddItem}>
-          <Text style={styles.addItemButtonText}>+ Add Item</Text>
-        </TouchableOpacity>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.pdfButton} onPress={handleViewAsPDF}>
-            <Text style={styles.pdfButtonText}>View as PDF</Text>
+          <TouchableOpacity style={styles.button} onPress={handleSave}>
+            <Text style={styles.buttonText}>Save</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
-            <Text style={styles.saveButtonText}>Save</Text>
+          <TouchableOpacity
+            style={[styles.button, styles.pdfButton]}
+            onPress={handleViewAsPDF}
+          >
+            <Text style={styles.buttonText}>View as PDF</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={handleAddItem}>
+            <Text style={styles.buttonText}>Add Item</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "white",
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    backgroundColor: "#f5f5f5",
-    textAlign: "left",
-  },
-
-  backButton: {
-    padding: 10,
-  },
-  shareButton: {
-    padding: 10,
-    marginLeft: 190,
-  },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#051650",
-    flex: 1,
-  },
-  body: {
-    padding: 15,
-  },
-  row: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 15,
-  },
-  column: {
-    flex: 1,
-    marginHorizontal: 5,
-  },
-  label: {
-    fontSize: 14,
-    marginBottom: 5,
-    color: "#051650",
-  },
-  picker: {
-    height: 50,
-    width: "100%",
-    backgroundColor: "#f5f5f5",
-  },
-  dateButton: {
-    backgroundColor: "#f5f5f5",
-    padding: 15,
-    borderRadius: 5,
-  },
-  dateText: {
-    fontSize: 16,
-    color: "#051650",
-  },
-  form: {
-    marginBottom: 15,
-  },
-  input: {
-    marginBottom: 15,
-  },
-  inputFocused: {
-    borderColor: "#051650",
-  },
-  addItemButton: {
-    marginEnd: 250,
-    backgroundColor: "#bbdffb",
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 30,
-    borderColor: "#000000", // Black border color
-    borderWidth: 1,
-  },
-  addItemButtonText: {
-    color: "#051650",
-    fontSize: 16,
-    textAlign: "center",
-  },
-  buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  pdfButton: {
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    backgroundColor: "#bbdffb",
-    borderRadius: 0,
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 5,
-    marginTop: 15,
-  },
-
-  saveButton: {
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 16,
-    backgroundColor: "#051650",
-    borderRadius: 0,
-    paddingHorizontal: 24,
-    paddingVertical: 18,
-    flex: 1,
-    marginBottom: 5,
-    marginTop: 15,
-  },
-
-  pdfButtonText: {
-    color: "darkred",
-    fontSize: 16,
-    textAlign: "center",
-  },
-  saveButtonText: {
-    color: "white",
-    fontSize: 16,
-    textAlign: "center",
-  },
-});
 
 export default CreateInvoice;

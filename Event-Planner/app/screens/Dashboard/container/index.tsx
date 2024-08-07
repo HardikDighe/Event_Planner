@@ -4,7 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import DashboardScreen from '../../../../app/screens/Dashboard/components/Dashboard';
-import DrawerContent from '../components/DrawerContent'; // Adjust the path to your DrawerContent
+import DrawerContent from '../../DrawerContent/components/DrawerContent'; // Adjust the path to your DrawerContent
 import { RootStackParamList, RootDrawerParamList } from '../../../../app/screens/Dashboard/components/types';
 
 

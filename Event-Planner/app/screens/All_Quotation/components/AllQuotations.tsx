@@ -3,7 +3,6 @@ import {
   View,
   Text,
   FlatList,
-  StyleSheet,
   TouchableOpacity,
   TextInput,
 } from "react-native";
@@ -14,6 +13,7 @@ import * as Sharing from "expo-sharing";
 import * as Print from "expo-print";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import styles from "../../../../../Event-Planner/app/screens/All_Quotation/styles/styles"; // Import the styles
 
 // Define types for navigation
 type RootStackParamList = {
@@ -156,7 +156,7 @@ const Header: React.FC<{
             .join("")}
         `,
       });
-      await Print.printAsync({ uri });
+      await Sharing.shareAsync(uri);
     } catch (error) {
       console.error("Failed to generate PDF:", error);
     }
@@ -164,25 +164,27 @@ const Header: React.FC<{
 
   return (
     <View style={styles.headerContainer}>
-      <TouchableOpacity onPress={() => {}}>
-        <Icon name="arrow-back" size={24} color="#000" />
-      </TouchableOpacity>
       {isSearching ? (
         <TextInput
           style={styles.searchInput}
-          placeholder="Search..."
           value={searchQuery}
-          onChangeText={(text) => setSearchQuery(text)}
+          onChangeText={setSearchQuery}
+          placeholder="Search Quotations"
         />
       ) : (
         <Text style={styles.headerText}>All Quotations</Text>
       )}
       <View style={styles.headerIcons}>
         <TouchableOpacity onPress={handleSearchIconClick}>
-          <Icon name="search" size={24} color="#000" />
+          <Icon
+            name={isSearching ? "close" : "search"}
+            size={24}
+            color="#000"
+            style={{ marginRight: 16 }}
+          />
         </TouchableOpacity>
         <TouchableOpacity onPress={handleGeneratePDF}>
-          <Icon name="picture-as-pdf" size={24} color="#000" />
+          <Icon name="picture-as-pdf" size={24} color="red" />
         </TouchableOpacity>
       </View>
     </View>
@@ -190,35 +192,37 @@ const Header: React.FC<{
 };
 
 const AllQuotation: React.FC = () => {
-  const [filteredQuotations, setFilteredQuotations] = useState(quotations);
   const navigation = useNavigation<NavigationProp>();
+  const [filteredQuotations, setFilteredQuotations] =
+    useState<Quotation[]>(quotations);
 
   const handleSearch = (query: string) => {
-    const filtered = quotations.filter((quotation) =>
-      quotation.name.toLowerCase().includes(query.toLowerCase())
-    );
-    setFilteredQuotations(filtered);
+    if (query.trim() === "") {
+      setFilteredQuotations(quotations);
+    } else {
+      setFilteredQuotations(
+        quotations.filter((quotation) =>
+          quotation.name.toLowerCase().includes(query.toLowerCase())
+        )
+      );
+    }
   };
 
   return (
     <View style={styles.container}>
-      <Header quotations={quotations} onSearch={handleSearch} />
+      <Header quotations={filteredQuotations} onSearch={handleSearch} />
       <View style={styles.quotationsHeader}>
         <Text style={styles.quotationsListText}>Quotations List</Text>
-        <TouchableOpacity
-          style={styles.sortByContainer}
-          onPress={() => {
-            // Sort logic here
-          }}
-        >
+        <View style={styles.sortByContainer}>
           <Text style={styles.sortByText}>Sort By</Text>
           <Icon name="sort" size={24} color="#000" />
-        </TouchableOpacity>
+        </View>
       </View>
       <FlatList
         data={filteredQuotations}
         renderItem={({ item }) => <QuotationItem item={item} />}
         keyExtractor={(item) => item.id}
+        contentContainerStyle={{ paddingBottom: 16 }}
       />
       <TouchableOpacity
         style={styles.createQuotationButton}
@@ -229,141 +233,5 @@ const AllQuotation: React.FC = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-    backgroundColor: "#fff",
-  },
-  headerContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#f5f5f5",
-    paddingBottom: 8,
-    paddingHorizontal: 16,
-    paddingTop: 16,
-  },
-  headerText: {
-    fontSize: 24,
-    fontFamily: "Arial",
-    color: "#051650",
-    flex: 1,
-    textAlign: "left",
-  },
-  searchInput: {
-    flex: 1,
-    fontSize: 18,
-    paddingHorizontal: 8,
-    backgroundColor: "#fff",
-    borderRadius: 4,
-    borderWidth: 1,
-    borderColor: "#ddd",
-  },
-  headerIcons: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  quotationsHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginVertical: 16,
-  },
-  quotationsListText: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#051650",
-  },
-  sortByContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  sortByText: {
-    fontSize: 16,
-    color: "#000",
-    marginRight: 8,
-    fontWeight: "bold",
-  },
-  quotationItem: {
-    backgroundColor: "#fff",
-    padding: 16,
-    borderRadius: 8,
-    marginBottom: 16,
-    elevation: 2,
-  },
-  row: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 8,
-  },
-  statusContainer: {
-    backgroundColor: "#d3d3d3",
-    padding: 4,
-    borderRadius: 4,
-  },
-  status: {
-    fontSize: 12,
-    color: "#000",
-  },
-  nameAmountContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "100%",
-  },
-  name: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#051650",
-  },
-  amount: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "lightgreen",
-  },
-  dateBalanceContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "100%",
-  },
-  date: {
-    fontSize: 14,
-    color: "#000",
-  },
-  balanceInput: {
-    backgroundColor: "#bbdffb",
-    borderRadius: 4,
-    paddingHorizontal: 8,
-    fontSize: 14,
-    color: "#051650",
-    borderColor: "#ddd",
-    borderWidth: 1,
-    width: 120,
-    textAlign: "right",
-  },
-  icons: {
-    flexDirection: "row",
-    justifyContent: "center",
-    marginTop: 16,
-  },
-  iconContainer: {
-    marginHorizontal: 8,
-  },
-  icon: {
-    color: "#000",
-  },
-  createQuotationButton: {
-    backgroundColor: "#051650",
-    padding: 16,
-    borderRadius: 8,
-    alignItems: "center",
-    marginTop: 16,
-  },
-  createQuotationButtonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-});
 
 export default AllQuotation;

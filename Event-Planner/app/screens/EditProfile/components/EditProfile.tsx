@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import styles from '../../../../../Event-Planner/app/screens/EditProfile/styles/styles';  // Import the styles
 
 const EditProfile = () => {
     const [name, setName] = useState('');
@@ -32,34 +33,4 @@ const EditProfile = () => {
     );
 };
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 16,
-    },
-    title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 16,
-    },
-    input: {
-        height: 40,
-        borderColor: 'gray',
-        borderWidth: 1,
-        marginBottom: 12,
-        paddingLeft: 8,
-    },
-    button: {
-        backgroundColor: '#051650',
-        padding: 10,
-        alignItems: 'center',
-        borderRadius: 5,
-    },
-    buttonText: {
-        color: '#fff',
-        fontSize: 18,
-    },
-});
-
 export default EditProfile;
-//

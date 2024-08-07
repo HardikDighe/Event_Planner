@@ -1,8 +1,8 @@
 import React from 'react';
-import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
-import { DrawerContentComponentProps } from '@react-navigation/drawer';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons'; // Make sure you have this installed
+import { DrawerContentScrollView, DrawerContentComponentProps } from '@react-navigation/drawer';
+import { View, Text, TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import styles from '../../../../../Event-Planner/app/screens/DrawerContent/styles/styles'; // Import styles from the new file
 
 const DrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
   return (
@@ -65,47 +65,5 @@ const DrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
     </DrawerContentScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  header: {
-    padding: 16,
-    backgroundColor: '#f4f4f4',
-    borderBottomWidth: 1,
-    borderBottomColor: '#ddd',
-  },
-  vendorName: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  section: {
-    marginVertical: 8,
-    paddingHorizontal: 16,
-  },
-  sectionTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 8,
-  },
-  item: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ddd',
-  },
-  itemText: {
-    fontSize: 16,
-    marginLeft: 8, // Adjust the margin to control space between the icon and text
-  },
-  separator: {
-    height: 1,
-    backgroundColor: '#ddd',
-    marginVertical: 8,
-  },
-});
 
 export default DrawerContent;
