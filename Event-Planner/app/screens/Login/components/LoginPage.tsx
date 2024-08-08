@@ -119,17 +119,12 @@ const LoginPage: React.FC<LoginPageProps> = ({ navigation }) => {
     }
 
     if (valid) {
-      navigation.navigate('DashBoard', { email, password });
+      navigation.navigate('Dashboard', { email, password });
     }
   };
 
   const handleForgotPassword = () => {
     navigation.navigate('ForgotPassword');
-  };
-
-  const handleGoogleLogin = () => {
-    // Implement Google login functionality
-    console.log('Implement Google login');
   };
 
   return (
@@ -163,10 +158,6 @@ const LoginPage: React.FC<LoginPageProps> = ({ navigation }) => {
           <TouchableOpacity onPress={handleForgotPassword}>
             <Text style={styles.linkText}>Forgot Password?</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.googleButton} onPress={handleGoogleLogin}>
-            <Icon name="google" size={20} color="white" />
-            <Text style={[styles.buttonText, { marginLeft: 10 }]}>Login with Google</Text>
-          </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
             <Text style={styles.linkText}>Don't have an account? Sign up</Text>
           </TouchableOpacity>
@@ -183,7 +174,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
   },
   scrollContainer: {
     flexGrow: 1,
@@ -237,15 +228,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 10,
     borderRadius: 10,
-  },
-  googleButton: {
-    backgroundColor: '#051650',
-    padding: 10,
-    alignItems: 'center',
-    marginBottom: 10,
-    borderRadius: 10,
-    flexDirection: 'row', // Align icon and text horizontally
-    justifyContent: 'center', // Center contents horizontally
   },
   buttonText: {
     color: 'white',

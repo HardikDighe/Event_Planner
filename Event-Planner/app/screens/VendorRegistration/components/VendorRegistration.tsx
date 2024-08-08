@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { View, StyleSheet, TouchableOpacity, Text, Alert } from "react-native";
+import { View, Text, TouchableOpacity, Alert } from "react-native";
 import { NavigationProp } from "@react-navigation/native";
 import { TextInput } from "react-native-paper";
+import styles from "../../../../../Event-Planner/app/screens/VendorRegistration/styles/styles"; // Import styles from the new file
 
 interface Props {
   navigation: NavigationProp<any>;
@@ -38,7 +39,7 @@ const VendorRegistration: React.FC<Props> = ({ navigation }) => {
     };
 
     try {
-      const response = await fetch("http://192.168.2.112/vendor", { // Use the correct backend server URL
+      const response = await fetch("http://localhost:3000/Vendor", { // Use the correct backend server URL
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -50,7 +51,7 @@ const VendorRegistration: React.FC<Props> = ({ navigation }) => {
         const jsonResponse = await response.json();
         console.log("Vendor data saved successfully:", jsonResponse);
         Alert.alert("Success", "Vendor data saved successfully.");
-        navigation.navigate("NextScreen"); // Navigate to the next screen if needed
+        navigation.goBack(); // Navigate back to the previous screen
       } else {
         const errorResponse = await response.json();
         console.error("Error saving vendor data:", errorResponse);
@@ -128,53 +129,12 @@ const VendorRegistration: React.FC<Props> = ({ navigation }) => {
 
       <TouchableOpacity
         onPress={handleSave}
-        style={[styles.button, { backgroundColor: "#051650" }]}
+        style={styles.button}
       >
         <Text style={styles.saveButtonText}>Submit</Text>
       </TouchableOpacity>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-    backgroundColor: "white",
-  },
-  input: {
-    marginBottom: 16,
-    backgroundColor: "white",
-    borderRadius: 500,
-  },
-  focusedInput: {
-    borderColor: "blue",
-  },
-  errorText: {
-    color: "red",
-    marginBottom: 16,
-  },
-  button: {
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 5,
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 20,
-    backgroundColor: "#051650",
-  },
-  saveButtonText: {
-    fontSize: 16,
-    color: "white",
-  },
-  addItemText: {
-    fontSize: 16,
-    color: "#051650",
-    textDecorationLine: "underline",
-  },
-  spacer: {
-    flex: 1,
-  },
-});
 
 export default VendorRegistration;

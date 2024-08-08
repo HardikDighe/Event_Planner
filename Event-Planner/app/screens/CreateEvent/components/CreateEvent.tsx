@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { View, TextInput, TouchableOpacity, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, TextInput, TouchableOpacity, Text, ScrollView } from 'react-native';
+import styles from '../../../../../Event-Planner/app/screens/CreateEvent/styles/styles'; // Adjust the path as necessary
+
 const CreateEvent = () => {
   const [eventTitle, setEventTitle] = useState('');
   const [date, setDate] = useState('');
@@ -7,6 +9,7 @@ const CreateEvent = () => {
   const [location, setLocation] = useState('');
   const [eventDetails, setEventDetails] = useState('');
   const [focusedField, setFocusedField] = useState('');
+
   const handleCreateEvent = () => {
     // Handle event creation logic here
     console.log({
@@ -17,9 +20,10 @@ const CreateEvent = () => {
       eventDetails,
     });
   };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.title}>Event Registration</Text>
+      <Text style={styles.title}>Event Registration</Text>
       <View style={styles.inputContainer}>
         {(focusedField === 'eventTitle' || eventTitle) && <Text style={styles.floatingLabel}>Event Title</Text>}
         <TextInput
@@ -84,61 +88,5 @@ const CreateEvent = () => {
     </ScrollView>
   );
 };
-const styles = StyleSheet.create({
-  container: {
-    flexGrow: 1,
-    justifyContent: 'center',
-    padding: 16,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginVertical: 20,
-  },
-  inputContainer: {
-    marginVertical: 10,
-    position: 'relative',
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 10,
-    borderRadius: 5,
-  },
-  floatingLabel: {
-    position: 'absolute',
-    left: 10,
-    top: -10,
-    backgroundColor: '#fff',
-    paddingHorizontal: 5,
-    fontSize: 12,
-    color: 'black',
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  halfInput: {
-    flex: 1,
-    marginHorizontal: 5,
-  },
-  multilineInput: {
-    height: 100,
-    textAlignVertical: 'top',
-  },
-  button: {
-    backgroundColor: '#051650',
-    padding: 15,
-    borderRadius: 5,
-    alignItems: 'center',
-    marginVertical: 10,
-    alignSelf: 'stretch',
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-});
+
 export default CreateEvent;

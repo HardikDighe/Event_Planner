@@ -1,10 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
-import { GoogleSignin, statusCodes, User } from '@react-native-google-signin/google-signin';
+// screens/SignupScreen.tsx
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { TextInput as PaperTextInput, Provider as PaperProvider } from 'react-native-paper';
+import styles from '../styles/styles';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../../../(tabs)/types'; // Import your types
+
+type SignupScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Signup'>;
 
 const SignupScreen: React.FC = () => {
+  const navigation = useNavigation<SignupScreenNavigationProp>(); // Use typed navigation
   const [firstName, setFirstName] = useState<string>('');
   const [lastName, setLastName] = useState<string>('');
   const [phoneNumber, setPhoneNumber] = useState<string>('');
@@ -20,13 +27,6 @@ const SignupScreen: React.FC = () => {
   const [phoneError, setPhoneError] = useState<string>('');
   const [passwordError, setPasswordError] = useState<string>('');
   const [confirmPasswordError, setConfirmPasswordError] = useState<string>('');
-
-  useEffect(() => {
-    GoogleSignin.configure({
-      webClientId: '253616364449-vd0gktp31k69vnnng8rqhjnehahu7pcq.apps.googleusercontent.com',
-      offlineAccess: false,
-    });
-  }, []);
 
   const handleSignup = () => {
     let valid = true;
@@ -67,36 +67,7 @@ const SignupScreen: React.FC = () => {
     if (valid) {
       console.log('Signup button pressed');
       // Proceed with signup logic
-    }
-  };
-
-  const handleGoogleSignIn = async () => {
-    try {
-      await GoogleSignin.hasPlayServices();
-      const userInfo: User = await GoogleSignin.signIn();
-      console.log('User Info:', userInfo);
-      // Use userInfo to auto-fill the signup form or directly sign up the user
-      setEmail(userInfo.user.email ?? '');
-      setFirstName(userInfo.user.givenName ?? '');
-      setLastName(userInfo.user.familyName ?? '');
-
-      // Optionally, you could also auto-submit the form here if you want to complete signup automatically
-      // handleSignup();
-
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        if ((error as any).code === statusCodes.SIGN_IN_CANCELLED) {
-          console.log('User cancelled the login flow');
-        } else if ((error as any).code === statusCodes.IN_PROGRESS) {
-          console.log('Sign in is in progress already');
-        } else if ((error as any).code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-          console.log('Play services not available or outdated');
-        } else {
-          console.log('Some other error happened:', error.message);
-        }
-      } else {
-        console.log('An unknown error occurred', error);
-      }
+      navigation.navigate('Login'); // Navigate to the Login screen after successful signup
     }
   };
 
@@ -202,86 +173,9 @@ const SignupScreen: React.FC = () => {
         <TouchableOpacity style={styles.button} onPress={handleSignup}>
           <Text style={styles.buttonText}>Signup</Text>
         </TouchableOpacity>
-
-        <TouchableOpacity style={styles.googleButton} onPress={handleGoogleSignIn}>
-          <Icon name="google" size={20} color="#fff" style={styles.googleIcon} />
-          <Text style={styles.googleButtonText}>Sign Up with Google</Text>
-        </TouchableOpacity>
       </ScrollView>
     </PaperProvider>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flexGrow: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
-  },
-  inputHalf: {
-    flex: 1,
-    marginHorizontal: 5,
-    marginBottom: 10,
-  },
-  input: {
-    width: '100%',
-    marginBottom: 10,
-  },
-  passwordContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '100%',
-    marginBottom: 10,
-  },
-  eyeIcon: {
-    position: 'absolute',
-    right: 15,
-  },
-  button: {
-    width: '100%',
-    height: 50,
-    backgroundColor: '#051650',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 5,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-  },
-  googleButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
-    height: 50,
-    backgroundColor: '#051650',
-    borderRadius: 5,
-    marginTop: 20,
-  },
-  googleIcon: {
-    marginRight: 10,
-  },
-  googleButtonText: {
-    color: '#fff',
-    fontSize: 18,
-  },
-  errorText: {
-    color: 'red',
-    fontSize: 12,
-    marginBottom: 10,
-  },
-});
 
 export default SignupScreen;
