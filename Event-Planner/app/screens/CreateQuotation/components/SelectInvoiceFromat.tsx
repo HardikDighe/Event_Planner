@@ -4,6 +4,7 @@ import Swiper from 'react-native-swiper';
 import * as Print from 'expo-print';
 import { shareAsync } from 'expo-sharing';
 import { ToWords } from 'to-words';
+import styles from '../../../../app/screens/CreateQuotation/styles/styles';
 
 const SelectInvoiceFormat = () => {
     const [currentFormat, setCurrentFormat] = useState(0);
@@ -956,155 +957,155 @@ const SelectInvoiceFormat = () => {
     );
 };
 
-const styles = StyleSheet.create({
-    container: {
-        flexGrow: 1,
-        padding: 10,
-        backgroundColor: '#fff'
-    },
-    headerText: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        marginBottom: 20
-    },
-    swiper: {
-        height: 550,
-        backgroundColor: "grey"
-    },
-    slide: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 20
-    },
-    previewContainer: {
-        width: '110%',
-        borderRadius: 10,
-        backgroundColor: 'white',
-        padding: 15,
-        shadowColor: '#000',
-        shadowOpacity: 0.1,
-        shadowRadius: 10,
-        shadowOffset: { width: 0, height: 0 },
-        elevation: 5, flex: 1
-    },
-    previewTitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        marginBottom: 10
-    },
-    previewSubtitle: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        textAlign: 'left',
-        marginBottom: 10,
-        marginTop: 20,
+// const styles = StyleSheet.create({
+//     container: {
+//         flexGrow: 1,
+//         padding: 10,
+//         backgroundColor: '#fff'
+//     },
+//     headerText: {
+//         fontSize: 20,
+//         fontWeight: 'bold',
+//         textAlign: 'center',
+//         marginBottom: 20
+//     },
+//     swiper: {
+//         height: 550,
+//         backgroundColor: "grey"
+//     },
+//     slide: {
+//         flex: 1,
+//         justifyContent: 'center',
+//         alignItems: 'center',
+//         padding: 20
+//     },
+//     previewContainer: {
+//         width: '110%',
+//         borderRadius: 10,
+//         backgroundColor: 'white',
+//         padding: 15,
+//         shadowColor: '#000',
+//         shadowOpacity: 0.1,
+//         shadowRadius: 10,
+//         shadowOffset: { width: 0, height: 0 },
+//         elevation: 5, flex: 1
+//     },
+//     previewTitle: {
+//         fontSize: 18,
+//         fontWeight: 'bold',
+//         textAlign: 'center',
+//         marginBottom: 10
+//     },
+//     previewSubtitle: {
+//         fontSize: 16,
+//         fontWeight: 'bold',
+//         textAlign: 'left',
+//         marginBottom: 10,
+//         marginTop: 20,
 
-    },
-    previewSubTitle: {
-        fontSize: 16,
-        textAlign: 'left',
-        marginBottom: 10,
-        marginTop: 20
-    },
-    table: {
-        width: '100%',
-        // borderCollapse: 'collapse',
-        marginBottom: 20,
-        borderWidth: 1,
+//     },
+//     previewSubTitle: {
+//         fontSize: 16,
+//         textAlign: 'left',
+//         marginBottom: 10,
+//         marginTop: 20
+//     },
+//     table: {
+//         width: '100%',
+//         // borderCollapse: 'collapse',
+//         marginBottom: 20,
+//         borderWidth: 1,
 
-        // borderRadius: 7
-    },
-    tableRow: {
-        flexDirection: 'row',
-        borderBottomWidth: 1,
-        // borderBottomColor: '#ddd',
-        paddingVertical: 8
-    },
-    tableHeader: {
-        fontWeight: 'bold',
-        flex: 1,
+//         // borderRadius: 7
+//     },
+//     tableRow: {
+//         flexDirection: 'row',
+//         borderBottomWidth: 1,
+//         // borderBottomColor: '#ddd',
+//         paddingVertical: 8
+//     },
+//     tableHeader: {
+//         fontWeight: 'bold',
+//         flex: 1,
 
-    },
-    tableCell: {
-        flex: 1,
-        paddingHorizontal: 4,
+//     },
+//     tableCell: {
+//         flex: 1,
+//         paddingHorizontal: 4,
 
-    },
-    summaryContainer: {
-        marginTop: 10,
-    },
-    summaryText: {
-        fontSize: 16,
-        textAlign: 'right',
-        fontWeight: 'bold'
-    },
-    shareButton: {
-        backgroundColor: '#007bff',
-        padding: 15,
-        borderRadius: 10,
-        marginTop: 20,
-        alignItems: 'center'
-    },
-    shareButtonText: {
-        color: '#fff',
-        fontSize: 16,
-        fontWeight: 'bold'
-    },
-    footerText: {
-        fontSize: 16,
-        textAlign: 'center',
-        marginTop: 20,
-        fontWeight: 'bold'
-    },
+//     },
+//     summaryContainer: {
+//         marginTop: 10,
+//     },
+//     summaryText: {
+//         fontSize: 16,
+//         textAlign: 'right',
+//         fontWeight: 'bold'
+//     },
+//     shareButton: {
+//         backgroundColor: '#007bff',
+//         padding: 15,
+//         borderRadius: 10,
+//         marginTop: 20,
+//         alignItems: 'center'
+//     },
+//     shareButtonText: {
+//         color: '#fff',
+//         fontSize: 16,
+//         fontWeight: 'bold'
+//     },
+//     footerText: {
+//         fontSize: 16,
+//         textAlign: 'center',
+//         marginTop: 20,
+//         fontWeight: 'bold'
+//     },
 
 
-    container1: {
-        flex: 1,
-        backgroundColor: '#fff',
-        padding: 20,
-    },
-    logo: {
-        width: 100,
-        height: 100,
-        alignSelf: 'center',
-        marginBottom: 20,
-    },
-    header: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        marginBottom: 20,
-    },
-    invoiceDetails: {
-        marginBottom: 20,
-    },
-    invoiceNumber: {
-        fontSize: 16,
-        fontWeight: 'bold',
-    },
-    invoiceDate: {
-        fontSize: 16,
-    },
-    items: {
-        marginBottom: 20,
-    },
-    totals: {
-        marginTop: 10,
-        borderBottomWidth: 1,
-        borderStyle: 'dashed'
-    },
-    subtotal: {
-        fontSize: 17,
-        flex: 1,
-    },
-    total: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        flex: 1
-    }
-});
+//     container1: {
+//         flex: 1,
+//         backgroundColor: '#fff',
+//         padding: 20,
+//     },
+//     logo: {
+//         width: 100,
+//         height: 100,
+//         alignSelf: 'center',
+//         marginBottom: 20,
+//     },
+//     header: {
+//         fontSize: 24,
+//         fontWeight: 'bold',
+//         textAlign: 'center',
+//         marginBottom: 20,
+//     },
+//     invoiceDetails: {
+//         marginBottom: 20,
+//     },
+//     invoiceNumber: {
+//         fontSize: 16,
+//         fontWeight: 'bold',
+//     },
+//     invoiceDate: {
+//         fontSize: 16,
+//     },
+//     items: {
+//         marginBottom: 20,
+//     },
+//     totals: {
+//         marginTop: 10,
+//         borderBottomWidth: 1,
+//         borderStyle: 'dashed'
+//     },
+//     subtotal: {
+//         fontSize: 17,
+//         flex: 1,
+//     },
+//     total: {
+//         fontSize: 20,
+//         fontWeight: 'bold',
+//         flex: 1
+//     }
+// });
 
 export default SelectInvoiceFormat;

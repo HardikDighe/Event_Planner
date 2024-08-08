@@ -5,6 +5,9 @@ import * as Print from 'expo-print';
 import { shareAsync } from 'expo-sharing';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { StackNavigationProp } from '@react-navigation/stack';
+import styles from '../../../../app/screens/CreateQuotation/styles/styles';
+import { saveQuotation } from '../api/createquotation.api';
+import { fetchQuotationId } from '../api/getQuotationId.api';
 
 interface FloatingLabelInputProps {
     label: string;
@@ -25,35 +28,35 @@ type RouteParams = {
 };
 type RootStackParamList = {
     SelectInvoiceFormat: {
-      customerName: string;
-      phoneNumber: string;
-      address: string;
-      emailId: string;
-      gstin: string;
-      quotationDate: Date;
-      venueDate: Date;
-      venueTime: Date;
-      venueDetails: string;
-      items: Item[];
+        customerName: string;
+        phoneNumber: string;
+        address: string;
+        emailId: string;
+        gstin: string;
+        quotationDate: Date;
+        venueDate: Date;
+        venueTime: Date;
+        venueDetails: string;
+        items: Item[];
     };
     ViewInvoice: {
-      customerName: string;
-      phoneNumber: string;
-      address: string;
-      emailId: string;
-      gstin: string;
-      quotationDate: Date;
-      venueDate: Date;
-      venueTime: Date;
-      venueDetails: string;
-      items: Item[];
+        customerName: string;
+        phoneNumber: string;
+        address: string;
+        emailId: string;
+        gstin: string;
+        quotationDate: Date;
+        venueDate: Date;
+        venueTime: Date;
+        venueDetails: string;
+        items: Item[];
     };
     EditQuotation: {
-      quotationId: string;
+        quotationId: string;
     };
     AddItem: undefined;
-  };
-  
+};
+
 
 
 // FloatingLabelInput as a functional component with typed props
@@ -111,11 +114,11 @@ interface Props {
 interface CreateQuotationProps { }
 
 const CreateQuotation: React.FC<Props> = () => {
-   // const navigation = useNavigation();
+    // const navigation = useNavigation();
     const navigation = useNavigation<SelectInvoiceFormatNavigationProp>();
-
     const route = useRoute();
 
+    const [quotationId, setQuotationId] = useState(Number);
     const [customerName, setCustomerName] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [address, setAddress] = useState('');
@@ -126,7 +129,6 @@ const CreateQuotation: React.FC<Props> = () => {
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [showTimePicker, setShowTimePicker] = useState(false);
     const [quotationDate, setQuotationDate] = useState(new Date());
-    const [quotationTime, setQuotationTime] = useState(new Date());
     const [venueDetails, setVenueDetails] = useState('');
     //const [items, setItems] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
@@ -140,6 +142,18 @@ const CreateQuotation: React.FC<Props> = () => {
             setItems(prevItems => [...prevItems, route.params.newItem]);
         }
     }, [route.params?.newItem]);
+    useEffect(() => {
+        setQuotationDate;
+        const loadQuotationId = async () => {
+            const id = await fetchQuotationId();
+            if (id !== null) {
+                setQuotationId(id);
+            } else {
+                Alert.alert('Error', 'Failed to load quotation ID.');
+            }
+        };
+        loadQuotationId();
+    }, []);
 
     const handleSharePDF = async () => {
         const htmlContent = `
@@ -168,7 +182,7 @@ const CreateQuotation: React.FC<Props> = () => {
                 }
             </style>
         </head>
-        <body>
+        <body> 
             <h1>Quotation Details</h1>
             <table>
                 <tr>
@@ -252,21 +266,12 @@ const CreateQuotation: React.FC<Props> = () => {
         }
     };
 
-    useEffect(() => {
-        if (route.params?.newItem) {
-            setItems([...items, route.params.newItem]);
-        }
-    }, [route.params?.newItem]);
-
-
-
     const handleDateChange = (event: React.SyntheticEvent<any>, selectedDate?: Date) => {
         setShowDatePicker(false);
         if (selectedDate) {
             setVenueDate(selectedDate);
         }
     };
-    
 
     const handleSharePDF1 = () => {
         navigation.navigate('SelectInvoiceFormat', {
@@ -305,127 +310,143 @@ const CreateQuotation: React.FC<Props> = () => {
         navigation.navigate('EditQuotation', { quotationId: 'quotationIdHere' });
     };
 
-
-    const handleSave = async () => {
-        const quotationData = {
-            customerName,
-            phoneNumber,
-            address,
-            emailId,
-            gstin,
-            quotationDate,
-            venueDate,
-            venueTime,
-            venueDetails,
-            items,
-        };
-        setModalVisible(true);
-        try {
-            const response = await fetch('http://192.168.0.108:3000/quotation', {
-                method: 'POST',
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(quotationData),
-            });
-
-            // if (response.ok) {
-            //     setModalVisible(true);  // Show the modal
-            // } else {
-            //     Alert.alert('Error', 'Failed to save quotation.');
-            // }
-
-        } catch (error) {
-            Alert.alert('Error', 'An error occurred while saving the quotation.');
-        }
+    const quotationData = {
+        customerName,
+        phoneNumber,
+        address,
+        emailId,
+        gstin,
+        quotationDate,
+        venueDate,
+        venueTime,
+        venueDetails,
+        items, 
     };
+    const handleSave = async () => {
+        const isSuccess = await saveQuotation(quotationData);
+    if (isSuccess) {
+        setModalVisible(true);  // Show the modal if the save was successful
+    }
+    }
 
     return (
-        <ScrollView contentContainerStyle={styles.container}>
-            <Text style={styles.title}>Create Quotation</Text>
+        <View style={{ flex: 1 }}>
+            <ScrollView contentContainerStyle={styles.container}>
+                <Text style={styles.title}>Create Quotation</Text>
 
-            <View style={styles.topField}>
-                <View style={styles.halfField}>
-                    <Text style={styles.label1}>Quotation Number</Text>
-                    <Text style={styles.label1}>01</Text>
+                <View style={styles.topField}>
+                    <View style={styles.halfField}>
+                        <Text style={styles.label1}>Quotation Number</Text>
+                        <Text style={styles.label1}>{quotationId}</Text>
+                    </View>
+
+                    <View style={{ width: 1, backgroundColor: '#ccc' }} />
+
+                    <View style={styles.halfField}>
+                        <Text style={styles.label1}>Date:</Text>
+                        <Text>{quotationDate.toDateString()}</Text>
+                    </View>
                 </View>
 
-                <View style={{ width: 1, backgroundColor: '#ccc' }} />
-
-                <View style={styles.halfField}>
-                    <Text style={styles.label1}>Date:</Text>
-                    <Text>{quotationDate.toDateString()}</Text>
-                </View>
-            </View>
-
-            <FloatingLabelInput
-                label="Enter Customer Name"
-                value={customerName}
-                onChangeText={setCustomerName}
-            />
-            <FloatingLabelInput
-                label="Enter Phone Number"
-                value={phoneNumber}
-                onChangeText={setPhoneNumber}
-                keyboardType="phone-pad"
-            />
-
-
-            <FloatingLabelInput
-                label="Enter Email ID"
-                value={emailId}
-                onChangeText={setEmailId}
-                keyboardType="email-address"
-            />
-            <FloatingLabelInput
-                label="Enter GSTIN"
-                value={gstin}
-                onChangeText={setGstin}
-            />
-
-            <TouchableOpacity onPress={() => setShowDatePicker(true)}>
-                <Text style={styles.label}>Venue Date: {venueDate.toDateString()}</Text>
-            </TouchableOpacity>
-
-            {showDatePicker && (
-                <DateTimePicker
-                    value={venueDate}
-                    mode="date"
-                    display="default"
-                    onChange={handleDateChange}
+                <FloatingLabelInput
+                    label="Enter Customer Name"
+                    value={customerName}
+                    onChangeText={setCustomerName}
                 />
-            )}
-
-            {/* Venue Time Picker */}
-            <TouchableOpacity onPress={() => setShowTimePicker(true)}>
-                <Text style={styles.label}>Venue Time: {venueTime.toTimeString().slice(0, 5)}</Text>
-            </TouchableOpacity>
-
-            {showTimePicker && (
-                <DateTimePicker
-                    value={venueTime}
-                    mode="time"
-                    display="default"
-                    onChange={handleTimeChange}
+                <FloatingLabelInput
+                    label="Enter Phone Number"
+                    value={phoneNumber}
+                    onChangeText={setPhoneNumber}
+                    keyboardType="phone-pad"
                 />
-            )}
-
-            <FloatingLabelInput
-                label="Enter Venue Details"
-                value={venueDetails}
-                onChangeText={setVenueDetails}
+                 <FloatingLabelInput
+                label="Enter Address"
+                value={address}
+                onChangeText={setAddress}
+                //keyboardType="email-address"
             />
+                <FloatingLabelInput
+                    label="Enter Email ID"
+                    value={emailId}
+                    onChangeText={setEmailId}
+                    keyboardType="email-address"
+                />
+                <FloatingLabelInput
+                    label="Enter GSTIN"
+                    value={gstin}
+                    onChangeText={setGstin}
+                />
 
-            {items.map((item, index) => (
-                <View key={index} style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginBottom: 10 }}>
-                    <Text style={{ fontSize: 18 }}>{item.itemName}</Text>
-                    <Text>Quantity: {item.itemQuantity}</Text>
-                    <Text>Rate: {item.itemPrice}</Text>
-                    <Text>Total: {item.itemTotalPrice}</Text>
-                </View>
-            ))}
+                <TouchableOpacity onPress={() => setShowDatePicker(true)}>
+                    <Text style={styles.label}>Venue Date: {venueDate.toDateString()}</Text>
+                </TouchableOpacity>
+                {showDatePicker && (
+                    <DateTimePicker
+                        value={venueDate}
+                        mode="date"
+                        display="default"
+                        onChange={() => handleDateChange}
+                    />
+                )}
 
-            <TouchableOpacity style={styles.linkButton} onPress={addItem}>
-                <Text style={styles.linkButtonText}>+ Add Item</Text>
-            </TouchableOpacity>
+                {/* Venue Time Picker */}
+                <TouchableOpacity onPress={() => setShowTimePicker(true)}>
+                    <Text style={styles.label}>Venue Time: {venueTime.toTimeString().slice(0, 5)}</Text>
+                </TouchableOpacity>
+                {showTimePicker && (
+                    <DateTimePicker
+                        value={venueTime}
+                        mode="time"
+                        display="default"
+                        onChange={() => handleTimeChange}
+                    />
+                )}
+
+                <FloatingLabelInput
+                    label="Enter Venue Details"
+                    value={venueDetails}
+                    onChangeText={setVenueDetails}
+                />
+
+                {items.map((item, index) => (
+                    <View key={index} style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginBottom: 10 }}>
+                        <Text style={{ fontSize: 18 }}>{item.itemName}</Text>
+                        <Text>Quantity: {item.itemQuantity}</Text>
+                        <Text>Rate: {item.itemPrice}</Text>
+                        <Text>Total: {item.itemTotalPrice}</Text>
+                    </View>
+                ))}
+
+                <TouchableOpacity style={styles.linkButton} onPress={addItem}>
+                    <Text style={styles.linkButtonText}>+ Add Item</Text>
+                </TouchableOpacity>
+
+                <Modal
+                    visible={modalVisible}
+                    transparent={true}
+                    animationType="slide"
+                    onRequestClose={() => setModalVisible(false)}
+                >
+                    <View style={styles.modalContainer}>
+                        <View style={styles.modalContent}>
+                            <Text style={styles.modalTitle}>Success</Text>
+                            <Text style={styles.modalMessage}>Quotation saved successfully!</Text>
+                            <TouchableOpacity style={styles.modalButton} onPress={handleSharePDF}>
+                                <Text style={styles.modalButtonText}>Share</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.modalButton} onPress={handleEdit} >
+                                <Text style={styles.modalButtonText}>Edit</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.modalButton} >
+                                <Text style={styles.modalButtonText}>Delete</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.modalButton} onPress={() => setModalVisible(false)}>
+                                <Text style={styles.modalButtonText}>Close</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </Modal>
+            </ScrollView>
 
             <View style={styles.buttonsContainer}>
                 <TouchableOpacity style={styles.button} onPress={handleSharePDF1}>
@@ -435,149 +456,8 @@ const CreateQuotation: React.FC<Props> = () => {
                     <Text style={styles.buttonText}>Save</Text>
                 </TouchableOpacity>
             </View>
-
-            <Modal
-                visible={modalVisible}
-                transparent={true}
-                animationType="slide"
-                onRequestClose={() => setModalVisible(false)}
-            >
-                <View style={styles.modalContainer}>
-                    <View style={styles.modalContent}>
-                        <Text style={styles.modalTitle}>Success</Text>
-                        <Text style={styles.modalMessage}>Quotation saved successfully!</Text>
-                        <TouchableOpacity style={styles.modalButton} onPress={handleSharePDF}>
-                            <Text style={styles.modalButtonText}>Share</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.modalButton} onPress={handleEdit} >
-                            <Text style={styles.modalButtonText}>Edit</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.modalButton} >
-                            <Text style={styles.modalButtonText}>Delete</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.modalButton} onPress={() => setModalVisible(false)}>
-                            <Text style={styles.modalButtonText}>Close</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </Modal>
-        </ScrollView>
+        </View>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flexGrow: 1,
-        padding: 20,
-        backgroundColor: 'white'
-    },
-    title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 20,
-    },
-    topField: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginBottom: 15,
-        paddingHorizontal: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: '#DCDCDC',
-        backgroundColor: "#F0F0F0",
-        borderRadius: 7,
-    },
-    halfField: {
-        flex: 1,
-        marginRight: 10,
-        justifyContent: 'center',
-    },
-    label1: {
-        fontSize: 16,
-        marginBottom: 5,
-        color: '#333',
-    },
-    field: {
-        marginBottom: 15,
-    },
-    input: {
-        height: 40,
-        borderColor: '#ccc',
-        borderWidth: 1,
-        borderRadius: 5,
-        paddingHorizontal: 10,
-        marginBottom: 10,
-    },
-    inputFocused: {
-        borderColor: '#007BFF',
-    },
-    buttonsContainer: {
-        marginTop: 30,
-        flexDirection: 'row',
-        justifyContent: 'space-evenly',
-    },
-    button: {
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-        backgroundColor: '#00008B',
-        borderRadius: 5,
-        flex: 1,
-        marginHorizontal: 5,
-    },
-    buttonText: {
-        color: '#fff',
-        textAlign: 'center',
-        fontSize: 16,
-    },
-    linkButton: {
-        paddingVertical: 5,
-        paddingHorizontal: 10,
-        borderRadius: 5,
-        borderColor: '#00008B',
-        backgroundColor: 'transparent',
-        alignSelf: 'flex-start',
-    },
-    linkButtonText: {
-        color: '#00008B',
-        fontSize: 16,
-        textAlign: 'center',
-        textDecorationLine: 'underline',
-    },
-    modalContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    },
-    modalContent: {
-        width: '80%',
-        backgroundColor: '#fff',
-        borderRadius: 10,
-        padding: 20,
-        alignItems: 'center',
-    },
-    modalTitle: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginBottom: 10,
-    },
-    modalMessage: {
-        fontSize: 16,
-        marginBottom: 20,
-    },
-    modalButton: {
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-        backgroundColor: '#00008B',
-        borderRadius: 5,
-        marginVertical: 5,
-        width: '100%',
-        alignItems: 'center',
-    },
-    modalButtonText: {
-        color: '#fff',
-        textAlign: 'center',
-        fontSize: 16,
-    },
-});
 
 export default CreateQuotation;

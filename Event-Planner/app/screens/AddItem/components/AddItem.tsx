@@ -62,6 +62,16 @@ const AddItem: React.FC<Props> = ({ navigation }) => {
 
   const handleSaveItem = () => {
     navigation.goBack();
+    const newItem = {
+      itemName,
+      quantity,
+      price,
+      discount,
+      payableAmount,
+      miscellaneous
+  };
+  // Pass the new item back to the CreateQuotation screen
+  navigation.navigate('CreateQuotation', { newItem });
   };
 
   return (

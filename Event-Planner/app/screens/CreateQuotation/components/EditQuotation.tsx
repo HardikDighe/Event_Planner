@@ -3,6 +3,10 @@ import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView, Alert,
 import { useNavigation, useRoute } from '@react-navigation/native';
 import * as Print from 'expo-print';
 import { shareAsync } from 'expo-sharing';
+import styles from '../../../../app/screens/CreateQuotation/styles/styles';
+import { fetchQuotationDetails } from '../api/getQuotationData.api';
+import { deleteQuotation } from '../api/deleteQuotation.api';
+import { updateQuotation } from '../api/updateQuatation.api';
 
 interface FloatingLabelInputProps {
     label: string;
@@ -49,7 +53,8 @@ const EditQuotation = () => {
     const { quotationId } = route.params as EditQuotationRouteParams;
 
     // Define and initialize state variables
-    const [quotationDetails, setQuotationDetails] = useState<any>(null); // Change to a more specific type if possible
+    const [quotationDetails, setQuotationDetails] = useState<any>();
+
     const [editItemModalVisible, setEditItemModalVisible] = useState(false);
     const [currentItemIndex, setCurrentItemIndex] = useState<number | null>(null);
     const [currentItem, setCurrentItem] = useState({
@@ -161,32 +166,17 @@ const EditQuotation = () => {
     };
 
     useEffect(() => {
-        const fetchQuotationDetails = async () => {
-            try {
-                const response = await fetch(`http://192.168.0.108:3000/quotation/${quotationId}`);
-                const data = await response.json();
+        const loadQuotationData = async () => {
+            const data = await fetchQuotationDetails('7a9a'); // Replace with the actual ID
+            if (data) {
                 setQuotationDetails(data);
-            } catch (error) {
-                console.error('Failed to fetch quotation details:', error);
-                Alert.alert('Error', 'Failed to fetch quotation details. Using demo data.');
-                setQuotationDetails({
-                    customerName: 'Demo Customer',
-                    phoneNumber: '1234567890',
-                    address: 'Demo Address',
-                    emailId: 'demo@example.com',
-                    gstin: '12ABCDE3456FZ1',
-                    quotationDate: new Date(),
-                    venueDetails: 'Demo Venue',
-                    items: [
-                        { itemName: 'Item 1', itemQuantity: '1', itemPrice: '100', itemDiscount: '0', itemTotalPrice: '100', itemMisc: 'None' },
-                        { itemName: 'Item 2', itemQuantity: '2', itemPrice: '200', itemDiscount: '20', itemTotalPrice: '360', itemMisc: 'None' }
-                    ],
-                });
+            } else {
+                console.error('Failed to load quotation data');
             }
         };
+        loadQuotationData();
 
-        fetchQuotationDetails();
-    }, [quotationId]);
+    }, []);
 
     const handleItemEdit = (index: number) => {
         if (!quotationDetails) return;
@@ -194,6 +184,17 @@ const EditQuotation = () => {
         setCurrentItemIndex(index);
         setCurrentItem(quotationDetails.items[index]);
         setEditItemModalVisible(true);
+    };
+
+    const handleDelete = async (id: string) => {
+        const success = await deleteQuotation(id);
+        if (success) {
+            // Handle successful deletion (e.g., update UI or show a success message)
+            console.log('Deleted successfully');
+        } else {
+            // Handle failed deletion (e.g., show an error message)
+            console.log('Deletion failed');
+        }
     };
 
     const handleItemDelete = (index: number) => {
@@ -216,23 +217,9 @@ const EditQuotation = () => {
     const handleSave = async () => {
         if (!quotationDetails) return;
 
+        updateQuotation(quotationDetails.id,quotationDetails);
         setModalVisible(true);
-        try {
-            const response = await fetch(`http://192.168.0.108:3000/quotation/${quotationId}`, {
-                method: 'PUT',
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(quotationDetails),
-            });
-
-            if (response.ok) {
-                // Optionally show success modal or message
-            } else {
-                Alert.alert('Error', 'Failed to update quotation.');
-            }
-        } catch (error) {
-            console.error('Failed to update quotation:', error);
-            Alert.alert('Error', 'An error occurred while updating the quotation.');
-        }
+        
     };
 
     if (!quotationDetails) {
@@ -243,8 +230,8 @@ const EditQuotation = () => {
         );
     }
 
-
     return (
+        <view style={{flex:1}}>
         <ScrollView contentContainerStyle={styles.container}>
             <Text style={styles.title}>Edit Quotation</Text>
             <FloatingLabelInput
@@ -299,10 +286,8 @@ const EditQuotation = () => {
                 </View>
             ))}
 
-            <TouchableOpacity style={styles.button} onPress={handleSave}>
-                <Text style={styles.buttonText}>Save</Text>
-            </TouchableOpacity>
             
+
             <Modal
                 visible={modalVisible}
                 transparent={true}
@@ -319,7 +304,7 @@ const EditQuotation = () => {
                         {/* <TouchableOpacity style={styles.modalButton} onPress={handleEdit} >
                             <Text style={styles.modalButtonText}>Edit</Text>
                         </TouchableOpacity> */}
-                        <TouchableOpacity style={styles.modalButton} >
+                        <TouchableOpacity style={styles.modalButton} onPress={() => deleteQuotation(quotationDetails.id)} >
                             <Text style={styles.modalButtonText}>Delete</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.modalButton} onPress={() => navigation.navigate('CreateQuotation')}>
@@ -363,7 +348,7 @@ const EditQuotation = () => {
                         />
                         <FloatingLabelInput
                             label="Total Price"
-                             value={String(currentItem.itemTotalPrice)}
+                            value={String(currentItem.itemTotalPrice)}
                             onChangeText={(text) => setCurrentItem({ ...currentItem, itemTotalPrice: Number(text) })}
                             keyboardType="numeric"
                         />
@@ -382,109 +367,10 @@ const EditQuotation = () => {
                 </View>
             </Modal>
         </ScrollView>
+        <TouchableOpacity style={styles.button} onPress={handleSave}>
+        <Text style={styles.buttonText}>Save</Text>
+    </TouchableOpacity></view>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flexGrow: 1,
-        padding: 20,
-        backgroundColor: 'white',
-    },
-    title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 20,
-    },
-    field: {
-        marginBottom: 15,
-    },
-    input: {
-        borderWidth: 1,
-        // borderColor: '#ccc',
-        padding: 10,
-        borderRadius: 4,
-        fontSize: 16,
-    },
-    inputFocused: {
-        borderColor: '#007BFF',        
-    },
-    button: {
-        backgroundColor: '#007BFF',
-        padding: 15,
-        borderRadius: 4,
-        alignItems: 'center',
-        marginTop: 20,
-    },
-    buttonText: {
-        color: '#fff',
-        fontSize: 16,
-        fontWeight: 'bold',
-    },
-    itemContainer: {
-        marginBottom: 15,
-        padding: 10,
-        backgroundColor: '#fff',
-        borderRadius: 4,
-        borderWidth: 1,
-        borderColor: '#ccc',
-    },
-    itemButtons: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginTop: 10,
-    },
-    editButton: {
-        backgroundColor: '#28a745',
-        padding: 10,
-        borderRadius: 4,
-    },
-    deleteButton: {
-        backgroundColor: '#dc3545',
-        padding: 10,
-        borderRadius: 4,
-    },
-    loadingContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    modalContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0,0,0,0.5)',
-    },
-    modalContent: {
-        width: '80%',
-        padding: 20,
-        backgroundColor: '#fff',
-        borderRadius: 4,
-        alignItems: 'center',
-    },
-    modalTitle: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginBottom: 10,
-    },
-    modalMessage: {
-        fontSize: 16,
-        marginBottom: 20,
-    },
-    modalButton: {
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-        backgroundColor: '#00008B',
-        borderRadius: 5,
-        marginVertical: 5,
-        width: '100%',
-        alignItems: 'center',
-    },
-    modalButtonText: {
-        color: '#fff',
-        fontSize: 16,
-        fontWeight: 'bold',
-    },
-});
 
 export default EditQuotation;
