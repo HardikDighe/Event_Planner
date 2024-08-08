@@ -1,10 +1,17 @@
+// screens/SignupScreen.tsx
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { TextInput as PaperTextInput, Provider as PaperProvider } from 'react-native-paper';
-import styles from '../styles/styles'; // Importing the styles
+import styles from '../styles/styles';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../../../(tabs)/types'; // Import your types
+
+type SignupScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Signup'>;
 
 const SignupScreen: React.FC = () => {
+  const navigation = useNavigation<SignupScreenNavigationProp>(); // Use typed navigation
   const [firstName, setFirstName] = useState<string>('');
   const [lastName, setLastName] = useState<string>('');
   const [phoneNumber, setPhoneNumber] = useState<string>('');
@@ -60,6 +67,7 @@ const SignupScreen: React.FC = () => {
     if (valid) {
       console.log('Signup button pressed');
       // Proceed with signup logic
+      navigation.navigate('Login'); // Navigate to the Login screen after successful signup
     }
   };
 

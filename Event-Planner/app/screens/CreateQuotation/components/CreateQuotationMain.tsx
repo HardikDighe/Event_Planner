@@ -12,7 +12,7 @@ const CreateQuotationMain = () => {
     return (
         <NavigationContainer independent={true}>
             <Stack.Navigator initialRouteName="CreateQuotation">
-                <Stack.Screen name="CreateQuotation" component={CreateQuotation} />
+                <Stack.Screen name="CreateQuotation" component={CreateQuotation} options={{headerShown:false}}/>
                 <Stack.Screen name="AddItem" component={AddItem} />
                
                 <Stack.Screen name="EditQuotation" component={EditQuotation} />

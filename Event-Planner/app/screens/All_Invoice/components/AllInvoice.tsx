@@ -41,10 +41,10 @@ type Invoice = {
 const invoices: Invoice[] = [
   {
     id: "1",
-    name: "Rohan More",
-    amount: 82500,
+    name: "ABC",
+    amount: 80500,
     balance: 14500,
-    date: "21/05/2024",
+    date: "27/07/2024",
     status: "Approved",
   },
   // ... (other invoices)
@@ -187,7 +187,7 @@ const AllInvoices = () => {
       <Header onSearch={handleSearch} />
       <View style={styles.totalSalesContainer}>
         <Text style={styles.totalSales}>Total Sales</Text>
-        <Text style={styles.totalAmount}>₹1,000,000</Text>
+        <Text style={styles.totalAmount}>80,500</Text>
       </View>
       <View style={styles.invoicesHeader}>
         <Text style={styles.invoicesListText}>Invoices List</Text>

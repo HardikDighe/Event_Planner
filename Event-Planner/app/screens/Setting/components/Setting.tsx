@@ -12,9 +12,9 @@ const SettingsScreen = () => {
     return (
         <View style={styles.container}>
             {/* Header */}
-            <View style={styles.header}>
+            {/* <View style={styles.header}>
                 <Text style={styles.headerTitle}>Settings</Text>
-            </View>
+            </View> */}
             
             {/* Profile Section */}
             <View style={styles.profileSection}>

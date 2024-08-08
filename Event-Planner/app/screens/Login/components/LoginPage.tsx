@@ -119,7 +119,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ navigation }) => {
     }
 
     if (valid) {
-      navigation.navigate('DashBoard', { email, password });
+      navigation.navigate('Dashboard', { email, password });
     }
   };
 
@@ -174,7 +174,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
   },
   scrollContainer: {
     flexGrow: 1,

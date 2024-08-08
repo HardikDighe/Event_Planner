@@ -22,7 +22,6 @@ const VendorRegistration: React.FC<Props> = ({ navigation }) => {
   const [phoneNumberError, setPhoneNumberError] = useState("");
 
   const handleSave = async () => {
-    console.warn("Hello")
     // Validate the phone number field
     if (!phoneNumber) {
       setPhoneNumberError("Phone number is required.");
@@ -40,7 +39,6 @@ const VendorRegistration: React.FC<Props> = ({ navigation }) => {
     };
 
     try {
-     
       const response = await fetch("http://localhost:3000/Vendor", { // Use the correct backend server URL
         method: "POST",
         headers: {
@@ -53,7 +51,7 @@ const VendorRegistration: React.FC<Props> = ({ navigation }) => {
         const jsonResponse = await response.json();
         console.log("Vendor data saved successfully:", jsonResponse);
         Alert.alert("Success", "Vendor data saved successfully.");
-        navigation.navigate("NextScreen"); // Navigate to the next screen if needed
+        navigation.goBack(); // Navigate back to the previous screen
       } else {
         const errorResponse = await response.json();
         console.error("Error saving vendor data:", errorResponse);

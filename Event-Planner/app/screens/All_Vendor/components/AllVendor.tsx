@@ -9,6 +9,9 @@ import {
 import { Card, IconButton } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import styles from '../../../../../Event-Planner/app/screens/All_Vendor/styles/styles';
+import { useNavigation } from '@react-navigation/native';
+import { StackScreenProps } from '@react-navigation/stack';
+import { RootStackParamList } from '../../../(tabs)/types';
 
 // Expo dependencies
 import * as Sharing from "expo-sharing";
@@ -37,6 +40,7 @@ const vendors: Vendor[] = [
 const Header: React.FC<{ onSearch: (query: string) => void }> = ({
   onSearch,
 }) => {
+  const navigation = useNavigation(); 
   const [searchQuery, setSearchQuery] = useState("");
 
   // Function to generate and share PDF
@@ -80,7 +84,7 @@ const Header: React.FC<{ onSearch: (query: string) => void }> = ({
 
   return (
     <View style={styles.headerContainer}>
-      <TouchableOpacity onPress={() => {}}>
+       <TouchableOpacity onPress={() => navigation.goBack()}>
         <IconButton icon="arrow-left" size={24} />
       </TouchableOpacity>
       <Text style={styles.headerText}>All Vendors</Text>
@@ -173,6 +177,7 @@ const VendorCard: React.FC<{ vendor: Vendor }> = ({ vendor }) => {
 
 const VendorListScreen: React.FC = () => {
   const [filteredVendors, setFilteredVendors] = useState<Vendor[]>(vendors);
+  const navigation = useNavigation(); // Use the useNavigation hook
 
   const handleSearch = (query: string) => {
     const lowercasedQuery = query.toLowerCase();
@@ -198,7 +203,10 @@ const VendorListScreen: React.FC = () => {
           <VendorCard key={vendor.id} vendor={vendor} />
         ))}
       </ScrollView>
-      <TouchableOpacity style={styles.registerButton}>
+      <TouchableOpacity
+        style={styles.registerButton}
+        onPress={() => navigation.navigate('VendorRegistration')}
+      >
         <Text style={styles.registerButtonText}>+ Register Vendor</Text>
       </TouchableOpacity>
     </View>

@@ -15,7 +15,7 @@ import { useNavigation, NavigationProp } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 import { TextInput as PaperInput } from "react-native-paper";
-import { RootStackParamList } from "../../Dashboard/components/types"; // Adjust the import path
+import { RootStackParamList } from "../../../(tabs)/types"; // Adjust the import path
 import styles from "../../../../../Event-Planner/app/screens/CreateInvoice/styles/styles";
 
 interface FormData {

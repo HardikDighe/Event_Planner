@@ -28,22 +28,18 @@ const DrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
           <TouchableOpacity style={styles.item} onPress={() => props.navigation.navigate('Invoices')}>
             <Ionicons name="file-tray-outline" size={24} color="black" />
             <Text style={styles.itemText}>Invoices</Text>
-            <Ionicons name="chevron-forward-outline" size={20} color="black" />
           </TouchableOpacity>
           <TouchableOpacity style={styles.item} onPress={() => props.navigation.navigate('Quotation')}>
-            <Ionicons name="document-text-outline" size={24} color="black" />
+            <Ionicons name="file-tray-stacked-outline" size={24} color="black" />
             <Text style={styles.itemText}>Quotation</Text>
-            <Ionicons name="chevron-forward-outline" size={20} color="black" />
           </TouchableOpacity>
           <TouchableOpacity style={styles.item} onPress={() => props.navigation.navigate('AllEvents')}>
             <Ionicons name="calendar-outline" size={24} color="black" />
             <Text style={styles.itemText}>All Events</Text>
-            <Ionicons name="chevron-forward-outline" size={20} color="black" />
           </TouchableOpacity>
           <TouchableOpacity style={styles.item} onPress={() => props.navigation.navigate('AllVendors')}>
             <Ionicons name="people-outline" size={24} color="black" />
             <Text style={styles.itemText}>All Vendors</Text>
-            <Ionicons name="chevron-forward-outline" size={20} color="black" />
           </TouchableOpacity>
         </View>
 
@@ -53,12 +49,10 @@ const DrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
           <TouchableOpacity style={styles.item} onPress={() => props.navigation.navigate('VendorRegistration')}>
             <Ionicons name="person-add-outline" size={24} color="black" />
             <Text style={styles.itemText}>Vendor Registration</Text>
-            <Ionicons name="chevron-forward-outline" size={20} color="black" />
           </TouchableOpacity>
           <TouchableOpacity style={styles.item} onPress={() => props.navigation.navigate('ServiceRegistration')}>
-            <Ionicons name="list-outline" size={24} color="black" />
+            <Ionicons name="construct-outline" size={24} color="black" />
             <Text style={styles.itemText}>Service Registration</Text>
-            <Ionicons name="chevron-forward-outline" size={20} color="black" />
           </TouchableOpacity>
         </View>
       </View>

@@ -1,38 +1,21 @@
-
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createDrawerNavigator } from '@react-navigation/drawer';
-import DashboardScreen from '../../../../app/screens/Dashboard/components/Dashboard';
-import DrawerContent from '../../DrawerContent/components/DrawerContent'; // Adjust the path to your DrawerContent
-import { RootStackParamList, RootDrawerParamList } from '../../../../app/screens/Dashboard/components/types';
+import { SafeAreaView, StatusBar, StyleSheet } from 'react-native';
+import DashNavigation from '../components/DashboardNavigation';
 
 
-const Stack = createNativeStackNavigator<RootStackParamList>();
-const Drawer = createDrawerNavigator<RootDrawerParamList>();
-
-const DrawerNavigator: React.FC = () => {
+const App = () => {
   return (
-    <Drawer.Navigator drawerContent={(props) => <DrawerContent {...props} />}>
-      <Drawer.Screen name="Dashboard" component={DashboardScreen} />
-      {/* Add more screens here as needed */}
-    </Drawer.Navigator>
+    <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="dark-content" />
+      <DashNavigation />
+    </SafeAreaView>
   );
 };
 
-const App: React.FC = () => {
-  return (
-    <NavigationContainer independent={true}>
-      <Stack.Navigator initialRouteName="Dashboard">
-        <Stack.Screen
-          name="Dashboard"
-          component={DrawerNavigator} // Use the Drawer Navigator here
-          options={{ headerShown: false }} // Hide the header for the drawer navigator
-        />
-        {/* Add more stack screens here as needed */}
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-};
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
 
 export default App;

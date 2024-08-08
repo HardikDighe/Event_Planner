@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { View, TextInput, TouchableOpacity, Text, StyleSheet, ScrollView, Alert, Switch } from 'react-native';
+import { NavigationProp } from "@react-navigation/native";
+
 const RegisterEvent = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -41,6 +43,7 @@ const RegisterEvent = () => {
     if (valid) {
       // Handle registration logic here
       Alert.alert('Registered successfully!', `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nTickets: ${numTickets}`);
+     
     } else {
       if (!isChecked) {
         Alert.alert('Please agree to the event policies and terms.');
