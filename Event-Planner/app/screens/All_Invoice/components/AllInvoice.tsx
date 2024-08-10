@@ -203,7 +203,7 @@ const AllInvoices = () => {
       />
       <TouchableOpacity
         style={styles.createInvoiceButton}
-        onPress={handleCreateInvoice}
+        onPress={() => navigation.navigate('CreateInvoive')}
       >
         <Text style={styles.createInvoiceButtonText}>Create Invoice</Text>
       </TouchableOpacity>

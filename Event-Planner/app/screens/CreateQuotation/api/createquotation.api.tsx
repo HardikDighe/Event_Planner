@@ -2,7 +2,7 @@ import { Alert } from 'react-native';
 
 export const saveQuotation = async (quotationData: Object): Promise<boolean> => {
     try {
-        const response = await fetch('http://192.168.0.143:3000/demoQuotation', {
+        const response = await fetch('http://localhost:3000/demoQuotation', {
             method: 'POST',
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(quotationData),

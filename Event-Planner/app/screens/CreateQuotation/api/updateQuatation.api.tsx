@@ -1,7 +1,7 @@
 import { Alert } from "react-native";
 export const updateQuotation = async (quotationId: string | number, quotationDetails: any): Promise<boolean> => {
     try {
-        const response = await fetch(`http://192.168.0.143:3000/demoQuotation/${quotationId}`, {
+        const response = await fetch(`http://localhost:3000/demoQuotation/${quotationId}`, {
             method: 'PUT',
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(quotationDetails),

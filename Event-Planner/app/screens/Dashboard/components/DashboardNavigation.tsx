@@ -16,6 +16,7 @@ import VendorListScreen from '../../All_Vendor/components/AllVendor';
 import VendorRegistration from '../../VendorRegistration/components/VendorRegistration';
 import AddItem from '../../AddItem/components/AddItem';
 import RegisterEvent from '../../All-Events/components/RegisterEvent';
+import CreateInvoice from '../../CreateInvoice/components/CreateInvoice';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Drawer = createDrawerNavigator<RootDrawerParamList>();
@@ -118,6 +119,11 @@ const DashNavigation: React.FC = () => {
           name="EventRegistration"
           component={RegisterEvent} // Ensure SettingNavigation is a stack navigator
           options={{ headerShown:true  }} // Optionally hide header if using custom header in SettingNavigation
+        />
+        <Stack.Screen
+          name="CreateInvoive"
+          component={CreateInvoice} // Ensure SettingNavigation is a stack navigator
+          options={{ headerShown:false  }} // Optionally hide header if using custom header in SettingNavigation
         />
       </Stack.Navigator>
     </NavigationContainer>

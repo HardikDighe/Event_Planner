@@ -167,7 +167,7 @@ const EditQuotation = () => {
 
     useEffect(() => {
         const loadQuotationData = async () => {
-            const data = await fetchQuotationDetails('7a9a'); // Replace with the actual ID
+            const data = await fetchQuotationDetails('aa92'); // Replace with the actual ID
             if (data) {
                 setQuotationDetails(data);
             } else {

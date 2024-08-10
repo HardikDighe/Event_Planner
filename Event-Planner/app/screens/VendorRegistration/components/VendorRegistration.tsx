@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import { View, Text, TouchableOpacity, Alert } from "react-native";
 import { NavigationProp } from "@react-navigation/native";
 import { TextInput } from "react-native-paper";
-import styles from "../../../../../Event-Planner/app/screens/VendorRegistration/styles/styles"; // Import styles from the new file
+import styles from "../../../../../Event-Planner/app/screens/VendorRegistration/styles/styles";
+import strings from "../../../../app/screens/VendorRegistration/constants/string";
+import { saveVendorData, VendorData } from "../../../../app/screens/VendorRegistration/api/vendorreg,api"; // Import the API function
+
 
 interface Props {
   navigation: NavigationProp<any>;
@@ -22,51 +25,34 @@ const VendorRegistration: React.FC<Props> = ({ navigation }) => {
   const [phoneNumberError, setPhoneNumberError] = useState("");
 
   const handleSave = async () => {
-    // Validate the phone number field
     if (!phoneNumber) {
-      setPhoneNumberError("Phone number is required.");
+      setPhoneNumberError(strings.errors.phoneNumberRequired);
       return;
     }
 
-    // Clear the error message if validation passes
     setPhoneNumberError("");
 
-    const vendorData = {
+    const vendorData: VendorData = {
       vendorName,
       phoneNumber,
       address,
       gstNumber,
     };
 
-    try {
-      const response = await fetch("http://localhost:3000/Vendor", { // Use the correct backend server URL
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(vendorData),
-      });
+    const result = await saveVendorData(vendorData);
 
-      if (response.ok) {
-        const jsonResponse = await response.json();
-        console.log("Vendor data saved successfully:", jsonResponse);
-        Alert.alert("Success", "Vendor data saved successfully.");
-        navigation.goBack(); // Navigate back to the previous screen
-      } else {
-        const errorResponse = await response.json();
-        console.error("Error saving vendor data:", errorResponse);
-        Alert.alert("Error", "Failed to save vendor data.");
-      }
-    } catch (error) {
-      console.error("Error saving vendor data:", error);
-      Alert.alert("Error", "An error occurred while saving vendor data.");
+    if (result.success) {
+      Alert.alert("Success", strings.alerts.success);
+      navigation.goBack();
+    } else {
+      Alert.alert("Error", result.error || strings.alerts.error);
     }
   };
 
   return (
     <View style={styles.container}>
       <TextInput
-        label="Vendor Name"
+        label={strings.labels.vendorName}
         value={vendorName}
         onChangeText={setVendorName}
         style={[styles.input, vendorNameFocused && styles.focusedInput]}
@@ -78,7 +64,7 @@ const VendorRegistration: React.FC<Props> = ({ navigation }) => {
         }}
       />
       <TextInput
-        label="Phone Number"
+        label={strings.labels.phoneNumber}
         value={phoneNumber}
         onChangeText={setPhoneNumber}
         keyboardType="phone-pad"
@@ -95,7 +81,7 @@ const VendorRegistration: React.FC<Props> = ({ navigation }) => {
         <Text style={styles.errorText}>{phoneNumberError}</Text>
       ) : null}
       <TextInput
-        label="Address"
+        label={strings.labels.address}
         value={address}
         onChangeText={setAddress}
         style={[styles.input, addressFocused && styles.focusedInput]}
@@ -107,7 +93,7 @@ const VendorRegistration: React.FC<Props> = ({ navigation }) => {
         }}
       />
       <TextInput
-        label="GSTIN No."
+        label={strings.labels.gstNumber}
         value={gstNumber}
         onChangeText={setGstNumber}
         style={[styles.input, gstNumberFocused && styles.focusedInput]}
@@ -120,18 +106,17 @@ const VendorRegistration: React.FC<Props> = ({ navigation }) => {
       />
       <TouchableOpacity onPress={() => navigation.navigate("AddItem")}>
         <Text style={[styles.addItemText, { color: "#051650" }]}>
-          + Add Item
+          {strings.buttons.addItem}
         </Text>
       </TouchableOpacity>
 
-      {/* Spacer to push the Save button to the bottom */}
       <View style={styles.spacer} />
 
       <TouchableOpacity
         onPress={handleSave}
         style={styles.button}
       >
-        <Text style={styles.saveButtonText}>Submit</Text>
+        <Text style={styles.saveButtonText}>{strings.buttons.submit}</Text>
       </TouchableOpacity>
     </View>
   );

@@ -1,6 +1,6 @@
 export const fetchQuotationDetails = async (quotationId: string) => {
     try {
-        const response = await fetch(`http://192.168.0.143:3000/demoQuotation/${quotationId}`);
+        const response = await fetch(`http://localhost:3000/demoQuotation/${quotationId}`);
         if (response.ok) {
             const data = await response.json();
             // console.log('Fetched Data:', data); // Debugging line
