@@ -1,9 +1,9 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import CreateQuotation from '././CreateQuotation';
+import CreateQuotation from '../../../../app/screens/CreateQuotation/components/CreateQuotation';
 import AddItem from '../../../../app/screens/AddItem/components/AddItem';
-import EditQuotation from '././EditQuotation';
+import EditQuotation from '../../../../app/screens/CreateQuotation/components/EditQuotation';
 import SelectInvoiceFormat from '../../../../app/screens/CreateQuotation/components/SelectInvoiceFromat';
 
 const Stack = createStackNavigator();
