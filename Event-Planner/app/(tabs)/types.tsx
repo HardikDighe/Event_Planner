@@ -23,6 +23,39 @@ export type RootStackParamList = {
   AllEvents:undefined;
   AllVendors:undefined;
   EventRegistration:undefined;
+  // EditQuotation:undefined;
+  // SelectInvoiceFormat:undefined;
+
+
+  
+  SelectInvoiceFormat: {
+    customerName: string;
+    phoneNumber: string;
+    address: string;
+    emailId: string;
+    gstin: string;
+    quotationDate: Date;
+    venueDate: Date;
+    venueTime: Date;
+    venueDetails: string;
+    items: Item[];
+};
+ViewInvoice: {
+    customerName: string;
+    phoneNumber: string;
+    address: string;
+    emailId: string;
+    gstin: string;
+    quotationDate: Date;
+    venueDate: Date;
+    venueTime: Date;
+    venueDetails: string;
+    items: Item[];
+};
+EditQuotation: {
+    quotationId: string;
+};
+// AddItem: undefined;
 
 };
 
@@ -35,4 +68,14 @@ export type RootDrawerParamList = {
   AllVendors: undefined;
   VendorRegistration: undefined;
   ServiceRegistration: undefined;
+ 
 };
+
+interface Item {
+  itemName: string;
+  itemQuantity: number;
+  itemPrice: number;
+  itemDiscount: number;
+  payableAmount: number;
+  itemMisc: string;
+}

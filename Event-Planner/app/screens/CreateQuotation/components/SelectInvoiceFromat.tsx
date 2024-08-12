@@ -1,33 +1,52 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert, ScrollView } from 'react-native';
+import {RouteProp, useRoute } from '@react-navigation/native';
 import Swiper from 'react-native-swiper';
 import * as Print from 'expo-print';
 import { shareAsync } from 'expo-sharing';
 import { ToWords } from 'to-words';
+import { RootStackParamList } from "../../../(tabs)/types";
 import styles from '../../../../app/screens/CreateQuotation/styles/styles';
+import { ERROR_MESSAGES, STRINGS } from '../constants/string';
+
+type SelectInvoiceFormatRouteProp = RouteProp<RootStackParamList, 'SelectInvoiceFormat'>;
 
 const SelectInvoiceFormat = () => {
+    const route = useRoute<SelectInvoiceFormatRouteProp>();
+
+    const {
+        customerName,
+        phoneNumber,
+        address,
+        emailId,
+        gstin,
+        quotationDate,
+        venueDate,
+        venueTime,
+        venueDetails,
+        items
+    } = route.params; // Destructure the data from route.params
     const [currentFormat, setCurrentFormat] = useState(0);
     const toWords = new ToWords();
-    const { customerName, phoneNumber, address, emailId, gstin, quotationDate, venueDate, venueTime, venueDetails, items } = {
-        // Sample data for demonstration
-        customerName: "John Doe",
-        phoneNumber: "123-456-7890",
-        address: "123 Main St, Anytown, USA",
-        emailId: "john.doe@example.com",
-        gstin: "1234567890",
-        quotationDate: new Date(),
-        venueDate: new Date(),
-        venueTime: new Date(),
-        venueDetails: "Venue XYZ",
-        items: [
-            { itemName: "Item 1", itemQuantity: 1, itemPrice: 100, itemDiscount: 10, itemTotalPrice: 90, itemMisc: "" },
-            { itemName: "Item 2", itemQuantity: 2, itemPrice: 200, itemDiscount: 20, itemTotalPrice: 180, itemMisc: "" }
-        ]
-    };
+    // const { customerName, phoneNumber, address, emailId, gstin, quotationDate, venueDate, venueTime, venueDetails, items } = {
+    //     // Sample data for demonstration
+    //     customerName: "John Doe",
+    //     phoneNumber: "123-456-7890",
+    //     address: "123 Main St, Anytown, USA",
+    //     emailId: "john.doe@example.com",
+    //     gstin: "1234567890",
+    //     quotationDate: new Date(),
+    //     venueDate: new Date(),
+    //     venueTime: new Date(),
+    //     venueDetails: "Venue XYZ",
+    //     items: [
+    //         { itemName: "Item 1", itemQuantity: 1, itemPrice: 100, itemDiscount: 10, itemTotalPrice: 90, itemMisc: "" },
+    //         { itemName: "Item 2", itemQuantity: 2, itemPrice: 200, itemDiscount: 20, itemTotalPrice: 180, itemMisc: "" }
+    //     ]
+    // };
 
     // Calculate total price and discount
-    const totalPrice = items.reduce((total, item) => total + item.itemTotalPrice, 0);
+    const totalPrice = items.reduce((total, item) => total + item.payableAmount, 0);
     const totalDiscount = items.reduce((total, item) => total + item.itemDiscount, 0);
     let words = toWords.convert(totalPrice);
     const formats = [
@@ -119,7 +138,7 @@ const SelectInvoiceFormat = () => {
                                         <td>${item.itemName}</td>
                                         <td>${item.itemQuantity}</td>
                                         <td>${item.itemPrice}</td>
-                                        <td>${item.itemTotalPrice}</td>
+                                        <td>${item.payableAmount}</td>
                                     </tr>`).join('')}
                             </tbody>
                         </table>
@@ -178,7 +197,7 @@ const SelectInvoiceFormat = () => {
                                 <Text style={styles.tableCell}>{item.itemQuantity}</Text>
                                 <Text style={styles.tableCell}>{item.itemPrice}</Text>
                                 <Text style={styles.tableCell}>{item.itemDiscount}</Text>
-                                <Text style={styles.tableCell}>{item.itemTotalPrice}</Text>
+                                <Text style={styles.tableCell}>{item.payableAmount}</Text>
 
                             </View>
                         ))}
@@ -240,7 +259,7 @@ const SelectInvoiceFormat = () => {
                                     <td>${item.itemQuantity}</td>
                                     <td>${item.itemPrice}</td>
                                     <td>${item.itemDiscount}</td>
-                                    <td>${item.itemTotalPrice}</td>
+                                    <td>${item.payableAmount}</td>
                                     <td>${item.itemMisc}</td>
                                 </tr>`).join('')}
                         </table>
@@ -281,7 +300,7 @@ const SelectInvoiceFormat = () => {
                                 <Text style={styles.tableCell}>{item.itemQuantity}</Text>
                                 <Text style={styles.tableCell}>{item.itemPrice}</Text>
                                 <Text style={styles.tableCell}>{item.itemDiscount}</Text>
-                                <Text style={styles.tableCell}>{item.itemTotalPrice}</Text>
+                                <Text style={styles.tableCell}>{item.payableAmount}</Text>
 
                             </View>
                         ))}
@@ -290,7 +309,7 @@ const SelectInvoiceFormat = () => {
                         <Text style={styles.summaryText}>Total Price: {totalPrice}</Text>
                         <Text style={styles.summaryText}>Total Discount: {totalDiscount}</Text>
                     </View>
-                    <Text style={styles.footerText}>Thank you for choosing us!</Text>
+                    <Text style={styles.footerText}>{STRINGS.thankYouMassage}</Text>
                 </View>
             )
 
@@ -457,7 +476,7 @@ const SelectInvoiceFormat = () => {
                                 <Text style={styles.tableCell}>{item.itemQuantity}</Text>
                                 <Text style={styles.tableCell}>{item.itemPrice}</Text>
                                 <Text style={styles.tableCell}>{item.itemDiscount}</Text>
-                                <Text style={styles.tableCell}>{item.itemTotalPrice}</Text>
+                                <Text style={styles.tableCell}>{item.payableAmount}</Text>
 
                             </View>
                         ))}
@@ -479,7 +498,7 @@ const SelectInvoiceFormat = () => {
                         marginTop: 15
                     }}>
                         <Text style={{ fontWeight: 'bold' }}>Terms and Conditions</Text>
-                        <Text style={{}}>Thank you for choosing us!</Text>
+                        <Text style={{}}>{STRINGS.thankYouMassage}</Text>
                     </View>
                 </View>
             )
@@ -671,7 +690,7 @@ const SelectInvoiceFormat = () => {
                                 <Text style={styles.tableCell}>{item.itemQuantity}</Text>
                                 <Text style={styles.tableCell}>{item.itemPrice}</Text>
                                 <Text style={styles.tableCell}>{item.itemDiscount}</Text>
-                                <Text style={styles.tableCell}>{item.itemTotalPrice}</Text>
+                                <Text style={styles.tableCell}>{item.payableAmount}</Text>
                             </View>
                         ))}
                     </View>
@@ -679,7 +698,7 @@ const SelectInvoiceFormat = () => {
                         <View style={{ flex: 1, }}>
                             <Text>Invoice Amount in Words</Text>
                             <Text style={{ fontWeight: 'bold' }}>{words}</Text>
-                            <Text style={{ marginTop: 11 }}>Thank you for choosing us!</Text>
+                            <Text style={{ marginTop: 11 }}>{STRINGS.thankYouMassage}</Text>
                         </View>
                         <View style={{ flex: 0.8, borderWidth: 1 }}>
                             <View style={{ flexDirection: 'row', justifyContent: 'center', }}>
@@ -893,7 +912,7 @@ const SelectInvoiceFormat = () => {
                                 <Text style={styles.tableCell}>{item.itemQuantity}</Text>
                                 <Text style={styles.tableCell}>{item.itemPrice}</Text>
                                 <Text style={styles.tableCell}>{item.itemDiscount}</Text>
-                                <Text style={styles.tableCell}>{item.itemTotalPrice}</Text>
+                                <Text style={styles.tableCell}>{item.payableAmount}</Text>
                             </View>
                         ))}
                     </View>
@@ -901,7 +920,7 @@ const SelectInvoiceFormat = () => {
                         <View style={{ flex: 1, }}>
                             <Text>Invoice Amount in Words</Text>
                             <Text style={{ fontWeight: 'bold' }}>{words}</Text>
-                            <Text style={{ marginTop: 11 }}>Thank you for choosing us!</Text>
+                            <Text style={{ marginTop: 11 }}>{STRINGS.thankYouMassage}</Text>
                         </View>
                         <View style={{ flex: 0.8, borderWidth: 1 }}>
                             <View style={{ flexDirection: 'row', justifyContent: 'center', }}>
@@ -931,7 +950,7 @@ const SelectInvoiceFormat = () => {
             const { uri } = await Print.printToFileAsync({ html: htmlContent });
             await shareAsync(uri);
         } catch (error) {
-            Alert.alert('Error', 'An error occurred while sharing the file.');
+            Alert.alert(ERROR_MESSAGES.shareError);
         }
     };
 
@@ -956,156 +975,5 @@ const SelectInvoiceFormat = () => {
         </ScrollView>
     );
 };
-
-// const styles = StyleSheet.create({
-//     container: {
-//         flexGrow: 1,
-//         padding: 10,
-//         backgroundColor: '#fff'
-//     },
-//     headerText: {
-//         fontSize: 20,
-//         fontWeight: 'bold',
-//         textAlign: 'center',
-//         marginBottom: 20
-//     },
-//     swiper: {
-//         height: 550,
-//         backgroundColor: "grey"
-//     },
-//     slide: {
-//         flex: 1,
-//         justifyContent: 'center',
-//         alignItems: 'center',
-//         padding: 20
-//     },
-//     previewContainer: {
-//         width: '110%',
-//         borderRadius: 10,
-//         backgroundColor: 'white',
-//         padding: 15,
-//         shadowColor: '#000',
-//         shadowOpacity: 0.1,
-//         shadowRadius: 10,
-//         shadowOffset: { width: 0, height: 0 },
-//         elevation: 5, flex: 1
-//     },
-//     previewTitle: {
-//         fontSize: 18,
-//         fontWeight: 'bold',
-//         textAlign: 'center',
-//         marginBottom: 10
-//     },
-//     previewSubtitle: {
-//         fontSize: 16,
-//         fontWeight: 'bold',
-//         textAlign: 'left',
-//         marginBottom: 10,
-//         marginTop: 20,
-
-//     },
-//     previewSubTitle: {
-//         fontSize: 16,
-//         textAlign: 'left',
-//         marginBottom: 10,
-//         marginTop: 20
-//     },
-//     table: {
-//         width: '100%',
-//         // borderCollapse: 'collapse',
-//         marginBottom: 20,
-//         borderWidth: 1,
-
-//         // borderRadius: 7
-//     },
-//     tableRow: {
-//         flexDirection: 'row',
-//         borderBottomWidth: 1,
-//         // borderBottomColor: '#ddd',
-//         paddingVertical: 8
-//     },
-//     tableHeader: {
-//         fontWeight: 'bold',
-//         flex: 1,
-
-//     },
-//     tableCell: {
-//         flex: 1,
-//         paddingHorizontal: 4,
-
-//     },
-//     summaryContainer: {
-//         marginTop: 10,
-//     },
-//     summaryText: {
-//         fontSize: 16,
-//         textAlign: 'right',
-//         fontWeight: 'bold'
-//     },
-//     shareButton: {
-//         backgroundColor: '#007bff',
-//         padding: 15,
-//         borderRadius: 10,
-//         marginTop: 20,
-//         alignItems: 'center'
-//     },
-//     shareButtonText: {
-//         color: '#fff',
-//         fontSize: 16,
-//         fontWeight: 'bold'
-//     },
-//     footerText: {
-//         fontSize: 16,
-//         textAlign: 'center',
-//         marginTop: 20,
-//         fontWeight: 'bold'
-//     },
-
-
-//     container1: {
-//         flex: 1,
-//         backgroundColor: '#fff',
-//         padding: 20,
-//     },
-//     logo: {
-//         width: 100,
-//         height: 100,
-//         alignSelf: 'center',
-//         marginBottom: 20,
-//     },
-//     header: {
-//         fontSize: 24,
-//         fontWeight: 'bold',
-//         textAlign: 'center',
-//         marginBottom: 20,
-//     },
-//     invoiceDetails: {
-//         marginBottom: 20,
-//     },
-//     invoiceNumber: {
-//         fontSize: 16,
-//         fontWeight: 'bold',
-//     },
-//     invoiceDate: {
-//         fontSize: 16,
-//     },
-//     items: {
-//         marginBottom: 20,
-//     },
-//     totals: {
-//         marginTop: 10,
-//         borderBottomWidth: 1,
-//         borderStyle: 'dashed'
-//     },
-//     subtotal: {
-//         fontSize: 17,
-//         flex: 1,
-//     },
-//     total: {
-//         fontSize: 20,
-//         fontWeight: 'bold',
-//         flex: 1
-//     }
-// });
 
 export default SelectInvoiceFormat;

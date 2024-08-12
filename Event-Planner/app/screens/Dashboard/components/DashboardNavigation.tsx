@@ -11,12 +11,14 @@ import { RootStackParamList, RootDrawerParamList } from '../../../(tabs)/types';
 import NotificationScreen from '../../Notification/components/Notification';
 import AllInvoices from '../../All_Invoice/components/AllInvoice';
 import AllQuotation from '../../All_Quotation/components/AllQuotations';
-import CreateQuotationMain from '../../CreateQuotation/components/CreateQuotationMain';
 import VendorListScreen from '../../All_Vendor/components/AllVendor';
 import VendorRegistration from '../../VendorRegistration/components/VendorRegistration';
 import AddItem from '../../AddItem/components/AddItem';
 import RegisterEvent from '../../All-Events/components/RegisterEvent';
 import CreateInvoice from '../../CreateInvoice/components/CreateInvoice';
+import CreateQuotation from '../../CreateQuotation/components/CreateQuotation';
+import EditQuotation from '../../CreateQuotation/components/EditQuotation';
+import SelectInvoiceFormat from '../../CreateQuotation/components/SelectInvoiceFromat';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Drawer = createDrawerNavigator<RootDrawerParamList>();
@@ -97,7 +99,17 @@ const DashNavigation: React.FC = () => {
         />
          <Stack.Screen
           name="CreateQuotation"
-          component={CreateQuotationMain} // Ensure SettingNavigation is a stack navigator
+          component={CreateQuotation} // Ensure SettingNavigation is a stack navigator
+          options={{ headerShown: true }} // Optionally hide header if using custom header in SettingNavigation
+        />
+        <Stack.Screen
+          name="EditQuotation"
+          component={EditQuotation} // Ensure SettingNavigation is a stack navigator
+          options={{ headerShown: true }} // Optionally hide header if using custom header in SettingNavigation
+        />
+         <Stack.Screen
+          name="SelectInvoiceFormat"
+          component={SelectInvoiceFormat} // Ensure SettingNavigation is a stack navigator
           options={{ headerShown: true }} // Optionally hide header if using custom header in SettingNavigation
         />
          <Stack.Screen
@@ -121,7 +133,7 @@ const DashNavigation: React.FC = () => {
           options={{ headerShown:true  }} // Optionally hide header if using custom header in SettingNavigation
         />
         <Stack.Screen
-          name="CreateInvoive"
+          name="CreateInvoice"
           component={CreateInvoice} // Ensure SettingNavigation is a stack navigator
           options={{ headerShown:false  }} // Optionally hide header if using custom header in SettingNavigation
         />

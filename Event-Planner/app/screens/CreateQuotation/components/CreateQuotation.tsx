@@ -8,6 +8,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import styles from '../../../../app/screens/CreateQuotation/styles/styles';
 import { saveQuotation } from '../api/createquotation.api';
 import { fetchQuotationId } from '../api/getQuotationId.api';
+import { STRINGS,ERROR_MESSAGES, HEADERS } from '../../../../app/screens/CreateQuotation/constants/string';
 
 interface FloatingLabelInputProps {
     label: string;
@@ -149,7 +150,7 @@ const CreateQuotation: React.FC<Props> = () => {
             if (id !== null) {
                 setQuotationId(id);
             } else {
-                Alert.alert('Error', 'Failed to load quotation ID.');
+                Alert.alert(ERROR_MESSAGES.loadIdFailed);
             }
         };
         loadQuotationId();
@@ -261,8 +262,8 @@ const CreateQuotation: React.FC<Props> = () => {
             console.log('PDF saved to:', uri);
             await shareAsync(uri);
         } catch (error) {
-            console.error('Failed to generate or share PDF:', error);
-            Alert.alert('Error', 'Failed to generate or share PDF. Please try again.');
+            console.error(ERROR_MESSAGES.GenerateFailed, error);
+            Alert.alert(ERROR_MESSAGES.GenerateFailed);
         }
     };
 
@@ -273,7 +274,7 @@ const CreateQuotation: React.FC<Props> = () => {
         }
     };
 
-    const handleSharePDF1 = () => {
+    const handleInvoiceFormat = () => {
         navigation.navigate('SelectInvoiceFormat', {
             customerName,
             phoneNumber,
@@ -336,7 +337,7 @@ const CreateQuotation: React.FC<Props> = () => {
 
                 <View style={styles.topField}>
                     <View style={styles.halfField}>
-                        <Text style={styles.label1}>Quotation Number</Text>
+                        <Text style={styles.label1}>{STRINGS.quotationNumberLabel}</Text>
                         <Text style={styles.label1}>{quotationId}</Text>
                     </View>
 
@@ -418,7 +419,7 @@ const CreateQuotation: React.FC<Props> = () => {
                 ))}
 
                 <TouchableOpacity style={styles.linkButton} onPress={addItem}>
-                    <Text style={styles.linkButtonText}>+ Add Item</Text>
+                    <Text style={styles.linkButtonText}>{STRINGS.addItemButtonText}</Text>
                 </TouchableOpacity>
 
                 <Modal
@@ -429,19 +430,19 @@ const CreateQuotation: React.FC<Props> = () => {
                 >
                     <View style={styles.modalContainer}>
                         <View style={styles.modalContent}>
-                            <Text style={styles.modalTitle}>Success</Text>
-                            <Text style={styles.modalMessage}>Quotation saved successfully!</Text>
+                            <Text style={styles.modalTitle}>{STRINGS.successTitle}</Text>
+                            <Text style={styles.modalMessage}>{STRINGS.successMessage}</Text>
                             <TouchableOpacity style={styles.modalButton} onPress={handleSharePDF}>
-                                <Text style={styles.modalButtonText}>Share</Text>
+                                <Text style={styles.modalButtonText}>{STRINGS.shareButtonText}</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.modalButton} onPress={handleEdit} >
-                                <Text style={styles.modalButtonText}>Edit</Text>
+                                <Text style={styles.modalButtonText}>{STRINGS.editButtonText}</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.modalButton} >
-                                <Text style={styles.modalButtonText}>Delete</Text>
+                                <Text style={styles.modalButtonText}>{STRINGS.deleteButtonText}</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.modalButton} onPress={() => setModalVisible(false)}>
-                                <Text style={styles.modalButtonText}>Close</Text>
+                                <Text style={styles.modalButtonText}>{STRINGS.closeButtonText}</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -449,11 +450,11 @@ const CreateQuotation: React.FC<Props> = () => {
             </ScrollView>
 
             <View style={styles.buttonsContainer}>
-                <TouchableOpacity style={styles.button} onPress={handleSharePDF1}>
-                    <Text style={styles.buttonText}>Convert to Invoice</Text>
+                <TouchableOpacity style={styles.button} onPress={handleInvoiceFormat}>
+                    <Text style={styles.buttonText}>{STRINGS.convertToInvoiceButtonText}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button} onPress={handleSave}>
-                    <Text style={styles.buttonText}>Save</Text>
+                    <Text style={styles.buttonText}>{STRINGS.saveButtonText}</Text>
                 </TouchableOpacity>
             </View>
         </View>
