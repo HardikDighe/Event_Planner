@@ -1,12 +1,13 @@
-// screens/SignupScreen.tsx
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { TextInput as PaperTextInput, Provider as PaperProvider } from 'react-native-paper';
 import styles from '../styles/styles';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../../../(tabs)/types'; // Import your types
+import { RootStackParamList } from '../../../(tabs)/types'; 
+import { Strings } from '../constants/string';
+import { signupUser } from '../api/signup.api';
 
 type SignupScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Signup'>;
 
@@ -28,7 +29,7 @@ const SignupScreen: React.FC = () => {
   const [passwordError, setPasswordError] = useState<string>('');
   const [confirmPasswordError, setConfirmPasswordError] = useState<string>('');
 
-  const handleSignup = () => {
+  const handleSignup = async () => {
     let valid = true;
 
     // Reset error messages
@@ -40,52 +41,69 @@ const SignupScreen: React.FC = () => {
     // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      setEmailError('Please enter a valid email address');
+      setEmailError(Strings.emailError);
       valid = false;
     }
 
     // Phone number validation
     const phoneRegex = /^\d{10}$/;
     if (!phoneRegex.test(phoneNumber)) {
-      setPhoneError('Please enter a valid 10-digit phone number');
+      setPhoneError(Strings.phoneError);
       valid = false;
     }
 
     // Password validation
     const passwordRegex = /^(?=.*[!@#$%^&*])(?=.*\d.*\d)[A-Za-z\d!@#$%^&*]{8,}$/;
     if (!passwordRegex.test(password)) {
-      setPasswordError('Password must be at least 8 characters long, contain at least one special character, and contain at least two numbers');
+      setPasswordError(Strings.passwordError);
       valid = false;
     }
 
     // Confirm password validation
     if (password !== confirmPassword) {
-      setConfirmPasswordError('Passwords do not match');
+      setConfirmPasswordError(Strings.confirmPasswordError);
       valid = false;
     }
 
     if (valid) {
-      console.log('Signup button pressed');
-      // Proceed with signup logic
-      navigation.navigate('Login'); // Navigate to the Login screen after successful signup
+      try {
+        const userData = {
+          firstName,
+          lastName,
+          phoneNumber,
+          email,
+          address,
+          firmName,
+          gstin,
+          password,
+        };
+
+        const data = await signupUser(userData);
+
+        // Handle successful signup
+        Alert.alert('Success', Strings.signupSuccess);
+      } catch (error) {
+        // Handle errors from the server or network
+        Alert.alert(Strings.signupError);
+      }
     }
   };
 
   return (
     <PaperProvider>
       <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.title}>Signup to your Account</Text>
+        <Text style={styles.title}>{Strings.signupTitle}</Text>
 
         <View style={styles.row}>
           <PaperTextInput
-            label="First Name"
+            label={Strings.firstNameLabel}
             value={firstName}
             onChangeText={setFirstName}
             style={styles.inputHalf}
             mode="outlined"
           />
           <PaperTextInput
-            label="Last Name"
+            label={Strings.lastNameLabel}
             value={lastName}
             onChangeText={setLastName}
             style={styles.inputHalf}
@@ -93,7 +111,7 @@ const SignupScreen: React.FC = () => {
           />
         </View>
         <PaperTextInput
-          label="Phone Number"
+          label={Strings.phoneNumberLabel}
           value={phoneNumber}
           onChangeText={setPhoneNumber}
           style={styles.input}
@@ -103,7 +121,7 @@ const SignupScreen: React.FC = () => {
         />
         {phoneError ? <Text style={styles.errorText}>{phoneError}</Text> : null}
         <PaperTextInput
-          label="Email ID"
+          label={Strings.emailLabel}
           value={email}
           onChangeText={setEmail}
           style={styles.input}
@@ -113,21 +131,21 @@ const SignupScreen: React.FC = () => {
         />
         {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
         <PaperTextInput
-          label="Address"
+          label={Strings.addressLabel}
           value={address}
           onChangeText={setAddress}
           style={styles.input}
           mode="outlined"
         />
         <PaperTextInput
-          label="Firm Name"
+          label={Strings.firmNameLabel}
           value={firmName}
           onChangeText={setFirmName}
           style={styles.input}
           mode="outlined"
         />
         <PaperTextInput
-          label="GSTIN No."
+          label={Strings.gstinLabel}
           value={gstin}
           onChangeText={setGstin}
           style={styles.input}
@@ -135,7 +153,7 @@ const SignupScreen: React.FC = () => {
         />
         <View style={styles.passwordContainer}>
           <PaperTextInput
-            label="Password"
+            label={Strings.passwordLabel}
             value={password}
             onChangeText={setPassword}
             style={styles.input}
@@ -153,7 +171,7 @@ const SignupScreen: React.FC = () => {
         {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
         <View style={styles.passwordContainer}>
           <PaperTextInput
-            label="Confirm Password"
+            label={Strings.confirmPasswordLabel}
             value={confirmPassword}
             onChangeText={setConfirmPassword}
             style={styles.input}
@@ -171,7 +189,7 @@ const SignupScreen: React.FC = () => {
         {confirmPasswordError ? <Text style={styles.errorText}>{confirmPasswordError}</Text> : null}
 
         <TouchableOpacity style={styles.button} onPress={handleSignup}>
-          <Text style={styles.buttonText}>Signup</Text>
+          <Text style={styles.buttonText}>{Strings.signupButton}</Text>
         </TouchableOpacity>
       </ScrollView>
     </PaperProvider>
