@@ -8,7 +8,7 @@ export const API_BASE_URL = 'http://localhost:3000';
 export const saveQuotation = async (quotationData: Object): Promise<boolean> => {
     try {
         const response = await axios.post(`${API_BASE_URL}${ENDPOINTS.saveQuotation}`, quotationData);
-        if (response.status === 200) {
+        if (response.status === 200 || response.status === 201) {
             return true; // Return true if the response is successful
         } else {
             Alert.alert('Error', ERROR_MESSAGES.saveError);
