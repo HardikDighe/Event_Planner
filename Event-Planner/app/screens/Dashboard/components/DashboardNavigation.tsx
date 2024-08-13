@@ -11,7 +11,6 @@ import { RootStackParamList, RootDrawerParamList } from '../../../(tabs)/types';
 import NotificationScreen from '../../Notification/components/Notification';
 import AllInvoices from '../../All_Invoice/components/AllInvoice';
 import AllQuotation from '../../All_Quotation/components/AllQuotations';
-import CreateQuotationMain from '../../CreateQuotation/components/CreateQuotationMain';
 import VendorListScreen from '../../All_Vendor/components/AllVendor';
 import VendorRegistration from '../../VendorRegistration/components/VendorRegistration';
 import AddItem from '../../AddItem/components/AddItem';
@@ -97,7 +96,17 @@ const DashNavigation: React.FC = () => {
         />
          <Stack.Screen
           name="CreateQuotation"
-          component={CreateQuotationMain} // Ensure SettingNavigation is a stack navigator
+          component={CreateQuotation} // Ensure SettingNavigation is a stack navigator
+          options={{ headerShown: true }} // Optionally hide header if using custom header in SettingNavigation
+        />
+        <Stack.Screen
+          name="EditQuotation"
+          component={EditQuotation} // Ensure SettingNavigation is a stack navigator
+          options={{ headerShown: true }} // Optionally hide header if using custom header in SettingNavigation
+        />
+         <Stack.Screen
+          name="SelectInvoiceFormat"
+          component={SelectInvoiceFormat} // Ensure SettingNavigation is a stack navigator
           options={{ headerShown: true }} // Optionally hide header if using custom header in SettingNavigation
         />
          <Stack.Screen
