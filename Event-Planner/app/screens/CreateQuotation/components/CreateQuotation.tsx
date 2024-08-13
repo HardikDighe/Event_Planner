@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView, Alert, Animated, Modal } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation, RouteProp, useRoute } from '@react-navigation/native';
 import * as Print from 'expo-print';
 import { shareAsync } from 'expo-sharing';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { StackNavigationProp } from '@react-navigation/stack';
 import styles from '../../../../app/screens/CreateQuotation/styles/styles';
-import { saveQuotation } from '../api/createquotation.api';
-import { fetchQuotationId } from '../api/getQuotationId.api';
+import { saveQuotation, deleteQuotation, fetchQuotationId } from '../api/Quotation.api';
+// import { fetchQuotationId } from '../api/getQuotationId.api';
 import { STRINGS,ERROR_MESSAGES, HEADERS } from '../../../../app/screens/CreateQuotation/constants/string';
+import { RootStackParamList } from "../../../(tabs)/types";
 
 interface FloatingLabelInputProps {
     label: string;
@@ -16,48 +17,8 @@ interface FloatingLabelInputProps {
     onChangeText: (text: string) => void;
     keyboardType?: string;
 }
-interface Item {
-    itemName: string;
-    itemQuantity: number;
-    itemPrice: number;
-    itemDiscount: number;
-    itemTotalPrice: number;
-    itemMisc: string;
-}
-type RouteParams = {
-    newItem?: Item;
-};
-type RootStackParamList = {
-    SelectInvoiceFormat: {
-        customerName: string;
-        phoneNumber: string;
-        address: string;
-        emailId: string;
-        gstin: string;
-        quotationDate: Date;
-        venueDate: Date;
-        venueTime: Date;
-        venueDetails: string;
-        items: Item[];
-    };
-    ViewInvoice: {
-        customerName: string;
-        phoneNumber: string;
-        address: string;
-        emailId: string;
-        gstin: string;
-        quotationDate: Date;
-        venueDate: Date;
-        venueTime: Date;
-        venueDetails: string;
-        items: Item[];
-    };
-    EditQuotation: {
-        quotationId: string;
-    };
-    AddItem: undefined;
-};
 
+type CreateQuotationRouteProp = RouteProp<RootStackParamList, 'CreateQuotation'>;
 
 
 // FloatingLabelInput as a functional component with typed props
@@ -65,7 +26,7 @@ const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({ label, value, o
 
     const [isFocused, setIsFocused] = useState(false);
     const animatedIsFocused = useRef(new Animated.Value(value ? 1 : 0)).current;
-
+    type SelectInvoiceFormatRouteProp = RouteProp<RootStackParamList, 'SelectInvoiceFormat'>;
     useEffect(() => {
         Animated.timing(animatedIsFocused, {
             toValue: isFocused || value ? 1 : 0,
@@ -104,9 +65,7 @@ const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({ label, value, o
     );
 };
 
-
 type SelectInvoiceFormatNavigationProp = StackNavigationProp<RootStackParamList, 'SelectInvoiceFormat'>;
-
 
 interface Props {
     navigation: SelectInvoiceFormatNavigationProp;
@@ -117,8 +76,9 @@ interface CreateQuotationProps { }
 const CreateQuotation: React.FC<Props> = () => {
     // const navigation = useNavigation();
     const navigation = useNavigation<SelectInvoiceFormatNavigationProp>();
-    const route = useRoute();
-
+    // const route = useRoute();
+    // const route = useRoute<RouteProp<RootStackParamList, 'CreateQuotation'>>();
+    const route = useRoute<CreateQuotationRouteProp>();
     const [quotationId, setQuotationId] = useState(Number);
     const [customerName, setCustomerName] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
@@ -143,11 +103,12 @@ const CreateQuotation: React.FC<Props> = () => {
             setItems(prevItems => [...prevItems, route.params.newItem]);
         }
     }, [route.params?.newItem]);
+    
     useEffect(() => {
         setQuotationDate;
         const loadQuotationId = async () => {
             const id = await fetchQuotationId();
-            if (id !== null) {
+            if (id !==  null) {
                 setQuotationId(id);
             } else {
                 Alert.alert(ERROR_MESSAGES.loadIdFailed);
@@ -412,9 +373,9 @@ const CreateQuotation: React.FC<Props> = () => {
                 {items.map((item, index) => (
                     <View key={index} style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', marginBottom: 10 }}>
                         <Text style={{ fontSize: 18 }}>{item.itemName}</Text>
-                        <Text>Quantity: {item.itemQuantity}</Text>
-                        <Text>Rate: {item.itemPrice}</Text>
-                        <Text>Total: {item.itemTotalPrice}</Text>
+                        <Text>Quantity: {item.quantity}</Text>
+                        <Text>Rate: {item.price}</Text>
+                        <Text>Total: {item.payableAmount}</Text>
                     </View>
                 ))}
 
@@ -438,7 +399,7 @@ const CreateQuotation: React.FC<Props> = () => {
                             <TouchableOpacity style={styles.modalButton} onPress={handleEdit} >
                                 <Text style={styles.modalButtonText}>{STRINGS.editButtonText}</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.modalButton} >
+                            <TouchableOpacity style={styles.modalButton} onPress={() => deleteQuotation(quotationId.toString())} >
                                 <Text style={styles.modalButtonText}>{STRINGS.deleteButtonText}</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.modalButton} onPress={() => setModalVisible(false)}>
@@ -447,7 +408,7 @@ const CreateQuotation: React.FC<Props> = () => {
                         </View>
                     </View>
                 </Modal>
-            </ScrollView>
+            </ScrollView> 
 
             <View style={styles.buttonsContainer}>
                 <TouchableOpacity style={styles.button} onPress={handleInvoiceFormat}>

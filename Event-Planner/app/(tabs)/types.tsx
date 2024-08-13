@@ -19,10 +19,15 @@ export type RootStackParamList = {
   Settings:undefined;
   Notifications:undefined;
   AllQuotations:undefined;
-  CreateQuotation:undefined;
+  CreateQuotation: {
+    newItem?: Item;
+};
+
   AllEvents:undefined;
   AllVendors:undefined;
   EventRegistration:undefined;
+  AllEventsNaviagtion:undefined;
+  RegisterEvent:undefined;
   // EditQuotation:undefined;
   // SelectInvoiceFormat:undefined;
 
@@ -68,14 +73,15 @@ export type RootDrawerParamList = {
   AllVendors: undefined;
   VendorRegistration: undefined;
   ServiceRegistration: undefined;
- 
+  All_Vendors:undefined;
+  All_Events:undefined;
 };
 
 interface Item {
   itemName: string;
-  itemQuantity: number;
-  itemPrice: number;
-  itemDiscount: number;
+  quantity: number;
+  price: number;
+  discount: number;
   payableAmount: number;
-  itemMisc: string;
+  miscellaneous: string;
 }

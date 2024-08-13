@@ -4,10 +4,8 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import * as Print from 'expo-print';
 import { shareAsync } from 'expo-sharing';
 import styles from '../../../../app/screens/CreateQuotation/styles/styles';
-import { fetchQuotationDetails } from '../api/getQuotationData.api';
-import { deleteQuotation } from '../api/deleteQuotation.api';
-import { updateQuotation } from '../api/updateQuatation.api';
-import { STRINGS } from '../constants/string';
+import { fetchQuotationDetails, deleteQuotation, updateQuotation } from '../api/Quotation.api';
+import { ERROR_MESSAGES, STRINGS } from '../constants/string';
 
 interface FloatingLabelInputProps {
     label: string;
@@ -55,16 +53,15 @@ const EditQuotation = () => {
 
     // Define and initialize state variables
     const [quotationDetails, setQuotationDetails] = useState<any>();
-
     const [editItemModalVisible, setEditItemModalVisible] = useState(false);
     const [currentItemIndex, setCurrentItemIndex] = useState<number | null>(null);
     const [currentItem, setCurrentItem] = useState({
         itemName: '',
-        itemQuantity: '',
-        itemPrice: '',
-        itemDiscount: '',
-        itemTotalPrice: '',
-        itemMisc: '',
+        quantity: '',
+        price: '',
+        discount: '',
+        payableAmount: '',
+        miscellaneous: '',
     });
     const [modalVisible, setModalVisible] = useState(false);
 
@@ -162,7 +159,7 @@ const EditQuotation = () => {
             // Share PDF
             await shareAsync(uri);
         } catch (error) {
-            Alert.alert('Error', 'Failed to generate or share the PDF.');
+            Alert.alert(ERROR_MESSAGES.GenerateFailed);
         }
     };
 
@@ -328,32 +325,32 @@ const EditQuotation = () => {
                             />
                             <FloatingLabelInput
                                 label="Quantity"
-                                value={String(currentItem.itemQuantity)}
-                                onChangeText={(text) => setCurrentItem({ ...currentItem, itemQuantity: Number(text) })}
+                                value={String(currentItem.quantity)}
+                                onChangeText={(text) => setCurrentItem({ ...currentItem, quantity: Number(text) })}
                                 keyboardType="numeric"
                             />
                             <FloatingLabelInput
                                 label="Price"
-                                value={String(currentItem.itemPrice)}
-                                onChangeText={(text) => setCurrentItem({ ...currentItem, itemPrice: Number(text) })}
+                                value={String(currentItem.price)}
+                                onChangeText={(text) => setCurrentItem({ ...currentItem, price: Number(text) })}
                                 keyboardType="numeric"
                             />
                             <FloatingLabelInput
                                 label="Discount"
-                                value={String(currentItem.itemDiscount)}
-                                onChangeText={(text) => setCurrentItem({ ...currentItem, itemDiscount: Number(text) })}
+                                value={String(currentItem.discount)}
+                                onChangeText={(text) => setCurrentItem({ ...currentItem, discount: Number(text) })}
                                 keyboardType="numeric"
                             />
                             <FloatingLabelInput
                                 label="Total Price"
-                                value={String(currentItem.itemTotalPrice)}
-                                onChangeText={(text) => setCurrentItem({ ...currentItem, itemTotalPrice: Number(text) })}
+                                value={String(currentItem.payableAmount)}
+                                onChangeText={(text) => setCurrentItem({ ...currentItem, payableAmount: Number(text) })}
                                 keyboardType="numeric"
                             />
                             <FloatingLabelInput
                                 label="Misc"
-                                value={currentItem.itemMisc}
-                                onChangeText={(text) => setCurrentItem({ ...currentItem, itemMisc: text })}
+                                value={currentItem.miscellaneous}
+                                onChangeText={(text) => setCurrentItem({ ...currentItem, miscellaneous: text })}
                             />
                             <TouchableOpacity style={styles.button} onPress={saveEditedItem}>
                                 <Text style={styles.buttonText}>Save Item</Text>
