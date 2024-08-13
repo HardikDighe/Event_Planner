@@ -19,7 +19,9 @@ export type RootStackParamList = {
   Settings:undefined;
   Notifications:undefined;
   AllQuotations:undefined;
-  CreateQuotation:undefined;
+  CreateQuotation: {
+    newItem?: Item;
+};
   AllEvents:undefined;
   AllVendors:undefined;
   EventRegistration:undefined;
