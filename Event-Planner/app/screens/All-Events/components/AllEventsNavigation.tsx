@@ -1,14 +1,19 @@
-// Navigation.js
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import AllEvents from './AllEvents';
 import RegisterEvent from './RegisterEvent';
-RegisterEvent
-const Stack = createNativeStackNavigator();
-const AllEventsNaviagtion = () => {
+
+type RootStackParamList = {
+  AllEvents: undefined;
+  RegisterEvent: undefined;
+};
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
+
+const AllEventsNavigation = () => {
   return (
-    <NavigationContainer independent={true}>
+    <NavigationContainer>
       <Stack.Navigator initialRouteName="AllEvents">
         <Stack.Screen
           name="AllEvents"
@@ -22,4 +27,5 @@ const AllEventsNaviagtion = () => {
     </NavigationContainer>
   );
 };
-export default AllEventsNaviagtion;
+
+export default AllEventsNavigation;

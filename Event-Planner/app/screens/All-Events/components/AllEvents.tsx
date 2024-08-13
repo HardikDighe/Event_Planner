@@ -3,8 +3,22 @@ import { View, Text, StyleSheet, FlatList, TouchableOpacity, SafeAreaView, TextI
 import { FontAwesome, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
+import { StackNavigationProp } from '@react-navigation/stack';
 
-const events = [
+type Event = {
+  id: string;
+  title: string;
+  date: string;
+  day: string;
+  location: string;
+  description: string;
+};
+
+type AllEventsProps = {
+  navigation: StackNavigationProp<any, any>; // Adjust as needed
+};
+
+const events: Event[] = [
   {
     id: '1',
     title: 'Event Title 1',
@@ -30,19 +44,8 @@ const events = [
     description: 'Yet another event description with unique information.',
   },
 ];
+  // Add more events as needed
 
-type Event = {
-  id: string;
-  title: string;
-  date: string;
-  day: string;
-  location: string;
-  description: string;
-};
-
-type AllEventsProps = {
-  navigation: any; // Adjust the type according to your navigation setup, e.g., NavigationProp
-};
 
 const EventCard: React.FC<{ event: Event }> = ({ event }) => {
   const handleShare = async () => {
@@ -54,9 +57,7 @@ const EventCard: React.FC<{ event: Event }> = ({ event }) => {
         <p>${event.location}</p>
         <p>${event.description}</p>
       `;
-      // Generate the PDF
       const { uri } = await Print.printToFileAsync({ html: htmlContent });
-      // Check if sharing is available
       if (await Sharing.isAvailableAsync()) {
         await Sharing.shareAsync(uri);
       } else {
@@ -76,7 +77,6 @@ const EventCard: React.FC<{ event: Event }> = ({ event }) => {
         <p>${event.location}</p>
         <p>${event.description}</p>
       `;
-      // Initiate the printing process
       await Print.printAsync({ html: htmlContent });
     } catch (error) {
       Alert.alert('Error', 'An error occurred while printing');
@@ -146,9 +146,7 @@ const AllEvents: React.FC<AllEventsProps> = ({ navigation }) => {
           <p>${event.description}</p>
         `).join('')}
       `;
-      // Generate the PDF
       const { uri } = await Print.printToFileAsync({ html: htmlContent });
-      // Check if sharing is available
       if (await Sharing.isAvailableAsync()) {
         await Sharing.shareAsync(uri);
       } else {
@@ -162,7 +160,7 @@ const AllEvents: React.FC<AllEventsProps> = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
           <MaterialIcons name="arrow-back" size={28} color="black" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>All Events</Text>
@@ -201,6 +199,7 @@ const AllEvents: React.FC<AllEventsProps> = ({ navigation }) => {
     </SafeAreaView>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
