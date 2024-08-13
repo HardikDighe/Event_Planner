@@ -1,101 +1,83 @@
+import axios from 'axios';
 import { Alert } from 'react-native';
+import { ENDPOINTS, ERROR_MESSAGES, ALERT_MESSAGES } from '../constants/string';
+// import { STRINGS } from '../constants/string';
+
+export const API_BASE_URL = 'http://localhost:3000';
 
 export const saveQuotation = async (quotationData: Object): Promise<boolean> => {
     try {
-        const response = await fetch('http://localhost:3000/demoQuotation', {
-            method: 'POST',
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(quotationData),
-        });
-
-        if (response.ok) {
-            // API call was successful
-            return true;  // Return true if the response is successful
+        const response = await axios.post(`${API_BASE_URL}${ENDPOINTS.saveQuotation}`, quotationData);
+        if (response.status === 200) {
+            return true; // Return true if the response is successful
         } else {
-            Alert.alert('Error', 'Failed to save quotation.');
-            return false;  // Return false if the response is not successful
-        }
-    } catch (error) {
-        Alert.alert('Error', 'An error occurred while saving the quotation.');
-        return false;  // Return false if an error occurs
-    }
-};
-
-export const deleteQuotation= async (quotationId: string): Promise<boolean> => {
-    try {
-        const response = await fetch(`http://192.168.0.143:3000/demoQuotation/${quotationId}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-
-        if (response.ok) {
-            console.log('Quotation deleted successfully.');
-            return true;
-        } else {
-            console.error('Failed to delete quotation.');
+            Alert.alert('Error', ERROR_MESSAGES.saveError);
             return false;
         }
     } catch (error) {
-        console.error('An error occurred while deleting the quotation:', error);
+        Alert.alert('Error', ALERT_MESSAGES.saveQuotationError);
+        return false;
+    }
+};
+
+export const deleteQuotation = async (quotationId: string): Promise<boolean> => {
+    try {
+        const response = await axios.delete(`${API_BASE_URL}${ENDPOINTS.deleteQuotation(quotationId)}`);
+        if (response.status === 200) {
+            console.log('Quotation deleted successfully.');
+            return true;
+        } else {
+            console.error(ERROR_MESSAGES.deleteQuotation);
+            return false;
+        }
+    } catch (error) {
+        console.error(ALERT_MESSAGES.deleteQuotationError, error);
         return false;
     }
 };
 
 export const fetchQuotationDetails = async (quotationId: string) => {
     try {
-        const response = await fetch(`http://localhost:3000/demoQuotation/${quotationId}`);
-        if (response.ok) {
-            const data = await response.json();
-            // console.log('Fetched Data:', data); // Debugging line
-            return data;
+        const response = await axios.get(`${API_BASE_URL}${ENDPOINTS.fetchQuotationDetails(quotationId)}`);
+        if (response.status === 200) {
+            return response.data;
         } else {
-            console.error('Failed to fetch quotation details');
+            console.error(ERROR_MESSAGES.fetchQuotationDetails);
             return null;
         }
     } catch (error) {
-        console.error('An error occurred while fetching the quotation details:', error);
+        console.error(ALERT_MESSAGES.fetchQuotationDetailsError, error);
         return null;
     }
 };
 
-
-
 export const fetchQuotationId = async (): Promise<number | null> => {
     try {
-        const response = await fetch(`http://localhost:3000/demoQuotation/quotationId}`);
-        if (response.ok) {
-            const Id: number = await response.json();
-            return Id;
+        const response = await axios.get(`${API_BASE_URL}${ENDPOINTS.fetchQuotationId}`);
+        if (response.status === 200) {
+            return response.data as number;
         } else {
-            console.error('Failed to fetch Quotation Id');
+            console.error(ERROR_MESSAGES.fetchQuotationId);
             return null;
         }
     } catch (error) {
-        console.error('An error occurred while fetching the quotation Id:', error);
+        console.error(ALERT_MESSAGES.fetchQuotationIdError, error);
         return null;
     }
 };
 
 export const updateQuotation = async (quotationId: string | number, quotationDetails: any): Promise<boolean> => {
     try {
-        const response = await fetch(`http://localhost:3000/demoQuotation/${quotationId}`, {
-            method: 'PUT',
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(quotationDetails),
-        });
-
-        if (response.ok) {
-            // Successfully updated the quotation
+        const response = await axios.put(`${API_BASE_URL}${ENDPOINTS.updateQuotation(quotationId)}`, quotationDetails);
+        if (response.status === 200) {
             console.log('Quotation updated successfully');
             return true;
         } else {
-            console.error('Failed to update quotation');
+            console.error(ERROR_MESSAGES.updateQuotation);
             return false;
         }
     } catch (error) {
-        console.error('An error occurred while updating the quotation:', error);
+        console.error(ALERT_MESSAGES.updateQuotationError, error);
         return false;
     }
 };

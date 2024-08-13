@@ -6,7 +6,7 @@ import { shareAsync } from 'expo-sharing';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { StackNavigationProp } from '@react-navigation/stack';
 import styles from '../../../../app/screens/CreateQuotation/styles/styles';
-import { saveQuotation, fetchQuotationId } from '../api/Quotation.api';
+import { saveQuotation, deleteQuotation, fetchQuotationId } from '../api/Quotation.api';
 // import { fetchQuotationId } from '../api/getQuotationId.api';
 import { STRINGS,ERROR_MESSAGES, HEADERS } from '../../../../app/screens/CreateQuotation/constants/string';
 import { RootStackParamList } from "../../../(tabs)/types";
@@ -108,7 +108,7 @@ const CreateQuotation: React.FC<Props> = () => {
         setQuotationDate;
         const loadQuotationId = async () => {
             const id = await fetchQuotationId();
-            if (id !== null) {
+            if (id !==  null) {
                 setQuotationId(id);
             } else {
                 Alert.alert(ERROR_MESSAGES.loadIdFailed);
@@ -399,7 +399,7 @@ const CreateQuotation: React.FC<Props> = () => {
                             <TouchableOpacity style={styles.modalButton} onPress={handleEdit} >
                                 <Text style={styles.modalButtonText}>{STRINGS.editButtonText}</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.modalButton} >
+                            <TouchableOpacity style={styles.modalButton} onPress={() => deleteQuotation(quotationId.toString())} >
                                 <Text style={styles.modalButtonText}>{STRINGS.deleteButtonText}</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.modalButton} onPress={() => setModalVisible(false)}>
@@ -408,7 +408,7 @@ const CreateQuotation: React.FC<Props> = () => {
                         </View>
                     </View>
                 </Modal>
-            </ScrollView>
+            </ScrollView> 
 
             <View style={styles.buttonsContainer}>
                 <TouchableOpacity style={styles.button} onPress={handleInvoiceFormat}>
