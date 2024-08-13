@@ -19,6 +19,9 @@ import CreateInvoice from '../../CreateInvoice/components/CreateInvoice';
 import CreateQuotation from '../../CreateQuotation/components/CreateQuotation';
 import EditQuotation from '../../CreateQuotation/components/EditQuotation';
 import SelectInvoiceFormat from '../../CreateQuotation/components/SelectInvoiceFromat';
+// import AllEventsNaviagtion from '../../All-Events/components/AllEventsNavigation';
+import AllEvents from '../../All-Events/components/AllEvents';
+
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Drawer = createDrawerNavigator<RootDrawerParamList>();
@@ -53,7 +56,8 @@ const DrawerNavigator: React.FC = () => {
       />
       <Drawer.Screen
       name='AllEvents'
-      component={AllQuotation}
+      component={AllEvents}
+      options={{ headerShown:false  }}
       />
       <Drawer.Screen
       name='AllVendors'
@@ -136,6 +140,16 @@ const DashNavigation: React.FC = () => {
           name="CreateInvoice"
           component={CreateInvoice} // Ensure SettingNavigation is a stack navigator
           options={{ headerShown:false  }} // Optionally hide header if using custom header in SettingNavigation
+        />
+        <Stack.Screen
+          name="AllEvents"
+          component={AllEvents} // Ensure SettingNavigation is a stack navigator
+          options={{ headerShown:false}} // Optionally hide header if using custom header in SettingNavigation
+        />
+         <Stack.Screen
+          name="RegisterEvent"
+          component={RegisterEvent} // Ensure SettingNavigation is a stack navigator
+          options={{ headerShown:true}} // Optionally hide header if using custom header in SettingNavigation
         />
       </Stack.Navigator>
     </NavigationContainer>
