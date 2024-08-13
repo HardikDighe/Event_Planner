@@ -72,6 +72,7 @@ const AddItem: React.FC<Props> = ({ navigation }) => {
   };
   // Pass the new item back to the CreateQuotation screen
   navigation.navigate('CreateQuotation', { newItem });
+  navigation.navigate('VendorRegistration',{newItem})
   };
 
   return (
