@@ -121,7 +121,7 @@ const DashNavigation: React.FC = () => {
           options={{ headerShown:true  }} // Optionally hide header if using custom header in SettingNavigation
         />
         <Stack.Screen
-          name="CreateInvoive"
+          name="CreateInvoice"
           component={CreateInvoice} // Ensure SettingNavigation is a stack navigator
           options={{ headerShown:false  }} // Optionally hide header if using custom header in SettingNavigation
         />

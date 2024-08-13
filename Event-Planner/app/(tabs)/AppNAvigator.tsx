@@ -2,10 +2,10 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import  SignupScreen from '../../app/screens/SignUp/components/SignupScreen';
-import LoginPageNavigation from '../../app/screens/Login/components/LoginPageNavigation';
+import LoginPageNavigation from '../screens/Login/container/LoginPageNavigation';
 import   {RootStackParamList}  from './types';
 import LoginPage from '../../app/screens/Login/components/LoginPage';
-import ForgotPassword from '../../app/screens/Login/components/ForgotPassword';
+import ForgotPassword from '../screens/ForgotPassword/components/ForgotPassword';
 import DashNavigation from '../screens/Dashboard/components/DashboardNavigation';
 import SettingNavigation from '../screens/Setting/components/SettingNavigation';
 

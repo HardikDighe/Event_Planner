@@ -1,9 +1,9 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import LoginPage from './LoginPage';
-import ForgotPassword from './ForgotPassword';
-import SignupScreen from '../../../../app/screens/SignUp/components/SignupScreen'; // Import the SignUp component
+import LoginPage from '../components/LoginPage';
+import ForgotPassword from '../../ForgotPassword/components/ForgotPassword';
+import SignupScreen from '../../SignUp/components/SignupScreen'; // Import the SignUp component
 import DashboardScreen from '../../Dashboard/components/Dashboard';
 import { RootStackParamList } from '../../../(tabs)/types';
 

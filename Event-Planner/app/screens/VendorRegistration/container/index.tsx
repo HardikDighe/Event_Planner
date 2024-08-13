@@ -2,7 +2,7 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { Provider as PaperProvider } from "react-native-paper"; // Import PaperProvider
+import { Provider as PaperProvider } from "react-native-paper"; 
 import VendorRegistration from "../components/VendorRegistration";
 import AddItem from "../../../screens/AddItem/components/AddItem";
 

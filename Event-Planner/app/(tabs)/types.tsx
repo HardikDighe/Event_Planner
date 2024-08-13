@@ -23,6 +23,7 @@ export type RootStackParamList = {
   AllEvents:undefined;
   AllVendors:undefined;
   EventRegistration:undefined;
+  CreateInvoive:undefined;
 
 };
 
