@@ -19,7 +19,10 @@ export type RootStackParamList = {
   Settings:undefined;
   Notifications:undefined;
   AllQuotations:undefined;
-  CreateQuotation:undefined;
+  // CreateQuotation:undefined;
+  CreateQuotation: {
+    newItem?: Item;  // Add newItem as an optional parameter
+};
   AllEvents:undefined;
   AllVendors:undefined;
   EventRegistration:undefined;
@@ -73,9 +76,9 @@ export type RootDrawerParamList = {
 
 interface Item {
   itemName: string;
-  itemQuantity: number;
-  itemPrice: number;
-  itemDiscount: number;
+  quantity: number;
+  price: number;
+  discount: number;
   payableAmount: number;
-  itemMisc: string;
+  miscellaneous: string;
 }

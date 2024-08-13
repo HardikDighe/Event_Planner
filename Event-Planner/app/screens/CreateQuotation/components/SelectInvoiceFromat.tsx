@@ -28,26 +28,8 @@ const SelectInvoiceFormat = () => {
     } = route.params; // Destructure the data from route.params
     const [currentFormat, setCurrentFormat] = useState(0);
     const toWords = new ToWords();
-    // const { customerName, phoneNumber, address, emailId, gstin, quotationDate, venueDate, venueTime, venueDetails, items } = {
-    //     // Sample data for demonstration
-    //     customerName: "John Doe",
-    //     phoneNumber: "123-456-7890",
-    //     address: "123 Main St, Anytown, USA",
-    //     emailId: "john.doe@example.com",
-    //     gstin: "1234567890",
-    //     quotationDate: new Date(),
-    //     venueDate: new Date(),
-    //     venueTime: new Date(),
-    //     venueDetails: "Venue XYZ",
-    //     items: [
-    //         { itemName: "Item 1", itemQuantity: 1, itemPrice: 100, itemDiscount: 10, itemTotalPrice: 90, itemMisc: "" },
-    //         { itemName: "Item 2", itemQuantity: 2, itemPrice: 200, itemDiscount: 20, itemTotalPrice: 180, itemMisc: "" }
-    //     ]
-    // };
-
-    // Calculate total price and discount
-    const totalPrice = items.reduce((total, item) => total + item.payableAmount, 0);
-    const totalDiscount = items.reduce((total, item) => total + item.itemDiscount, 0);
+    const totalPrice = items.reduce((total, item) => total + Number(item.payableAmount), 0);
+    const totalDiscount = items.reduce((total, item) => total + Number(item.discount), 0);
     let words = toWords.convert(totalPrice);
     const formats = [
         {
@@ -136,8 +118,8 @@ const SelectInvoiceFormat = () => {
                                 ${items.map(item => `
                                     <tr>
                                         <td>${item.itemName}</td>
-                                        <td>${item.itemQuantity}</td>
-                                        <td>${item.itemPrice}</td>
+                                        <td>${item.quantity}</td>
+                                        <td>${item.discount}</td>
                                         <td>${item.payableAmount}</td>
                                     </tr>`).join('')}
                             </tbody>
@@ -174,7 +156,7 @@ const SelectInvoiceFormat = () => {
                         <View style={{ flex: 1, alignItems: 'flex-end' }}>
                             <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
                                 <Text style={{}}>Invoice No.</Text>
-                                <Text style={{ fontWeight: 'bold' }}>1</Text>
+                                <Text style={{ fontWeight: 'bold' }}>0</Text>
                             </View>
                             <View style={{ flex: 1, flexDirection: 'column' }}>
                                 <Text style={{}}>Quotation Date</Text>
@@ -194,9 +176,9 @@ const SelectInvoiceFormat = () => {
                         {items.map((item, index) => (
                             <View key={index} style={styles.tableRow}>
                                 <Text style={styles.tableCell}>{item.itemName}</Text>
-                                <Text style={styles.tableCell}>{item.itemQuantity}</Text>
-                                <Text style={styles.tableCell}>{item.itemPrice}</Text>
-                                <Text style={styles.tableCell}>{item.itemDiscount}</Text>
+                                <Text style={styles.tableCell}>{item.quantity}</Text>
+                                <Text style={styles.tableCell}>{item.price}</Text>
+                                <Text style={styles.tableCell}>{item.discount}</Text>
                                 <Text style={styles.tableCell}>{item.payableAmount}</Text>
 
                             </View>
@@ -214,7 +196,7 @@ const SelectInvoiceFormat = () => {
                     </View>
                     <View style={{ flexDirection: 'row', marginTop: 22 }}>
                         <Text style={{ fontWeight: 'bold' }}>Terms & Conditions : </Text>
-                        <Text>Thank you for doing business with us.</Text>
+                        <Text>{STRINGS.thankYouMassage}</Text>
                     </View>
                 </View>
             )
@@ -256,11 +238,11 @@ const SelectInvoiceFormat = () => {
                             ${items.map(item => `
                                 <tr>
                                     <td>${item.itemName}</td>
-                                    <td>${item.itemQuantity}</td>
-                                    <td>${item.itemPrice}</td>
-                                    <td>${item.itemDiscount}</td>
+                                    <td>${item.quantity}</td>
+                                    <td>${item.price}</td>
+                                    <td>${item.discount}</td>
                                     <td>${item.payableAmount}</td>
-                                    <td>${item.itemMisc}</td>
+                                    <td>${item.miscellaneous}</td>
                                 </tr>`).join('')}
                         </table>
                         <div class="summary">
@@ -297,9 +279,9 @@ const SelectInvoiceFormat = () => {
                         {items.map((item, index) => (
                             <View key={index} style={styles.tableRow}>
                                 <Text style={styles.tableCell}>{item.itemName}</Text>
-                                <Text style={styles.tableCell}>{item.itemQuantity}</Text>
-                                <Text style={styles.tableCell}>{item.itemPrice}</Text>
-                                <Text style={styles.tableCell}>{item.itemDiscount}</Text>
+                                <Text style={styles.tableCell}>{item.quantity}</Text>
+                                <Text style={styles.tableCell}>{item.price}</Text>
+                                <Text style={styles.tableCell}>{item.discount}</Text>
                                 <Text style={styles.tableCell}>{item.payableAmount}</Text>
 
                             </View>
@@ -473,9 +455,9 @@ const SelectInvoiceFormat = () => {
                         {items.map((item, index) => (
                             <View key={index} style={styles.tableRow}>
                                 <Text style={styles.tableCell}>{item.itemName}</Text>
-                                <Text style={styles.tableCell}>{item.itemQuantity}</Text>
-                                <Text style={styles.tableCell}>{item.itemPrice}</Text>
-                                <Text style={styles.tableCell}>{item.itemDiscount}</Text>
+                                <Text style={styles.tableCell}>{item.quantity}</Text>
+                                <Text style={styles.tableCell}>{item.price}</Text>
+                                <Text style={styles.tableCell}>{item.discount}</Text>
                                 <Text style={styles.tableCell}>{item.payableAmount}</Text>
 
                             </View>
@@ -687,9 +669,9 @@ const SelectInvoiceFormat = () => {
                         {items.map((item, index) => (
                             <View key={index} style={styles.tableRow}>
                                 <Text style={styles.tableCell}>{item.itemName}</Text>
-                                <Text style={styles.tableCell}>{item.itemQuantity}</Text>
-                                <Text style={styles.tableCell}>{item.itemPrice}</Text>
-                                <Text style={styles.tableCell}>{item.itemDiscount}</Text>
+                                <Text style={styles.tableCell}>{item.quantity}</Text>
+                                <Text style={styles.tableCell}>{item.price}</Text>
+                                <Text style={styles.tableCell}>{item.discount}</Text>
                                 <Text style={styles.tableCell}>{item.payableAmount}</Text>
                             </View>
                         ))}
@@ -863,7 +845,7 @@ const SelectInvoiceFormat = () => {
                     </View>
                     <Text>Event Planner</Text>
                     <Text>Phone</Text>
-                    <Text>9876543210</Text>
+                    <Text>{phoneNumber}</Text>
                     <View style={{
                         flexDirection: 'row',
                         flex: 0.4,
@@ -909,9 +891,9 @@ const SelectInvoiceFormat = () => {
                         {items.map((item, index) => (
                             <View key={index} style={styles.tableRow}>
                                 <Text style={styles.tableCell}>{item.itemName}</Text>
-                                <Text style={styles.tableCell}>{item.itemQuantity}</Text>
-                                <Text style={styles.tableCell}>{item.itemPrice}</Text>
-                                <Text style={styles.tableCell}>{item.itemDiscount}</Text>
+                                <Text style={styles.tableCell}>{item.quantity}</Text>
+                                <Text style={styles.tableCell}>{item.price}</Text>
+                                <Text style={styles.tableCell}>{item.discount}</Text>
                                 <Text style={styles.tableCell}>{item.payableAmount}</Text>
                             </View>
                         ))}

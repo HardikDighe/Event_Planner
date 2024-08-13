@@ -4,9 +4,10 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import * as Print from 'expo-print';
 import { shareAsync } from 'expo-sharing';
 import styles from '../../../../app/screens/CreateQuotation/styles/styles';
-import { fetchQuotationDetails } from '../api/getQuotationData.api';
-import { deleteQuotation } from '../api/deleteQuotation.api';
-import { updateQuotation } from '../api/updateQuatation.api';
+// import { fetchQuotationDetails } from '../api/getQuotationData.api';
+// import { deleteQuotation } from '../api/deleteQuotation.api';
+// import { updateQuotation } from '../api/updateQuatation.api';
+import { fetchQuotationDetails, deleteQuotation, updateQuotation } from '../api/Quotation.api';
 import { STRINGS } from '../constants/string';
 
 interface FloatingLabelInputProps {
