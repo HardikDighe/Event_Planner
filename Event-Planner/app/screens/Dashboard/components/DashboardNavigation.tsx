@@ -55,13 +55,14 @@ const DrawerNavigator: React.FC = () => {
       component={AllQuotation}
       />
       <Drawer.Screen
-      name='AllEvents'
+      name='All_Events'
       component={AllEvents}
-      options={{ headerShown:false  }}
+      options={{ headerShown:false}}
       />
       <Drawer.Screen
-      name='AllVendors'
+      name='All_Vendors'
       component={VendorListScreen}
+      options={{ headerShown:true }}
      
       />
       <Drawer.Screen

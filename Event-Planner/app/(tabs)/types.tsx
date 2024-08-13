@@ -22,6 +22,7 @@ export type RootStackParamList = {
   CreateQuotation: {
     newItem?: Item;
 };
+
   AllEvents:undefined;
   AllVendors:undefined;
   EventRegistration:undefined;
@@ -72,7 +73,8 @@ export type RootDrawerParamList = {
   AllVendors: undefined;
   VendorRegistration: undefined;
   ServiceRegistration: undefined;
- 
+  All_Vendors:undefined;
+  All_Events:undefined;
 };
 
 interface Item {
