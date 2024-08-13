@@ -7,6 +7,7 @@ import styles from '../../../../app/screens/CreateQuotation/styles/styles';
 import { fetchQuotationDetails } from '../api/getQuotationData.api';
 import { deleteQuotation } from '../api/deleteQuotation.api';
 import { updateQuotation } from '../api/updateQuatation.api';
+import { STRINGS } from '../constants/string';
 
 interface FloatingLabelInputProps {
     label: string;
@@ -167,7 +168,7 @@ const EditQuotation = () => {
 
     useEffect(() => {
         const loadQuotationData = async () => {
-            const data = await fetchQuotationDetails('aa92'); // Replace with the actual ID
+            const data = await fetchQuotationDetails('8096'); // Replace with the actual ID
             if (data) {
                 setQuotationDetails(data);
             } else {
@@ -217,9 +218,9 @@ const EditQuotation = () => {
     const handleSave = async () => {
         if (!quotationDetails) return;
 
-        updateQuotation(quotationDetails.id,quotationDetails);
+        updateQuotation(quotationDetails.id, quotationDetails);
         setModalVisible(true);
-        
+
     };
 
     if (!quotationDetails) {
@@ -231,145 +232,143 @@ const EditQuotation = () => {
     }
 
     return (
-        <view style={{flex:1}}>
-        <ScrollView contentContainerStyle={styles.container}>
-            <Text style={styles.title}>Edit Quotation</Text>
-            <FloatingLabelInput
-                label="Enter Customer Name"
-                value={quotationDetails.customerName}
-                onChangeText={(text) => setQuotationDetails({ ...quotationDetails, customerName: text })}
-            />
-            <FloatingLabelInput
-                label="Enter Phone Number"
-                value={quotationDetails.phoneNumber}
-                onChangeText={(text) => setQuotationDetails({ ...quotationDetails, phoneNumber: text })}
-                keyboardType="phone-pad"
-            />
-            <FloatingLabelInput
-                label="Enter Address"
-                value={quotationDetails.address}
-                onChangeText={(text) => setQuotationDetails({ ...quotationDetails, address: text })}
-            />
-            <FloatingLabelInput
-                label="Enter Email ID"
-                value={quotationDetails.emailId}
-                onChangeText={(text) => setQuotationDetails({ ...quotationDetails, emailId: text })}
-                keyboardType="email-address"
-            />
-            <FloatingLabelInput
-                label="Enter GSTIN"
-                value={quotationDetails.gstin}
-                onChangeText={(text) => setQuotationDetails({ ...quotationDetails, gstin: text })}
-            />
-            <FloatingLabelInput
-                label="Enter Venue Details"
-                value={quotationDetails.venueDetails}
-                onChangeText={(text) => setQuotationDetails({ ...quotationDetails, venueDetails: text })}
-            />
+        <View style={{ flex: 1 }}>
+            <ScrollView contentContainerStyle={styles.container}>
+                <Text style={styles.title}>Edit Quotation</Text>
+                <FloatingLabelInput
+                    label="Enter Customer Name"
+                    value={quotationDetails.customerName}
+                    onChangeText={(text) => setQuotationDetails({ ...quotationDetails, customerName: text })}
+                />
+                <FloatingLabelInput
+                    label="Enter Phone Number"
+                    value={quotationDetails.phoneNumber}
+                    onChangeText={(text) => setQuotationDetails({ ...quotationDetails, phoneNumber: text })}
+                    keyboardType="phone-pad"
+                />
+                <FloatingLabelInput
+                    label="Enter Address"
+                    value={quotationDetails.address}
+                    onChangeText={(text) => setQuotationDetails({ ...quotationDetails, address: text })}
+                />
+                <FloatingLabelInput
+                    label="Enter Email ID"
+                    value={quotationDetails.emailId}
+                    onChangeText={(text) => setQuotationDetails({ ...quotationDetails, emailId: text })}
+                    keyboardType="email-address"
+                />
+                <FloatingLabelInput
+                    label="Enter GSTIN"
+                    value={quotationDetails.gstin}
+                    onChangeText={(text) => setQuotationDetails({ ...quotationDetails, gstin: text })}
+                />
+                <FloatingLabelInput
+                    label="Enter Venue Details"
+                    value={quotationDetails.venueDetails}
+                    onChangeText={(text) => setQuotationDetails({ ...quotationDetails, venueDetails: text })}
+                />
 
-            {quotationDetails.items.map((item, index) => (
-                <View key={index} style={styles.itemContainer}>
-                    <Text>Item Name: {item.itemName}</Text>
-                    <Text>Quantity: {item.itemQuantity}</Text>
-                    <Text>Price: {item.itemPrice}</Text>
-                    <Text>Discount: {item.itemDiscount}</Text>
-                    <Text>Total Price: {item.itemTotalPrice}</Text>
-                    <Text>Misc: {item.itemMisc}</Text>
-                    <View style={styles.itemButtons}>
-                        <TouchableOpacity onPress={() => handleItemEdit(index)} style={styles.editButton}>
-                            <Text style={styles.buttonText}>Edit</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => handleItemDelete(index)} style={styles.deleteButton}>
-                            <Text style={styles.buttonText}>Delete</Text>
-                        </TouchableOpacity>
+                {quotationDetails.items.map((item, index) => (
+                    <View key={index} style={styles.itemContainer}>
+                        <Text>Item Name: {item.itemName}</Text>
+                        <Text>Quantity: {item.itemQuantity}</Text>
+                        <Text>Price: {item.itemPrice}</Text>
+                        <Text>Discount: {item.itemDiscount}</Text>
+                        <Text>Total Price: {item.itemTotalPrice}</Text>
+                        <Text>Misc: {item.itemMisc}</Text>
+                        <View style={styles.itemButtons}>
+                            <TouchableOpacity onPress={() => handleItemEdit(index)} style={styles.editButton}>
+                                <Text style={styles.buttonText}>Edit</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => handleItemDelete(index)} style={styles.deleteButton}>
+                                <Text style={styles.buttonText}>Delete</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
-                </View>
-            ))}
+                ))}
 
-            
 
-            <Modal
-                visible={modalVisible}
-                transparent={true}
-                animationType="slide"
-                onRequestClose={() => setModalVisible(false)}
-            >
-                <View style={styles.modalContainer}>
-                    <View style={styles.modalContent}>
-                        <Text style={styles.modalTitle}>Success</Text>
-                        <Text style={styles.modalMessage}>Quotation saved successfully!</Text>
-                        <TouchableOpacity style={styles.modalButton} onPress={handleSharePDF}>
-                            <Text style={styles.modalButtonText}>Share</Text>
-                        </TouchableOpacity>
-                        {/* <TouchableOpacity style={styles.modalButton} onPress={handleEdit} >
-                            <Text style={styles.modalButtonText}>Edit</Text>
-                        </TouchableOpacity> */}
-                        <TouchableOpacity style={styles.modalButton} onPress={() => deleteQuotation(quotationDetails.id)} >
-                            <Text style={styles.modalButtonText}>Delete</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.modalButton} onPress={() => navigation.navigate('CreateQuotation')}>
-                            <Text style={styles.modalButtonText}>Close</Text>
-                        </TouchableOpacity>
+
+                <Modal
+                    visible={modalVisible}
+                    transparent={true}
+                    animationType="slide"
+                    onRequestClose={() => setModalVisible(false)}
+                >
+                    <View style={styles.modalContainer}>
+                        <View style={styles.modalContent}>
+                            <Text style={styles.modalTitle}>Success</Text>
+                            <Text style={styles.modalMessage}>{STRINGS.successMessage}</Text>
+                            <TouchableOpacity style={styles.modalButton} onPress={handleSharePDF}>
+                                <Text style={styles.modalButtonText}>Share</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.modalButton} onPress={() => deleteQuotation(quotationDetails.id)} >
+                                <Text style={styles.modalButtonText}>{STRINGS.deleteButtonText}</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.modalButton} onPress={() => navigation.navigate('CreateQuotation')}>
+                                <Text style={styles.modalButtonText}>Close</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
-                </View>
-            </Modal>
+                </Modal>
 
-            <Modal
-                visible={editItemModalVisible}
-                transparent={true}
-                animationType="slide"
-                onRequestClose={() => setEditItemModalVisible(false)}
-            >
-                <View style={styles.modalContainer}>
-                    <View style={styles.modalContent}>
-                        <Text style={styles.modalTitle}>Edit Item</Text>
-                        <FloatingLabelInput
-                            label="Item Name"
-                            value={currentItem.itemName}
-                            onChangeText={(text) => setCurrentItem({ ...currentItem, itemName: text })}
-                        />
-                        <FloatingLabelInput
-                            label="Quantity"
-                            value={String(currentItem.itemQuantity)}
-                            onChangeText={(text) => setCurrentItem({ ...currentItem, itemQuantity: Number(text) })}
-                            keyboardType="numeric"
-                        />
-                        <FloatingLabelInput
-                            label="Price"
-                            value={String(currentItem.itemPrice)}
-                            onChangeText={(text) => setCurrentItem({ ...currentItem, itemPrice: Number(text) })}
-                            keyboardType="numeric"
-                        />
-                        <FloatingLabelInput
-                            label="Discount"
-                            value={String(currentItem.itemDiscount)}
-                            onChangeText={(text) => setCurrentItem({ ...currentItem, itemDiscount: Number(text) })}
-                            keyboardType="numeric"
-                        />
-                        <FloatingLabelInput
-                            label="Total Price"
-                            value={String(currentItem.itemTotalPrice)}
-                            onChangeText={(text) => setCurrentItem({ ...currentItem, itemTotalPrice: Number(text) })}
-                            keyboardType="numeric"
-                        />
-                        <FloatingLabelInput
-                            label="Misc"
-                            value={currentItem.itemMisc}
-                            onChangeText={(text) => setCurrentItem({ ...currentItem, itemMisc: text })}
-                        />
-                        <TouchableOpacity style={styles.button} onPress={saveEditedItem}>
-                            <Text style={styles.buttonText}>Save Item</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.button} onPress={() => setEditItemModalVisible(false)}>
-                            <Text style={styles.buttonText}>Cancel</Text>
-                        </TouchableOpacity>
+                <Modal
+                    visible={editItemModalVisible}
+                    transparent={true}
+                    animationType="slide"
+                    onRequestClose={() => setEditItemModalVisible(false)}
+                >
+                    <View style={styles.modalContainer}>
+                        <View style={styles.modalContent}>
+                            <Text style={styles.modalTitle}>Edit Item</Text>
+                            <FloatingLabelInput
+                                label="Item Name"
+                                value={currentItem.itemName}
+                                onChangeText={(text) => setCurrentItem({ ...currentItem, itemName: text })}
+                            />
+                            <FloatingLabelInput
+                                label="Quantity"
+                                value={String(currentItem.itemQuantity)}
+                                onChangeText={(text) => setCurrentItem({ ...currentItem, itemQuantity: Number(text) })}
+                                keyboardType="numeric"
+                            />
+                            <FloatingLabelInput
+                                label="Price"
+                                value={String(currentItem.itemPrice)}
+                                onChangeText={(text) => setCurrentItem({ ...currentItem, itemPrice: Number(text) })}
+                                keyboardType="numeric"
+                            />
+                            <FloatingLabelInput
+                                label="Discount"
+                                value={String(currentItem.itemDiscount)}
+                                onChangeText={(text) => setCurrentItem({ ...currentItem, itemDiscount: Number(text) })}
+                                keyboardType="numeric"
+                            />
+                            <FloatingLabelInput
+                                label="Total Price"
+                                value={String(currentItem.itemTotalPrice)}
+                                onChangeText={(text) => setCurrentItem({ ...currentItem, itemTotalPrice: Number(text) })}
+                                keyboardType="numeric"
+                            />
+                            <FloatingLabelInput
+                                label="Misc"
+                                value={currentItem.itemMisc}
+                                onChangeText={(text) => setCurrentItem({ ...currentItem, itemMisc: text })}
+                            />
+                            <TouchableOpacity style={styles.button} onPress={saveEditedItem}>
+                                <Text style={styles.buttonText}>Save Item</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.button} onPress={() => setEditItemModalVisible(false)}>
+                                <Text style={styles.buttonText}>Cancel</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
-                </View>
-            </Modal>
-        </ScrollView>
-        <TouchableOpacity style={styles.button} onPress={handleSave}>
-        <Text style={styles.buttonText}>Save</Text>
-    </TouchableOpacity></view>
+                </Modal>
+            </ScrollView>
+            <TouchableOpacity style={styles.button} onPress={handleSave}>
+                <Text style={styles.buttonText}>Save</Text>
+            </TouchableOpacity>
+        </View>
     );
 };
 
