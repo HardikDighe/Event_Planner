@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, FlatList, TouchableOpacity, SafeAreaView, TextI
 import { FontAwesome, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
+
 const events = [
   {
     id: '1',
@@ -29,6 +30,7 @@ const events = [
     description: 'Yet another event description with unique information.',
   },
 ];
+
 type Event = {
   id: string;
   title: string;
@@ -37,7 +39,12 @@ type Event = {
   location: string;
   description: string;
 };
-const EventCard = ({ event }: { event: Event }) => {
+
+type AllEventsProps = {
+  navigation: any; // Adjust the type according to your navigation setup, e.g., NavigationProp
+};
+
+const EventCard: React.FC<{ event: Event }> = ({ event }) => {
   const handleShare = async () => {
     try {
       const htmlContent = `
@@ -59,6 +66,7 @@ const EventCard = ({ event }: { event: Event }) => {
       Alert.alert('Error', 'An error occurred while creating the PDF');
     }
   };
+
   const handlePrint = async () => {
     try {
       const htmlContent = `
@@ -74,6 +82,7 @@ const EventCard = ({ event }: { event: Event }) => {
       Alert.alert('Error', 'An error occurred while printing');
     }
   };
+
   return (
     <View style={styles.card}>
       <View style={styles.cardHeader}>
@@ -107,10 +116,12 @@ const EventCard = ({ event }: { event: Event }) => {
     </View>
   );
 };
-const AllEventsScreen = () => {
+
+const AllEvents: React.FC<AllEventsProps> = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [filteredEvents, setFilteredEvents] = useState<Event[]>(events);
   const [showSearchBar, setShowSearchBar] = useState<boolean>(false);
+
   const handleSearch = (query: string) => {
     setSearchQuery(query);
     if (query === '') {
@@ -122,6 +133,7 @@ const AllEventsScreen = () => {
       setFilteredEvents(filtered);
     }
   };
+
   const handlePrint = async () => {
     try {
       const htmlContent = `
@@ -146,6 +158,7 @@ const AllEventsScreen = () => {
       Alert.alert('Error', 'An error occurred while creating the PDF');
     }
   };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -182,7 +195,7 @@ const AllEventsScreen = () => {
         renderItem={({ item }) => <EventCard event={item} />}
         keyExtractor={item => item.id}
       />
-      <TouchableOpacity style={styles.registerEventButton}>
+      <TouchableOpacity style={styles.registerEventButton} onPress={() => navigation.navigate("RegisterEvent")}>
         <Text style={styles.registerEventButtonText}>+ Register Event</Text>
       </TouchableOpacity>
     </SafeAreaView>
@@ -316,4 +329,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-export default AllEventsScreen;
+export default AllEvents;
