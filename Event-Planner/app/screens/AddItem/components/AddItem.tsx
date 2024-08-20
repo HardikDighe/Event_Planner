@@ -9,7 +9,6 @@ interface Props {
 }
 
 const AddItem: React.FC<Props> = ({ navigation }) => {
-
   const route = useRoute<RouteProp<{ params: { fromScreen?: string } }, 'params'>>();
 
   const [itemName, setItemName] = useState("");
@@ -42,9 +41,7 @@ const AddItem: React.FC<Props> = ({ navigation }) => {
     const parsedDiscount = parseFloat(discount) || 0;
     const parsedMiscellaneous = parseFloat(miscellaneous) || 0;
 
-    let calculatedPayableAmount =
-      parsedTotalAmount - parsedDiscount + parsedMiscellaneous;
-
+    let calculatedPayableAmount = parsedTotalAmount - parsedDiscount + parsedMiscellaneous;
     calculatedPayableAmount = Math.max(calculatedPayableAmount, 0);
 
     setPayableAmount(calculatedPayableAmount.toString());
@@ -58,48 +55,29 @@ const AddItem: React.FC<Props> = ({ navigation }) => {
     setBalance(calculatedBalance.toString());
   }, [payableAmount, paidAmount]);
 
-  const handleQuantityChange = (value: string) => {
-    setQuantity(value);
-  };
-
-  const handlePriceChange = (value: string) => {
-    setPrice(value);
-  };
-
-  const handleDiscountChange = (value: string) => {
-    setDiscount(value);
-  };
-
-  const handleMiscellaneousChange = (value: string) => {
-    setMiscellaneous(value);
-  };
-
-  const handlePaidAmountChange = (value: string) => {
-    setPaidAmount(value);
-  };
+  const handleQuantityChange = (value: string) => setQuantity(value);
+  const handlePriceChange = (value: string) => setPrice(value);
+  const handleDiscountChange = (value: string) => setDiscount(value);
+  const handleMiscellaneousChange = (value: string) => setMiscellaneous(value);
+  const handlePaidAmountChange = (value: string) => setPaidAmount(value);
 
   const handleSaveItem = () => {
-    // navigation.goBack();
     const newItem = {
       itemName,
       quantity,
       price,
       discount,
       payableAmount,
-      miscellaneous
-  };
-  // Pass the new item 
-  const fromScreen = route.params?.fromScreen;
-  if (fromScreen === 'CreateQuotation') {
-      navigation.navigate('CreateQuotation', { newItem });
-  } else if (fromScreen === 'VendorRegistration') {
-      navigation.navigate('VendorRegistration', { newItem });
-  }else if (fromScreen === 'CreateInvoice') {
-    navigation.navigate('CreateInvoice', { newItem });
-    console.warn(route.params?.fromScreen);
-} else {
-      navigation.goBack(); // Default behavior
-  }
+      paidAmount,
+      balance,
+      miscellaneous,
+    };
+    const fromScreen = route.params?.fromScreen;
+    if (fromScreen === 'CreateInvoice') {
+      navigation.navigate('CreateInvoice', { newItem });
+    } else {
+      navigation.goBack();
+    }
   };
 
   return (
@@ -208,7 +186,6 @@ const AddItem: React.FC<Props> = ({ navigation }) => {
           </View>
         </View>
 
-        {/* New Paid Amount and Balance Fields */}
         <View style={styles.row}>
           <Text style={styles.rowLabel}>Paid Amount</Text>
           <View style={styles.inputContainer}>

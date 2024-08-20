@@ -1,5 +1,4 @@
-// AllInvoices.tsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -17,11 +16,9 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import styles from "../../../../..//Event-Planner/app/screens/All_Invoice/styles/styles"; // Import styles
 
-// Define types for navigation
 type RootStackParamList = {
   AllInvoices: undefined;
   CreateInvoice: undefined;
- 
 };
 
 type NavigationProp = NativeStackNavigationProp<
@@ -38,17 +35,77 @@ type Invoice = {
   status: string;
 };
 
-const invoices: Invoice[] = [
-  {
-    id: "1",
-    name: "ABC",
-    amount: 80500,
-    balance: 14500,
-    date: "27/07/2024",
-    status: "Approved",
-  },
-  // ... (other invoices)
-];
+const AllInvoices = () => {
+  const navigation = useNavigation<NavigationProp>();
+  const [invoices, setInvoices] = useState<Invoice[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Fetch data from API
+  useEffect(() => {
+    const fetchInvoices = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/CreateInvoice");
+        const data = await response.json();
+
+        // Map the data to the required format, ensuring that items[0] exists
+        const mappedInvoices = data.map((invoice: any) => {
+          const firstItem = invoice.items && invoice.items[0];
+
+          return {
+            id: invoice.id,
+            name: invoice.customer || "Unknown", // Fallback to "Unknown" if customer is empty
+            amount: firstItem ? parseFloat(firstItem.payableAmount) : 0,
+            balance: firstItem ? parseFloat(firstItem.balance) : 0,
+            date: new Date(invoice.dateTime).toLocaleDateString(),
+            status: "Pending", // You can set status as required
+          };
+        });
+
+        setInvoices(mappedInvoices);
+      } catch (error) {
+        console.error("Failed to fetch invoices:", error);
+      }
+    };
+
+    fetchInvoices();
+  }, []);
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+  };
+
+  const filteredInvoices = invoices.filter((invoice) =>
+    invoice.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  return (
+    <View style={styles.container}>
+      <Header onSearch={handleSearch} />
+      <View style={styles.totalSalesContainer}>
+        <Text style={styles.totalSales}>Total Sales</Text>
+        <Text style={styles.totalAmount}>80,500</Text>
+      </View>
+      <View style={styles.invoicesHeader}>
+        <Text style={styles.invoicesListText}>Invoices List</Text>
+        <View style={styles.sortByContainer}>
+          <Text style={styles.sortByText}>Sort By</Text>
+          <Icon name="sort" size={24} color="#051650" />
+        </View>
+      </View>
+      <FlatList
+        data={filteredInvoices}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => <InvoiceItem item={item} />}
+      />
+      <TouchableOpacity
+        style={styles.createInvoiceButton}
+        onPress={() => navigation.navigate("CreateInvoice")}
+      >
+        <Text style={styles.createInvoiceButtonText}>Create Invoice</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
 
 const InvoiceItem: React.FC<{ item: Invoice }> = ({ item }) => {
   const handlePrint = async () => {
@@ -161,52 +218,6 @@ const Header: React.FC<{ onSearch: (query: string) => void }> = ({
           <Icon name="picture-as-pdf" size={24} color="red" />
         </TouchableOpacity>
       </View>
-    </View>
-  );
-};
-
-const AllInvoices = () => {
-  const navigation = useNavigation<NavigationProp>();
-  const [searchQuery, setSearchQuery] = useState("");
-
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
-    // Implement search logic here if needed
-  };
-
-  const handleCreateInvoice = () => {
-    navigation.navigate("CreateInvoice");
-  };
-
-  const filteredInvoices = invoices.filter((invoice) =>
-    invoice.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  return (
-    <View style={styles.container}>
-      <Header onSearch={handleSearch} />
-      <View style={styles.totalSalesContainer}>
-        <Text style={styles.totalSales}>Total Sales</Text>
-        <Text style={styles.totalAmount}>80,500</Text>
-      </View>
-      <View style={styles.invoicesHeader}>
-        <Text style={styles.invoicesListText}>Invoices List</Text>
-        <View style={styles.sortByContainer}>
-          <Text style={styles.sortByText}>Sort By</Text>
-          <Icon name="sort" size={24} color="#051650" />
-        </View>
-      </View>
-      <FlatList
-        data={filteredInvoices}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <InvoiceItem item={item} />}
-      />
-      <TouchableOpacity
-        style={styles.createInvoiceButton}
-        onPress={() => navigation.navigate('CreateInvoice')}
-      >
-        <Text style={styles.createInvoiceButtonText}>Create Invoice</Text>
-      </TouchableOpacity>
     </View>
   );
 };
