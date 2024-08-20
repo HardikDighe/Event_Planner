@@ -104,7 +104,7 @@ const VendorRegistration: React.FC<Props> = ({ navigation }) => {
           colors: { text: "black", primary: "black", background: "white" },
         }}
       />
-      <TouchableOpacity onPress={() => navigation.navigate("AddItem")}>
+      <TouchableOpacity onPress={() => navigation.navigate("AddItem", { fromScreen: 'VendorRegistration' })}>
         <Text style={[styles.addItemText, { color: "#051650" }]}>
           {strings.buttons.addItem}
         </Text>

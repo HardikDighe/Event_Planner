@@ -75,7 +75,11 @@ const AddItem: React.FC<Props> = ({ navigation }) => {
     const fromScreen = route.params?.fromScreen;
     if (fromScreen === 'CreateInvoice') {
       navigation.navigate('CreateInvoice', { newItem });
-    } else {
+    }else if (fromScreen === 'CreateQuotation') {
+      navigation.navigate('CreateQuotation', { newItem });
+    }else if (fromScreen === 'VendorRegistration') {
+      navigation.navigate('VendorRegistration', { newItem });
+    }  else {
       navigation.goBack();
     }
   };
