@@ -1,10 +1,8 @@
-// AllInvoices.tsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
   FlatList,
-  StyleSheet,
   TouchableOpacity,
   TextInput,
 } from "react-native";
@@ -16,40 +14,65 @@ import * as Print from "expo-print";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import styles from "../../../../..//Event-Planner/app/screens/All_Invoice/styles/styles"; // Import styles
-
-// Define types for navigation
+import { fetchInvoices, Invoice } from "../../../screens/All_Invoice/api/allinvoice.api"; // Import the fetch function and types
 type RootStackParamList = {
   AllInvoices: undefined;
   CreateInvoice: undefined;
- 
 };
-
 type NavigationProp = NativeStackNavigationProp<
   RootStackParamList,
   "AllInvoices"
 >;
-
-type Invoice = {
-  id: string;
-  name: string;
-  amount: number;
-  balance: number;
-  date: string;
-  status: string;
+const AllInvoices = () => {
+  const navigation = useNavigation<NavigationProp>();
+  const [invoices, setInvoices] = useState<Invoice[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  // Fetch data from API
+  useEffect(() => {
+    const loadInvoices = async () => {
+      try {
+        const fetchedInvoices = await fetchInvoices();
+        setInvoices(fetchedInvoices);
+      } catch (error) {
+        console.error("Failed to load invoices:", error);
+      }
+    };
+    loadInvoices();
+  }, []);
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+  };
+  const filteredInvoices = invoices.filter((invoice) =>
+    invoice.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+  return (
+    <View style={styles.container}>
+      <Header onSearch={handleSearch} />
+      <View style={styles.totalSalesContainer}>
+        <Text style={styles.totalSales}>Total Sales</Text>
+        <Text style={styles.totalAmount}>80,500</Text>
+      </View>
+      <View style={styles.invoicesHeader}>
+        <Text style={styles.invoicesListText}>Invoices List</Text>
+        <View style={styles.sortByContainer}>
+          <Text style={styles.sortByText}>Sort By</Text>
+          <Icon name="sort" size={24} color="#051650" />
+        </View>
+      </View>
+      <FlatList
+        data={filteredInvoices}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => <InvoiceItem item={item} />}
+      />
+      <TouchableOpacity
+        style={styles.createInvoiceButton}
+        onPress={() => navigation.navigate("CreateInvoice")}
+      >
+        <Text style={styles.createInvoiceButtonText}>Create Invoice</Text>
+      </TouchableOpacity>
+    </View>
+  );
 };
-
-const invoices: Invoice[] = [
-  {
-    id: "1",
-    name: "ABC",
-    amount: 80500,
-    balance: 14500,
-    date: "27/07/2024",
-    status: "Approved",
-  },
-  // ... (other invoices)
-];
-
 const InvoiceItem: React.FC<{ item: Invoice }> = ({ item }) => {
   const handlePrint = async () => {
     try {
@@ -68,12 +91,11 @@ const InvoiceItem: React.FC<{ item: Invoice }> = ({ item }) => {
       console.error("Failed to print:", error);
     }
   };
-
   const handleShare = async () => {
     try {
       const { uri } = await Print.printToFileAsync({
         html: `
-          <h1>Invoice #${item.id}</h1>
+         <h1>Invoice #${item.id}</h1>
           <p>Name: ${item.name}</p>
           <p>Amount: ₹${item.amount.toLocaleString()}</p>
           <p>Balance: ₹${item.balance.toLocaleString()}</p>
@@ -86,7 +108,6 @@ const InvoiceItem: React.FC<{ item: Invoice }> = ({ item }) => {
       console.error("Failed to share:", error);
     }
   };
-
   return (
     <View style={styles.invoiceItem}>
       <View style={styles.row}>
@@ -123,20 +144,17 @@ const InvoiceItem: React.FC<{ item: Invoice }> = ({ item }) => {
     </View>
   );
 };
-
 const Header: React.FC<{ onSearch: (query: string) => void }> = ({
   onSearch,
 }) => {
   const [isSearching, setIsSearching] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-
   const handleSearchIconClick = () => {
     setIsSearching((prev) => !prev);
     if (isSearching) {
       onSearch(searchQuery);
     }
   };
-
   return (
     <View style={styles.headerContainer}>
       {isSearching ? (
@@ -164,51 +182,4 @@ const Header: React.FC<{ onSearch: (query: string) => void }> = ({
     </View>
   );
 };
-
-const AllInvoices = () => {
-  const navigation = useNavigation<NavigationProp>();
-  const [searchQuery, setSearchQuery] = useState("");
-
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
-    // Implement search logic here if needed
-  };
-
-  const handleCreateInvoice = () => {
-    navigation.navigate("CreateInvoice");
-  };
-
-  const filteredInvoices = invoices.filter((invoice) =>
-    invoice.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  return (
-    <View style={styles.container}>
-      <Header onSearch={handleSearch} />
-      <View style={styles.totalSalesContainer}>
-        <Text style={styles.totalSales}>Total Sales</Text>
-        <Text style={styles.totalAmount}>80,500</Text>
-      </View>
-      <View style={styles.invoicesHeader}>
-        <Text style={styles.invoicesListText}>Invoices List</Text>
-        <View style={styles.sortByContainer}>
-          <Text style={styles.sortByText}>Sort By</Text>
-          <Icon name="sort" size={24} color="#051650" />
-        </View>
-      </View>
-      <FlatList
-        data={filteredInvoices}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <InvoiceItem item={item} />}
-      />
-      <TouchableOpacity
-        style={styles.createInvoiceButton}
-        onPress={() => navigation.navigate('CreateInvoice')}
-      >
-        <Text style={styles.createInvoiceButtonText}>Create Invoice</Text>
-      </TouchableOpacity>
-    </View>
-  );
-};
-
 export default AllInvoices;
