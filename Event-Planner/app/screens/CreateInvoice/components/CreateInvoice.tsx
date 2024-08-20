@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -6,17 +6,16 @@ import {
   TouchableOpacity,
   Platform,
 } from "react-native";
-import DateTimePicker, {
-  DateTimePickerEvent,
-} from "@react-native-community/datetimepicker";
+import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 import * as Print from "expo-print";
 import * as Sharing from "expo-sharing";
-import { useNavigation, NavigationProp } from "@react-navigation/native";
+import { useNavigation, NavigationProp, useRoute, RouteProp } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 import { TextInput as PaperInput } from "react-native-paper";
 import { RootStackParamList } from "../../../(tabs)/types"; // Adjust the import path
 import styles from "../../../../../Event-Planner/app/screens/CreateInvoice/styles/styles";
+import axios from 'axios';
 
 interface FormData {
   customer: string;
@@ -27,10 +26,30 @@ interface FormData {
   dateTime: Date;
   venueDetails: string;
   invoiceNumber: string;
+  items: Item[];
+}
+
+interface Item {
+  itemName: string;
+  quantity: string;
+  price: string;
+  discount: string;
+  payableAmount: string;
+  miscellaneous: string;
 }
 
 const CreateInvoice: React.FC = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>(); // Typed navigation prop
+  const route = useRoute<RouteProp<{ params: { newItem?: Item } }, 'params'>>();
+  const [customer, setCustomer] = useState<string>("");
+  const [phoneNumber, setPhoneNumber] = useState<string>("");
+  const [address, setAddress] = useState<string>("");
+  const [emailId, setEmailId] = useState<string>("");
+  const [gstinNumber, setGstinNumber] = useState<string>("");
+  const [dateTime, setDateTime] = useState<Date>(new Date());
+  const [venueDetails, setVenueDetails] = useState<string>("");
+  const [invoiceNumber, setInvoiceNumber] = useState<string>("01");
+  const [items, setItems] = useState<Item[]>([]); // State for items
 
   const [formData, setFormData] = useState<FormData>({
     customer: "",
@@ -41,12 +60,24 @@ const CreateInvoice: React.FC = () => {
     dateTime: new Date(),
     venueDetails: "",
     invoiceNumber: "01",
+    items: items,
   });
+
+  
 
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
   const [focusedField, setFocusedField] = useState<string | null>(null);
   const [phoneNumberError, setPhoneNumberError] = useState<string | null>(null); // Error state for phone number
+  // console.warn(items);
 
+  useEffect(() => {
+    if (route.params?.newItem) {
+      setItems(prevItems => [...prevItems, route.params.newItem]);
+    }console.warn("hhh");
+    console.warn(items);
+    console.warn("jjj");
+  }, [route.params?.newItem]);
+  
   const handleInputChange = (name: keyof FormData, value: string) => {
     if (name === "dateTime") {
       const dateValue = new Date(value);
@@ -65,8 +96,27 @@ const CreateInvoice: React.FC = () => {
     setFormData({ ...formData, dateTime: currentDate });
   };
 
-  const handleSave = () => {
-    console.log("Invoice saved:", formData);
+  const handleSave = async () => {
+    const formData1 = {
+      customer,
+      phoneNumber,
+      address,
+      emailId,
+      gstinNumber,
+      dateTime,
+      venueDetails: "",
+      invoiceNumber,
+      items,
+    };
+
+    try {
+      console.warn(formData);
+      const response = await axios.post('http://localhost:3000/CreateInvoice', formData1);
+      console.log("Invoice saved:", response.data);
+      navigation.goBack(); // Navigate back after saving
+    } catch (error) {
+      console.error("Error saving invoice:", error);
+    }
   };
 
   const handleViewAsPDF = async () => {
@@ -125,7 +175,9 @@ const CreateInvoice: React.FC = () => {
   };
 
   const handleAddItem = () => {
-    navigation.navigate("AddItem"); // Typed navigation
+    // navigation.navigate("AddItem"); // Typed navigation
+    navigation.navigate('AddItem', { fromScreen: 'CreateInvoice' });
+
   };
 
   const handleBack = () => {

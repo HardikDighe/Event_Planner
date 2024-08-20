@@ -258,7 +258,8 @@ const CreateQuotation: React.FC<Props> = () => {
     };
 
     const addItem = () => {
-        navigation.navigate('AddItem');
+        navigation.navigate('AddItem', { fromScreen: 'CreateQuotation' });
+
     };
 
     const handleSave1 = async () => {

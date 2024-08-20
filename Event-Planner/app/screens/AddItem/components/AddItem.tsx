@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, TouchableOpacity, Text, ScrollView } from "react-native";
-import { NavigationProp } from "@react-navigation/native";
+import { NavigationProp, RouteProp, useRoute } from "@react-navigation/native";
 import { TextInput } from "react-native-paper";
 import { styles } from "../../../../app/screens/AddItem/styles/styles";  // Import styles from the new file
 
@@ -9,6 +9,9 @@ interface Props {
 }
 
 const AddItem: React.FC<Props> = ({ navigation }) => {
+
+  const route = useRoute<RouteProp<{ params: { fromScreen?: string } }, 'params'>>();
+
   const [itemName, setItemName] = useState("");
   const [quantity, setQuantity] = useState("");
   const [price, setPrice] = useState("");
@@ -61,7 +64,7 @@ const AddItem: React.FC<Props> = ({ navigation }) => {
   };
 
   const handleSaveItem = () => {
-    navigation.goBack();
+    // navigation.goBack();
     const newItem = {
       itemName,
       quantity,
@@ -70,9 +73,20 @@ const AddItem: React.FC<Props> = ({ navigation }) => {
       payableAmount,
       miscellaneous
   };
-  // Pass the new item back to the CreateQuotation screen
-  navigation.navigate('CreateQuotation', { newItem });
-  navigation.navigate('VendorRegistration',{newItem})
+  // Pass the new item 
+  const fromScreen = route.params?.fromScreen;
+  if (fromScreen === 'CreateQuotation') {
+      navigation.navigate('CreateQuotation', { newItem });
+  } else if (fromScreen === 'VendorRegistration') {
+      navigation.navigate('VendorRegistration', { newItem });
+  }else if (fromScreen === 'CreateInvoice') {
+    navigation.navigate('CreateInvoice', { newItem });
+    console.warn("aaaaaaaaaaaa")
+    console.warn("aa",newItem )
+    console.warn(route.params?.fromScreen);
+} else {
+      navigation.goBack(); // Default behavior
+  }
   };
 
   return (
