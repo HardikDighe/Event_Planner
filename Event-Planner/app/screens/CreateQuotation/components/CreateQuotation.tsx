@@ -258,7 +258,8 @@ const CreateQuotation: React.FC<Props> = () => {
     };
 
     const addItem = () => {
-        navigation.navigate('AddItem');
+        navigation.navigate('AddItem', { fromScreen: 'CreateQuotation' });
+
     };
 
     const handleSave1 = async () => {
@@ -286,6 +287,9 @@ const CreateQuotation: React.FC<Props> = () => {
     };
     const handleSave = async () => {
         const isSuccess = await saveQuotation(quotationData);
+        console.warn("aaabbbbbcccccccccc")
+        console.warn(isSuccess);
+        console.warn("aaaaaaaaaaaaaaaaaaaaa")
     if (isSuccess) {
         setModalVisible(true);  // Show the modal if the save was successful
     }

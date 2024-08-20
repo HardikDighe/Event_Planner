@@ -66,8 +66,9 @@ const DrawerNavigator: React.FC = () => {
      
       />
       <Drawer.Screen
-      name='VendorRegistration'
+      name='Vendor_Registration'
       component={VendorRegistration}
+      options={{ headerShown:false}}
       />
     </Drawer.Navigator>
   );

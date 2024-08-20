@@ -75,6 +75,7 @@ export type RootDrawerParamList = {
   ServiceRegistration: undefined;
   All_Vendors:undefined;
   All_Events:undefined;
+  Vendor_Registration:undefined;
 };
 
 interface Item {

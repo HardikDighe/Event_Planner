@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -6,17 +6,16 @@ import {
   TouchableOpacity,
   Platform,
 } from "react-native";
-import DateTimePicker, {
-  DateTimePickerEvent,
-} from "@react-native-community/datetimepicker";
+import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 import * as Print from "expo-print";
 import * as Sharing from "expo-sharing";
-import { useNavigation, NavigationProp } from "@react-navigation/native";
+import { useNavigation, NavigationProp, useRoute, RouteProp } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 import { TextInput as PaperInput } from "react-native-paper";
 import { RootStackParamList } from "../../../(tabs)/types"; // Adjust the import path
 import styles from "../../../../../Event-Planner/app/screens/CreateInvoice/styles/styles";
+import axios from 'axios';
 
 interface FormData {
   customer: string;
@@ -27,10 +26,30 @@ interface FormData {
   dateTime: Date;
   venueDetails: string;
   invoiceNumber: string;
+  items: Item[];
+}
+
+interface Item {
+  itemName: string;
+  quantity: string;
+  price: string;
+  discount: string;
+  payableAmount: string;
+  miscellaneous: string;
 }
 
 const CreateInvoice: React.FC = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>(); // Typed navigation prop
+  const route = useRoute<RouteProp<{ params: { newItem?: Item } }, 'params'>>();
+  const [customer, setCustomer] = useState<string>("");
+  const [phoneNumber, setPhoneNumber] = useState<string>("");
+  const [address, setAddress] = useState<string>("");
+  const [emailId, setEmailId] = useState<string>("");
+  const [gstinNumber, setGstinNumber] = useState<string>("");
+  const [dateTime, setDateTime] = useState<Date>(new Date());
+  const [venueDetails, setVenueDetails] = useState<string>("");
+  const [invoiceNumber, setInvoiceNumber] = useState<string>("01");
+  const [items, setItems] = useState<Item[]>([]); // State for items
 
   const [formData, setFormData] = useState<FormData>({
     customer: "",
@@ -41,19 +60,15 @@ const CreateInvoice: React.FC = () => {
     dateTime: new Date(),
     venueDetails: "",
     invoiceNumber: "01",
+    items: items,
   });
 
+  
+
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
-  const [focusedField, setFocusedField] = useState<string | null>(null);
-  const [phoneNumberError, setPhoneNumberError] = useState<string | null>(null); // Error state for phone number
 
   const handleInputChange = (name: keyof FormData, value: string) => {
-    if (name === "dateTime") {
-      const dateValue = new Date(value);
-      setFormData({ ...formData, [name]: dateValue });
-    } else {
-      setFormData({ ...formData, [name]: value });
-    }
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleDateChange = (
@@ -64,54 +79,77 @@ const CreateInvoice: React.FC = () => {
     setShowDatePicker(false);
     setFormData({ ...formData, dateTime: currentDate });
   };
+  useEffect(() => {
+    if (route.params?.newItem) {
+      setItems((prevItems) => [...prevItems, route.params.newItem]);
+    }
+  }, [route.params?.newItem]);
 
-  const handleSave = () => {
-    console.log("Invoice saved:", formData);
+  const handleSave = async () => {
+    const formData1 = {
+      customer,
+      phoneNumber,
+      address,
+      emailId,
+      gstinNumber,
+      dateTime,
+      venueDetails,
+      invoiceNumber,
+      items,
+    };
+    try {
+      const response = await axios.post('http://localhost:3000/CreateInvoice', formData1);
+      console.log("Invoice saved:", response.data);
+      navigation.goBack(); // Navigate back after saving
+    } catch (error) {
+      console.error("Error saving invoice:", error);
+    }
   };
 
   const handleViewAsPDF = async () => {
     const html = `
-      <h1>Invoice</h1>
-      <p><strong>Invoice Number:</strong> ${formData.invoiceNumber}</p>
-      <p><strong>Customer:</strong> ${formData.customer}</p>
-      <p><strong>Phone Number:</strong> ${formData.phoneNumber}</p>
-      <p><strong>Address:</strong> ${formData.address}</p>
-      <p><strong>Email ID:</strong> ${formData.emailId}</p>
-      <p><strong>GSTIN Number:</strong> ${formData.gstinNumber}</p>
-      <p><strong>Date & Time:</strong> ${formData.dateTime.toDateString()}</p>
-      <p><strong>Venue Details:</strong> ${formData.venueDetails}</p>
+      <html>
+        <body>
+          <h1>Invoice</h1>
+          <p><strong>Invoice Number:</strong> ${formData.invoiceNumber}</p>
+          <p><strong>Customer:</strong> ${formData.customer}</p>
+          <p><strong>Phone Number:</strong> ${formData.phoneNumber}</p>
+          <p><strong>Address:</strong> ${formData.address}</p>
+          <p><strong>Email ID:</strong> ${formData.emailId}</p>
+          <p><strong>GSTIN Number:</strong> ${formData.gstinNumber}</p>
+          <p><strong>Date & Time:</strong> ${formData.dateTime.toDateString()}</p>
+          <p><strong>Venue Details:</strong> ${formData.venueDetails}</p>
+        </body>
+      </html>
     `;
 
     try {
       const { uri } = await Print.printToFileAsync({ html });
       console.log("PDF generated at:", uri);
-
-      if (Platform.OS === "ios") {
-        // On iOS, use the share function from expo-sharing
-        await Sharing.shareAsync(uri);
-      } else {
-        // On Android, use the Sharing API to handle the file
-        await Sharing.shareAsync(uri);
-      }
+      await Sharing.shareAsync(uri);
     } catch (error) {
       console.error("Error generating or sharing PDF:", error);
     }
   };
 
   const handleShare = async () => {
+    const html = `
+      <html>
+        <body>
+          <h1>Invoice</h1>
+          <p><strong>Invoice Number:</strong> ${invoiceNumber}</p>
+          <p><strong>Customer:</strong> ${customer}</p>
+          <p><strong>Phone Number:</strong> ${phoneNumber}</p>
+          <p><strong>Address:</strong> ${address}</p>
+          <p><strong>Email ID:</strong> ${emailId}</p>
+          <p><strong>GSTIN Number:</strong> ${gstinNumber}</p>
+          <p><strong>Date & Time:</strong> ${dateTime.toDateString()}</p>
+          <p><strong>Venue Details:</strong> ${venueDetails}</p>
+        </body>
+      </html>
+    `;
+
     try {
-      // Generate PDF
-      const html = `
-        <h1>Invoice</h1>
-        <p><strong>Invoice Number:</strong> ${formData.invoiceNumber}</p>
-        <p><strong>Customer:</strong> ${formData.customer}</p>
-        <p><strong>Phone Number:</strong> ${formData.phoneNumber}</p>
-        <p><strong>Address:</strong> ${formData.address}</p>
-        <p><strong>Email ID:</strong> ${formData.emailId}</p>
-        <p><strong>GSTIN Number:</strong> ${formData.gstinNumber}</p>
-        <p><strong>Date & Time:</strong> ${formData.dateTime.toDateString()}</p>
-        <p><strong>Venue Details:</strong> ${formData.venueDetails}</p>
-      `;
       const { uri } = await Print.printToFileAsync({ html });
 
       if (await Sharing.isAvailableAsync()) {
@@ -120,16 +158,18 @@ const CreateInvoice: React.FC = () => {
         console.log("Sharing is not available on this platform");
       }
     } catch (error) {
-      console.error("Error sharing: ", error);
+      console.error("Error sharing:", error);
     }
   };
 
   const handleAddItem = () => {
-    navigation.navigate("AddItem"); // Typed navigation
+    // navigation.navigate("AddItem"); // Typed navigation
+    navigation.navigate('AddItem', { fromScreen: 'CreateInvoice' });
+
   };
 
   const handleBack = () => {
-    navigation.goBack(); // Navigate back to previous screen
+    navigation.goBack(); // Navigate back to the previous screen
   };
 
   return (
@@ -184,8 +224,8 @@ const CreateInvoice: React.FC = () => {
           <PaperInput
             mode="outlined"
             label="Customer"
-            value={formData.customer}
-            onChangeText={(text) => handleInputChange("customer", text)}
+            value={customer}
+            onChangeText={setCustomer}
             style={styles.input}
             theme={{
               colors: {
@@ -198,8 +238,8 @@ const CreateInvoice: React.FC = () => {
           <PaperInput
             mode="outlined"
             label="Phone Number"
-            value={formData.phoneNumber}
-            onChangeText={(text) => handleInputChange("phoneNumber", text)}
+            value={phoneNumber}
+            onChangeText={setPhoneNumber}
             keyboardType="phone-pad"
             style={styles.input}
             theme={{
@@ -213,8 +253,8 @@ const CreateInvoice: React.FC = () => {
           <PaperInput
             mode="outlined"
             label="Address"
-            value={formData.address}
-            onChangeText={(text) => handleInputChange("address", text)}
+            value={address}
+            onChangeText={setAddress}
             style={styles.input}
             theme={{
               colors: {
@@ -227,8 +267,8 @@ const CreateInvoice: React.FC = () => {
           <PaperInput
             mode="outlined"
             label="Email Id"
-            value={formData.emailId}
-            onChangeText={(text) => handleInputChange("emailId", text)}
+            value={emailId}
+            onChangeText={setEmailId}
             keyboardType="email-address"
             style={styles.input}
             theme={{
@@ -242,8 +282,8 @@ const CreateInvoice: React.FC = () => {
           <PaperInput
             mode="outlined"
             label="GSTIN Number"
-            value={formData.gstinNumber}
-            onChangeText={(text) => handleInputChange("gstinNumber", text)}
+            value={gstinNumber}
+            onChangeText={setGstinNumber}
             style={styles.input}
             theme={{
               colors: {
@@ -253,30 +293,11 @@ const CreateInvoice: React.FC = () => {
               },
             }}
           />
-          <Text style={styles.label}>Date & Time</Text>
-          <PaperInput
-            style={[
-              styles.input,
-              focusedField === "dateTime" && styles.inputFocused,
-            ]}
-            value={formData.dateTime.toDateString()}
-            onFocus={() => setFocusedField("dateTime")}
-            onBlur={() => setFocusedField(null)}
-            showSoftInputOnFocus={false}
-            theme={{
-              colors: {
-                text: "#051650",
-                primary: "#051650",
-                background: "white",
-              },
-            }}
-            onPressIn={() => setShowDatePicker(true)}
-          />
           <PaperInput
             mode="outlined"
             label="Venue Details"
-            value={formData.venueDetails}
-            onChangeText={(text) => handleInputChange("venueDetails", text)}
+            value={venueDetails}
+            onChangeText={setVenueDetails}
             style={styles.input}
             theme={{
               colors: {
