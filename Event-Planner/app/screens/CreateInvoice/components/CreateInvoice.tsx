@@ -79,10 +79,26 @@ const CreateInvoice: React.FC = () => {
     setShowDatePicker(false);
     setFormData({ ...formData, dateTime: currentDate });
   };
+  useEffect(() => {
+    if (route.params?.newItem) {
+      setItems((prevItems) => [...prevItems, route.params.newItem]);
+    }
+  }, [route.params?.newItem]);
 
   const handleSave = async () => {
+    const formData1 = {
+      customer,
+      phoneNumber,
+      address,
+      emailId,
+      gstinNumber,
+      dateTime,
+      venueDetails,
+      invoiceNumber,
+      items,
+    };
     try {
-      const response = await axios.post('http://localhost:3000/CreateInvoice', formData);
+      const response = await axios.post('http://localhost:3000/CreateInvoice', formData1);
       console.log("Invoice saved:", response.data);
       navigation.goBack(); // Navigate back after saving
     } catch (error) {
@@ -121,14 +137,14 @@ const CreateInvoice: React.FC = () => {
       <html>
         <body>
           <h1>Invoice</h1>
-          <p><strong>Invoice Number:</strong> ${formData.invoiceNumber}</p>
-          <p><strong>Customer:</strong> ${formData.customer}</p>
-          <p><strong>Phone Number:</strong> ${formData.phoneNumber}</p>
-          <p><strong>Address:</strong> ${formData.address}</p>
-          <p><strong>Email ID:</strong> ${formData.emailId}</p>
-          <p><strong>GSTIN Number:</strong> ${formData.gstinNumber}</p>
-          <p><strong>Date & Time:</strong> ${formData.dateTime.toDateString()}</p>
-          <p><strong>Venue Details:</strong> ${formData.venueDetails}</p>
+          <p><strong>Invoice Number:</strong> ${invoiceNumber}</p>
+          <p><strong>Customer:</strong> ${customer}</p>
+          <p><strong>Phone Number:</strong> ${phoneNumber}</p>
+          <p><strong>Address:</strong> ${address}</p>
+          <p><strong>Email ID:</strong> ${emailId}</p>
+          <p><strong>GSTIN Number:</strong> ${gstinNumber}</p>
+          <p><strong>Date & Time:</strong> ${dateTime.toDateString()}</p>
+          <p><strong>Venue Details:</strong> ${venueDetails}</p>
         </body>
       </html>
     `;
@@ -208,8 +224,8 @@ const CreateInvoice: React.FC = () => {
           <PaperInput
             mode="outlined"
             label="Customer"
-            value={formData.customer}
-            onChangeText={(text) => handleInputChange("customer", text)}
+            value={customer}
+            onChangeText={setCustomer}
             style={styles.input}
             theme={{
               colors: {
@@ -222,8 +238,8 @@ const CreateInvoice: React.FC = () => {
           <PaperInput
             mode="outlined"
             label="Phone Number"
-            value={formData.phoneNumber}
-            onChangeText={(text) => handleInputChange("phoneNumber", text)}
+            value={phoneNumber}
+            onChangeText={setPhoneNumber}
             keyboardType="phone-pad"
             style={styles.input}
             theme={{
@@ -237,8 +253,8 @@ const CreateInvoice: React.FC = () => {
           <PaperInput
             mode="outlined"
             label="Address"
-            value={formData.address}
-            onChangeText={(text) => handleInputChange("address", text)}
+            value={address}
+            onChangeText={setAddress}
             style={styles.input}
             theme={{
               colors: {
@@ -251,8 +267,8 @@ const CreateInvoice: React.FC = () => {
           <PaperInput
             mode="outlined"
             label="Email Id"
-            value={formData.emailId}
-            onChangeText={(text) => handleInputChange("emailId", text)}
+            value={emailId}
+            onChangeText={setEmailId}
             keyboardType="email-address"
             style={styles.input}
             theme={{
@@ -266,8 +282,8 @@ const CreateInvoice: React.FC = () => {
           <PaperInput
             mode="outlined"
             label="GSTIN Number"
-            value={formData.gstinNumber}
-            onChangeText={(text) => handleInputChange("gstinNumber", text)}
+            value={gstinNumber}
+            onChangeText={setGstinNumber}
             style={styles.input}
             theme={{
               colors: {
@@ -280,8 +296,8 @@ const CreateInvoice: React.FC = () => {
           <PaperInput
             mode="outlined"
             label="Venue Details"
-            value={formData.venueDetails}
-            onChangeText={(text) => handleInputChange("venueDetails", text)}
+            value={venueDetails}
+            onChangeText={setVenueDetails}
             style={styles.input}
             theme={{
               colors: {
