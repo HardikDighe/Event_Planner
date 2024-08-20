@@ -16,11 +16,14 @@ const AddItem: React.FC<Props> = ({ navigation }) => {
   const [discount, setDiscount] = useState("");
   const [payableAmount, setPayableAmount] = useState("");
   const [miscellaneous, setMiscellaneous] = useState("");
+  const [paidAmount, setPaidAmount] = useState("");
+  const [balance, setBalance] = useState("");
 
   const [itemNameFocused, setItemNameFocused] = useState(false);
   const [quantityFocused, setQuantityFocused] = useState(false);
   const [priceFocused, setPriceFocused] = useState(false);
   const [miscellaneousFocused, setMiscellaneousFocused] = useState(false);
+  const [paidAmountFocused, setPaidAmountFocused] = useState(false);
 
   useEffect(() => {
     if (!isNaN(parseFloat(quantity)) && !isNaN(parseFloat(price))) {
@@ -44,6 +47,14 @@ const AddItem: React.FC<Props> = ({ navigation }) => {
     setPayableAmount(calculatedPayableAmount.toString());
   }, [totalAmount, discount, miscellaneous]);
 
+  useEffect(() => {
+    const parsedPayableAmount = parseFloat(payableAmount) || 0;
+    const parsedPaidAmount = parseFloat(paidAmount) || 0;
+
+    const calculatedBalance = parsedPayableAmount - parsedPaidAmount;
+    setBalance(calculatedBalance.toString());
+  }, [payableAmount, paidAmount]);
+
   const handleQuantityChange = (value: string) => {
     setQuantity(value);
   };
@@ -60,6 +71,10 @@ const AddItem: React.FC<Props> = ({ navigation }) => {
     setMiscellaneous(value);
   };
 
+  const handlePaidAmountChange = (value: string) => {
+    setPaidAmount(value);
+  };
+
   const handleSaveItem = () => {
     navigation.goBack();
     const newItem = {
@@ -68,11 +83,13 @@ const AddItem: React.FC<Props> = ({ navigation }) => {
       price,
       discount,
       payableAmount,
-      miscellaneous
-  };
-  // Pass the new item back to the CreateQuotation screen
-  navigation.navigate('CreateQuotation', { newItem });
-  navigation.navigate('VendorRegistration',{newItem})
+      miscellaneous,
+      paidAmount,
+      balance,
+    };
+    // Pass the new item back to the CreateQuotation screen
+    // navigation.navigate('CreateQuotation', { newItem });
+    // navigation.navigate('VendorRegistration', { newItem });
   };
 
   return (
@@ -177,6 +194,49 @@ const AddItem: React.FC<Props> = ({ navigation }) => {
                   background: "white",
                 },
               }}
+            />
+          </View>
+        </View>
+
+        {/* New Paid Amount and Balance Fields */}
+        <View style={styles.row}>
+          <Text style={styles.rowLabel}>Paid Amount</Text>
+          <View style={styles.inputContainer}>
+            <Text style={styles.currencySymbol}>₹</Text>
+            <TextInput
+              value={paidAmount}
+              onChangeText={handlePaidAmountChange}
+              style={[styles.noUnderlineInput, paidAmountFocused && styles.focusedInput]}
+              underlineColor="transparent"
+              onFocus={() => setPaidAmountFocused(true)}
+              onBlur={() => setPaidAmountFocused(false)}
+              theme={{
+                colors: {
+                  text: "black",
+                  primary: "black",
+                  background: "white",
+                },
+              }}
+            />
+          </View>
+        </View>
+
+        <View style={styles.row}>
+          <Text style={styles.rowLabel}>Balance</Text>
+          <View style={styles.inputContainer}>
+            <Text style={styles.currencySymbol}>₹</Text>
+            <TextInput
+              value={balance === "0" ? "" : balance}
+              style={styles.noUnderlineInput}
+              underlineColor="transparent"
+              theme={{
+                colors: {
+                  text: "black",
+                  primary: "black",
+                  background: "white",
+                },
+              }}
+              editable={false}
             />
           </View>
         </View>

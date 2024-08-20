@@ -17,6 +17,7 @@ import { Picker } from "@react-native-picker/picker";
 import { TextInput as PaperInput } from "react-native-paper";
 import { RootStackParamList } from "../../../(tabs)/types"; // Adjust the import path
 import styles from "../../../../../Event-Planner/app/screens/CreateInvoice/styles/styles";
+import axios from 'axios';
 
 interface FormData {
   customer: string;
@@ -44,16 +45,9 @@ const CreateInvoice: React.FC = () => {
   });
 
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
-  const [focusedField, setFocusedField] = useState<string | null>(null);
-  const [phoneNumberError, setPhoneNumberError] = useState<string | null>(null); // Error state for phone number
 
   const handleInputChange = (name: keyof FormData, value: string) => {
-    if (name === "dateTime") {
-      const dateValue = new Date(value);
-      setFormData({ ...formData, [name]: dateValue });
-    } else {
-      setFormData({ ...formData, [name]: value });
-    }
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleDateChange = (
@@ -65,53 +59,60 @@ const CreateInvoice: React.FC = () => {
     setFormData({ ...formData, dateTime: currentDate });
   };
 
-  const handleSave = () => {
-    console.log("Invoice saved:", formData);
+  const handleSave = async () => {
+    try {
+      const response = await axios.post('http://localhost:3000/CreateInvoice', formData);
+      console.log("Invoice saved:", response.data);
+      navigation.goBack(); // Navigate back after saving
+    } catch (error) {
+      console.error("Error saving invoice:", error);
+    }
   };
 
   const handleViewAsPDF = async () => {
     const html = `
-      <h1>Invoice</h1>
-      <p><strong>Invoice Number:</strong> ${formData.invoiceNumber}</p>
-      <p><strong>Customer:</strong> ${formData.customer}</p>
-      <p><strong>Phone Number:</strong> ${formData.phoneNumber}</p>
-      <p><strong>Address:</strong> ${formData.address}</p>
-      <p><strong>Email ID:</strong> ${formData.emailId}</p>
-      <p><strong>GSTIN Number:</strong> ${formData.gstinNumber}</p>
-      <p><strong>Date & Time:</strong> ${formData.dateTime.toDateString()}</p>
-      <p><strong>Venue Details:</strong> ${formData.venueDetails}</p>
+      <html>
+        <body>
+          <h1>Invoice</h1>
+          <p><strong>Invoice Number:</strong> ${formData.invoiceNumber}</p>
+          <p><strong>Customer:</strong> ${formData.customer}</p>
+          <p><strong>Phone Number:</strong> ${formData.phoneNumber}</p>
+          <p><strong>Address:</strong> ${formData.address}</p>
+          <p><strong>Email ID:</strong> ${formData.emailId}</p>
+          <p><strong>GSTIN Number:</strong> ${formData.gstinNumber}</p>
+          <p><strong>Date & Time:</strong> ${formData.dateTime.toDateString()}</p>
+          <p><strong>Venue Details:</strong> ${formData.venueDetails}</p>
+        </body>
+      </html>
     `;
 
     try {
       const { uri } = await Print.printToFileAsync({ html });
       console.log("PDF generated at:", uri);
-
-      if (Platform.OS === "ios") {
-        // On iOS, use the share function from expo-sharing
-        await Sharing.shareAsync(uri);
-      } else {
-        // On Android, use the Sharing API to handle the file
-        await Sharing.shareAsync(uri);
-      }
+      await Sharing.shareAsync(uri);
     } catch (error) {
       console.error("Error generating or sharing PDF:", error);
     }
   };
 
   const handleShare = async () => {
+    const html = `
+      <html>
+        <body>
+          <h1>Invoice</h1>
+          <p><strong>Invoice Number:</strong> ${formData.invoiceNumber}</p>
+          <p><strong>Customer:</strong> ${formData.customer}</p>
+          <p><strong>Phone Number:</strong> ${formData.phoneNumber}</p>
+          <p><strong>Address:</strong> ${formData.address}</p>
+          <p><strong>Email ID:</strong> ${formData.emailId}</p>
+          <p><strong>GSTIN Number:</strong> ${formData.gstinNumber}</p>
+          <p><strong>Date & Time:</strong> ${formData.dateTime.toDateString()}</p>
+          <p><strong>Venue Details:</strong> ${formData.venueDetails}</p>
+        </body>
+      </html>
+    `;
+
     try {
-      // Generate PDF
-      const html = `
-        <h1>Invoice</h1>
-        <p><strong>Invoice Number:</strong> ${formData.invoiceNumber}</p>
-        <p><strong>Customer:</strong> ${formData.customer}</p>
-        <p><strong>Phone Number:</strong> ${formData.phoneNumber}</p>
-        <p><strong>Address:</strong> ${formData.address}</p>
-        <p><strong>Email ID:</strong> ${formData.emailId}</p>
-        <p><strong>GSTIN Number:</strong> ${formData.gstinNumber}</p>
-        <p><strong>Date & Time:</strong> ${formData.dateTime.toDateString()}</p>
-        <p><strong>Venue Details:</strong> ${formData.venueDetails}</p>
-      `;
       const { uri } = await Print.printToFileAsync({ html });
 
       if (await Sharing.isAvailableAsync()) {
@@ -120,7 +121,7 @@ const CreateInvoice: React.FC = () => {
         console.log("Sharing is not available on this platform");
       }
     } catch (error) {
-      console.error("Error sharing: ", error);
+      console.error("Error sharing:", error);
     }
   };
 
@@ -129,7 +130,7 @@ const CreateInvoice: React.FC = () => {
   };
 
   const handleBack = () => {
-    navigation.goBack(); // Navigate back to previous screen
+    navigation.goBack(); // Navigate back to the previous screen
   };
 
   return (
@@ -252,25 +253,6 @@ const CreateInvoice: React.FC = () => {
                 background: "white",
               },
             }}
-          />
-          <Text style={styles.label}>Date & Time</Text>
-          <PaperInput
-            style={[
-              styles.input,
-              focusedField === "dateTime" && styles.inputFocused,
-            ]}
-            value={formData.dateTime.toDateString()}
-            onFocus={() => setFocusedField("dateTime")}
-            onBlur={() => setFocusedField(null)}
-            showSoftInputOnFocus={false}
-            theme={{
-              colors: {
-                text: "#051650",
-                primary: "#051650",
-                background: "white",
-              },
-            }}
-            onPressIn={() => setShowDatePicker(true)}
           />
           <PaperInput
             mode="outlined"

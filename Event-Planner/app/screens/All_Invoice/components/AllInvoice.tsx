@@ -21,7 +21,7 @@ import styles from "../../../../..//Event-Planner/app/screens/All_Invoice/styles
 type RootStackParamList = {
   AllInvoices: undefined;
   CreateInvoice: undefined;
-  // Add other screens here if you have them
+ 
 };
 
 type NavigationProp = NativeStackNavigationProp<
