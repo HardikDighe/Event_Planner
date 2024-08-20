@@ -27,12 +27,20 @@ const AllInvoices = () => {
   const navigation = useNavigation<NavigationProp>();
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [totalBalance, setTotalBalance] = useState<number>(0);
+
   // Fetch data from API
   useEffect(() => {
     const loadInvoices = async () => {
       try {
         const fetchedInvoices = await fetchInvoices();
         setInvoices(fetchedInvoices);
+        let balanceSum: number = 0;
+        fetchedInvoices.forEach(invoice => {
+          const amount = Number(invoice.amount); // Properly cast the amount to a number
+          balanceSum += amount;
+        });
+        setTotalBalance(balanceSum);
       } catch (error) {
         console.error("Failed to load invoices:", error);
       }
@@ -50,7 +58,7 @@ const AllInvoices = () => {
       <Header onSearch={handleSearch} />
       <View style={styles.totalSalesContainer}>
         <Text style={styles.totalSales}>Total Sales</Text>
-        <Text style={styles.totalAmount}>80,500</Text>
+        <Text style={styles.totalAmount}>{totalBalance}</Text>
       </View>
       <View style={styles.invoicesHeader}>
         <Text style={styles.invoicesListText}>Invoices List</Text>
