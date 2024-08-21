@@ -62,10 +62,11 @@ const styles = StyleSheet.create({
     button: {
         paddingVertical: 10,
         paddingHorizontal: 20,
-        backgroundColor: '#00008B',
+        backgroundColor: '#051650',
         borderRadius: 5,
         flex: 1,
         marginHorizontal: 5,
+        marginBottom:10,
     },
     buttonText: {
         color: '#fff',
@@ -81,7 +82,7 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-start',
     },
     linkButtonText: {
-        color: '#00008B',
+        color: '#051650',
         fontSize: 16,
         textAlign: 'center',
         textDecorationLine: 'underline',
@@ -111,7 +112,7 @@ const styles = StyleSheet.create({
     modalButton: {
         paddingVertical: 10,
         paddingHorizontal: 20,
-        backgroundColor: '#00008B',
+        backgroundColor: '#051650',
         borderRadius: 5,
         marginVertical: 5,
         width: '100%',
@@ -227,7 +228,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     shareButton: {
-        backgroundColor: '#007bff',
+        backgroundColor: '#051650',
         padding: 15,
         borderRadius: 10,
         marginTop: 20,
