@@ -14,6 +14,19 @@ import * as Print from "expo-print";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import styles from "../../../../../Event-Planner/app/screens/All_Quotation/styles/styles"; // Import the styles
+import { fetchQuotations } from "../../All_Quotation/api/allquotation.api"; // Import the API function
+
+import {
+  HEADER_TITLE,
+  SEARCH_PLACEHOLDER,
+  QUOTATIONS_LIST_TEXT,
+  SORT_BY_TEXT,
+  CREATE_QUOTATION_BUTTON_TEXT,
+  PRINT_ERROR,
+  SHARE_ERROR,
+  GENERATE_PDF_ERROR,
+  EMPTY_SEARCH_QUERY,
+} from "../../All_Quotation/constants/string"; // Import the strings
 
 // Define types for navigation
 type RootStackParamList = {
@@ -41,40 +54,20 @@ const AllQuotation: React.FC = () => {
   const [filteredQuotations, setFilteredQuotations] = useState<Quotation[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Fetch data from your database
+  // Fetch data from your API
   useEffect(() => {
-    const fetchQuotations = async () => {
-      try {
-        const response = await fetch("http://localhost:3000/demoQuotation");
-        const data = await response.json();
-        console.log("API Response:", data); // Log the API response
-
-        const mappedQuotations: Quotation[] = data.map((item: any) => {
-          const firstItem = item.items[0] || {}; // Handle cases where items array might be empty
-
-          return {
-            id: item.id,
-            name: item.customerName,
-            amount: parseFloat(firstItem.payableAmount) || 0, // Handle potential missing or invalid data
-            balance: parseFloat(firstItem.balance) || 0, // Handle potential missing or invalid data
-            date: new Date(item.quotationDate).toLocaleDateString(),
-            status: item.status || 'Unknown', // Add a default value if status is missing
-          };
-        });
-
-        setQuotations(mappedQuotations);
-        setFilteredQuotations(mappedQuotations); // Initialize filteredQuotations
-      } catch (error) {
-        console.error("Failed to fetch quotations:", error);
-      }
+    const fetchData = async () => {
+      const data = await fetchQuotations();
+      setQuotations(data);
+      setFilteredQuotations(data);
     };
 
-    fetchQuotations();
+    fetchData();
   }, []);
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
-    if (query.trim() === "") {
+    if (query.trim() === EMPTY_SEARCH_QUERY) {
       setFilteredQuotations(quotations); // Reset to all quotations if query is empty
     } else {
       setFilteredQuotations(
@@ -100,7 +93,7 @@ const AllQuotation: React.FC = () => {
         });
         await Print.printAsync({ uri });
       } catch (error) {
-        console.error("Failed to print:", error);
+        console.error(PRINT_ERROR, error);
       }
     };
 
@@ -118,12 +111,9 @@ const AllQuotation: React.FC = () => {
         });
         await Sharing.shareAsync(uri);
       } catch (error) {
-        console.error("Failed to share:", error);
+        console.error(SHARE_ERROR, error);
       }
     };
-
-    // Debug log to check the values
-    console.log("QuotationItem:", item);
 
     return (
       <View style={styles.quotationItem}>
@@ -174,7 +164,7 @@ const AllQuotation: React.FC = () => {
     const handleSearchIconClick = () => {
       setIsSearching((prev) => !prev);
       if (!isSearching) {
-        onSearch(""); // Clear search when closing the search input
+        onSearch(EMPTY_SEARCH_QUERY); // Clear search when closing the search input
       }
     };
 
@@ -182,7 +172,7 @@ const AllQuotation: React.FC = () => {
       try {
         const { uri } = await Print.printToFileAsync({
           html: `
-            <h1>All Quotations</h1>
+            <h1>${HEADER_TITLE}</h1>
             ${filteredQuotations
               .map(
                 (quotation) => `
@@ -199,7 +189,7 @@ const AllQuotation: React.FC = () => {
         });
         await Sharing.shareAsync(uri);
       } catch (error) {
-        console.error("Failed to generate PDF:", error);
+        console.error(GENERATE_PDF_ERROR, error);
       }
     };
 
@@ -210,10 +200,10 @@ const AllQuotation: React.FC = () => {
             style={styles.searchInput}
             value={searchQuery}
             onChangeText={onSearch}
-            placeholder="Search Quotations"
+            placeholder={SEARCH_PLACEHOLDER}
           />
         ) : (
-          <Text style={styles.headerText}>All Quotations</Text>
+          <Text style={styles.headerText}>{HEADER_TITLE}</Text>
         )}
         <View style={styles.headerIcons}>
           <TouchableOpacity onPress={handleSearchIconClick}>
@@ -236,9 +226,9 @@ const AllQuotation: React.FC = () => {
     <View style={styles.container}>
       <Header onSearch={handleSearch} />
       <View style={styles.quotationsHeader}>
-        <Text style={styles.quotationsListText}>Quotations List</Text>
+        <Text style={styles.quotationsListText}>{QUOTATIONS_LIST_TEXT}</Text>
         <View style={styles.sortByContainer}>
-          <Text style={styles.sortByText}>Sort By</Text>
+          <Text style={styles.sortByText}>{SORT_BY_TEXT}</Text>
           <Icon name="sort" size={24} color="#000" />
         </View>
       </View>
@@ -252,7 +242,7 @@ const AllQuotation: React.FC = () => {
         style={styles.createQuotationButton}
         onPress={() => navigation.navigate("CreateQuotation")}
       >
-        <Text style={styles.createQuotationButtonText}>+ Create Quotation</Text>
+        <Text style={styles.createQuotationButtonText}>{CREATE_QUOTATION_BUTTON_TEXT}</Text>
       </TouchableOpacity>
     </View>
   );
