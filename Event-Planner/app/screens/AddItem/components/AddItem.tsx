@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { View, TouchableOpacity, Text, ScrollView } from "react-native";
 import { NavigationProp, RouteProp, useRoute } from "@react-navigation/native";
 import { TextInput } from "react-native-paper";
-import { styles } from "../../../../app/screens/AddItem/styles/styles";  // Import styles from the new file
+import { styles } from "../../../../app/screens/AddItem/styles/styles";
+import { STRINGS } from "../../../../app/screens/AddItem/constants/string"; // Import the strings
 
 interface Props {
   navigation: NavigationProp<any>;
@@ -75,11 +76,11 @@ const AddItem: React.FC<Props> = ({ navigation }) => {
     const fromScreen = route.params?.fromScreen;
     if (fromScreen === 'CreateInvoice') {
       navigation.navigate('CreateInvoice', { newItem });
-    }else if (fromScreen === 'CreateQuotation') {
+    } else if (fromScreen === 'CreateQuotation') {
       navigation.navigate('CreateQuotation', { newItem });
-    }else if (fromScreen === 'VendorRegistration') {
+    } else if (fromScreen === 'VendorRegistration') {
       navigation.navigate('VendorRegistration', { newItem });
-    }  else {
+    } else {
       navigation.goBack();
     }
   };
@@ -87,7 +88,7 @@ const AddItem: React.FC<Props> = ({ navigation }) => {
   return (
     <ScrollView style={styles.container}>
       <TextInput
-        label="Name"
+        label={STRINGS.labels.name}
         value={itemName}
         onChangeText={setItemName}
         style={[
@@ -103,7 +104,7 @@ const AddItem: React.FC<Props> = ({ navigation }) => {
         }}
       />
       <TextInput
-        label="Quantity"
+        label={STRINGS.labels.quantity}
         value={quantity}
         onChangeText={handleQuantityChange}
         style={[styles.input, quantityFocused && styles.focusedInput]}
@@ -115,7 +116,7 @@ const AddItem: React.FC<Props> = ({ navigation }) => {
         }}
       />
       <TextInput
-        label="Price"
+        label={STRINGS.labels.price}
         value={price}
         onChangeText={handlePriceChange}
         style={[styles.input, priceFocused && styles.focusedInput]}
@@ -129,9 +130,9 @@ const AddItem: React.FC<Props> = ({ navigation }) => {
 
       <View style={styles.combinedFieldsContainer}>
         <View style={styles.row}>
-          <Text style={styles.rowLabel}>Total Amount</Text>
+          <Text style={styles.rowLabel}>{STRINGS.labels.totalAmount}</Text>
           <View style={styles.inputContainer}>
-            <Text style={styles.currencySymbol}>₹</Text>
+            <Text style={styles.currencySymbol}>{STRINGS.placeholders.currencySymbol}</Text>
             <TextInput
               value={totalAmount}
               style={styles.noUnderlineInput}
@@ -149,9 +150,9 @@ const AddItem: React.FC<Props> = ({ navigation }) => {
         </View>
 
         <View style={styles.row}>
-          <Text style={styles.rowLabel}>Discount</Text>
+          <Text style={styles.rowLabel}>{STRINGS.labels.discount}</Text>
           <View style={styles.inputContainer}>
-            <Text style={styles.currencySymbol}>₹</Text>
+            <Text style={styles.currencySymbol}>{STRINGS.placeholders.currencySymbol}</Text>
             <TextInput
               value={discount}
               onChangeText={handleDiscountChange}
@@ -169,9 +170,9 @@ const AddItem: React.FC<Props> = ({ navigation }) => {
         </View>
 
         <View style={styles.row}>
-          <Text style={styles.rowLabel}>Payable Amount</Text>
+          <Text style={styles.rowLabel}>{STRINGS.labels.payableAmount}</Text>
           <View style={styles.inputContainer}>
-            <Text style={styles.currencySymbol}>₹</Text>
+            <Text style={styles.currencySymbol}>{STRINGS.placeholders.currencySymbol}</Text>
             <TextInput
               value={payableAmount === "0" ? "" : payableAmount}
               style={[
@@ -191,9 +192,9 @@ const AddItem: React.FC<Props> = ({ navigation }) => {
         </View>
 
         <View style={styles.row}>
-          <Text style={styles.rowLabel}>Paid Amount</Text>
+          <Text style={styles.rowLabel}>{STRINGS.labels.paidAmount}</Text>
           <View style={styles.inputContainer}>
-            <Text style={styles.currencySymbol}>₹</Text>
+            <Text style={styles.currencySymbol}>{STRINGS.placeholders.currencySymbol}</Text>
             <TextInput
               value={paidAmount}
               onChangeText={handlePaidAmountChange}
@@ -213,9 +214,9 @@ const AddItem: React.FC<Props> = ({ navigation }) => {
         </View>
 
         <View style={styles.row}>
-          <Text style={styles.rowLabel}>Balance</Text>
+          <Text style={styles.rowLabel}>{STRINGS.labels.balance}</Text>
           <View style={styles.inputContainer}>
-            <Text style={styles.currencySymbol}>₹</Text>
+            <Text style={styles.currencySymbol}>{STRINGS.placeholders.currencySymbol}</Text>
             <TextInput
               value={balance === "0" ? "" : balance}
               style={styles.noUnderlineInput}
@@ -234,7 +235,7 @@ const AddItem: React.FC<Props> = ({ navigation }) => {
       </View>
 
       <TextInput
-        label="Miscellaneous"
+        label={STRINGS.labels.miscellaneous}
         value={miscellaneous}
         onChangeText={handleMiscellaneousChange}
         style={[styles.input, miscellaneousFocused && styles.focusedInput]}
