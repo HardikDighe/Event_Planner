@@ -1,14 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, Alert } from "react-native";
-import { NavigationProp } from "@react-navigation/native";
+import { NavigationProp, RouteProp, useRoute } from "@react-navigation/native";
 import { TextInput } from "react-native-paper";
 import styles from "../../../../../Event-Planner/app/screens/VendorRegistration/styles/styles";
 import strings from "../../../../app/screens/VendorRegistration/constants/string";
 import { saveVendorData, VendorData } from "../../../../app/screens/VendorRegistration/api/vendorreg,api"; // Import the API function
-
+import { RootStackParamList } from "@/app/(tabs)/types";  
 
 interface Props {
   navigation: NavigationProp<any>;
+}
+interface Item {
+  itemName: string;
+  quantity: number;
+  price: number;
+  discount: number;
+  payableAmount: number;
+  miscellaneous: string;
 }
 
 const VendorRegistration: React.FC<Props> = ({ navigation }) => {
@@ -24,6 +32,19 @@ const VendorRegistration: React.FC<Props> = ({ navigation }) => {
 
   const [phoneNumberError, setPhoneNumberError] = useState("");
 
+  const [items, setItems] = useState<Item[]>([]);
+  const route = useRoute<RouteProp<RootStackParamList, 'VendorRegistration'>>();
+
+  useEffect(() => {
+    if (route.params?.newItem) {
+        const newItem = route.params.newItem;
+        if (newItem) {
+            setItems(prevItems => [...prevItems, newItem]);
+        }
+    }
+}, [route.params?.newItem]);
+
+
   const handleSave = async () => {
     if (!phoneNumber) {
       setPhoneNumberError(strings.errors.phoneNumberRequired);
@@ -37,6 +58,7 @@ const VendorRegistration: React.FC<Props> = ({ navigation }) => {
       phoneNumber,
       address,
       gstNumber,
+      items,
     };
 
     const result = await saveVendorData(vendorData);

@@ -1,15 +1,18 @@
 import axios, { AxiosError } from "axios";
+import { Item } from "@/app/(tabs)/types";
+
 
 export interface VendorData {
   vendorName: string;
   phoneNumber: string;
   address: string;
   gstNumber: string;
+  items: Item[];
 }
 
 export const saveVendorData = async (vendorData: VendorData) => {
   try {
-    const response = await axios.post("http://localhost:3000/Vendor", vendorData, {
+    const response = await axios.post("http://localhost:3000/ALlVendors", vendorData, {
       headers: {
         "Content-Type": "application/json",
       },

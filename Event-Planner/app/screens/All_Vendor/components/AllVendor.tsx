@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
   ScrollView,
   TouchableOpacity,
   TextInput,
+  Alert,
 } from "react-native";
 import { Card, IconButton } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialIcons";
@@ -17,25 +18,28 @@ import { RootStackParamList } from '../../../(tabs)/types';
 import * as Sharing from "expo-sharing";
 import * as FileSystem from "expo-file-system";
 import * as Print from "expo-print";
+import { fetchAllVendors } from "../api/allvendor.api";
 
 // Type definition for Vendor
 type Vendor = {
   id: number;
-  name: string;
-  phone: string;
+  vendorName: string;
+  phoneNumber: string;
   address: string;
 };
 
+
 // Sample vendor data
-const vendors: Vendor[] = [
-  {
-    id: 1,
-    name: "Rohan More",
-    phone: "+91 9856325698",
-    address: "AB Road, Indore 452002",
-  },
-  // More vendors...
-];
+// const vendors: Vendor[] = [
+//   {
+//     id: 1,
+//     name: "Rohan More",
+//     phone: "+91 9856325698",
+//     address: "AB Road, Indore 452002",
+//   },
+//   // More vendors...
+// ];
+
 
 const Header: React.FC<{ onSearch: (query: string) => void }> = ({
   onSearch,
@@ -51,12 +55,12 @@ const Header: React.FC<{ onSearch: (query: string) => void }> = ({
           <body>
             <h1>Vendor List</h1>
             <ul>
-              ${vendors
+              ${allVendorData
                 .map(
                   (vendor) => `
                 <li>
-                  <strong>${vendor.name}</strong><br />
-                  ${vendor.phone}<br />
+                  <strong>${vendor.vendorName}</strong><br />
+                  ${vendor.phoneNumber}<br />
                   ${vendor.address}
                 </li>
               `
@@ -149,9 +153,9 @@ const VendorCard: React.FC<{ vendor: Vendor }> = ({ vendor }) => {
   return (
     <Card style={styles.card}>
       <Card.Content>
-        <Text style={styles.vendorName}>{vendor.name}</Text>
+        <Text style={styles.vendorName}>{vendor.vendorName}</Text>
         <View style={styles.phoneRow}>
-          <Text>{vendor.phone}</Text>
+          <Text>{vendor.phoneNumber}</Text>
           <TouchableOpacity
             style={styles.viewDetailsButton}
             onPress={() => setShowDetails(!showDetails)}
@@ -176,17 +180,32 @@ const VendorCard: React.FC<{ vendor: Vendor }> = ({ vendor }) => {
 };
 
 const VendorListScreen: React.FC = () => {
-  const [filteredVendors, setFilteredVendors] = useState<Vendor[]>(vendors);
+  const [allVendorData, setAllVendorData] = useState<any[]>([]);
+  const [filteredVendors, setFilteredVendors] = useState<Vendor[]>(allVendorData);
   const navigation = useNavigation(); // Use the useNavigation hook
+
+  useEffect(() => {
+    const loadAllVendorData = async () => {
+      const data = await fetchAllVendors();
+      if (data !== null) {
+        setAllVendorData(data);
+        setFilteredVendors(data); // Initialize filteredVendors with allVendorData
+      } else {
+        Alert.alert("Error", "All vendors not loaded.");
+      }
+    };
+    loadAllVendorData();
+  }, []);
 
   const handleSearch = (query: string) => {
     const lowercasedQuery = query.toLowerCase();
     setFilteredVendors(
-      vendors.filter((vendor) =>
-        vendor.name.toLowerCase().includes(lowercasedQuery)
+      allVendorData.filter((vendor) =>
+        vendor.vendorName?.toLowerCase().includes(lowercasedQuery)
       )
     );
   };
+  
 
   return (
     <View style={styles.container}>

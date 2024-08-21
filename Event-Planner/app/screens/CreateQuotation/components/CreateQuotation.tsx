@@ -9,7 +9,7 @@ import styles from '../../../../app/screens/CreateQuotation/styles/styles';
 import { saveQuotation, deleteQuotation, fetchQuotationId } from '../api/Quotation.api';
 // import { fetchQuotationId } from '../api/getQuotationId.api';
 import { STRINGS,ERROR_MESSAGES, HEADERS } from '../../../../app/screens/CreateQuotation/constants/string';
-import { RootStackParamList } from "../../../(tabs)/types";
+import { RootStackParamList,Item } from "../../../(tabs)/types";
 
 interface FloatingLabelInputProps {
     label: string;
@@ -201,13 +201,12 @@ const CreateQuotation: React.FC<Props> = () => {
                 ${items.map(item => `
                     <tr>
                         <td>${item.itemName}</td>
-                        <td>${item.itemQuantity}</td>
-                        <td>${item.itemPrice}</td>
-                        <td>${item.itemDiscount}</td>
-                        <td>${item.itemTotalPrice}</td>
+                        <td>${item.quantity}</td>
+                        <td>${item.price}</td>
+                        <td>${item.discount}</td>
                          <td>${item.amount}</td>
                         <td>${item.balance}</td>
-                        <td>${item.itemMisc}</td>
+                        <td>${item.miscellaneous}</td>
                         
                     </tr>
                 `).join('')}

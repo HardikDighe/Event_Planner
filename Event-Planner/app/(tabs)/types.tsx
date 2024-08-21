@@ -4,7 +4,7 @@ export type RootStackParamList = {
   
   VendorRegisteration: undefined;
   Dashboard: undefined;
-  VendorRegistration: undefined;
+  VendorRegistration: { newItem?: Item };
   AddItem: undefined;
   Auth: undefined;
   Signup: undefined;
@@ -78,11 +78,12 @@ export type RootDrawerParamList = {
   Vendor_Registration:undefined;
 };
 
-interface Item {
+export interface Item {
   itemName: string;
   quantity: number;
   price: number;
   discount: number;
-  payableAmount: number;
+  amount: Number;
+  balance: number;
   miscellaneous: string;
 }

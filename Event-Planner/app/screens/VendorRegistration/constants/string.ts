@@ -22,4 +22,21 @@ const strings = {
   };
   
   export default strings;
+
+  // apiConfig.ts
+export const API_BASE_URL = 'http://localhost:3000';
+
+export const ENDPOINTS = {
+  getVendors: '/ALlVendors',
+  // Add other endpoints here
+};
+
+export const ERROR_MESSAGES = {
+  fetchVendorsError: 'Failed to fetch vendors. Please try again.',
+};
+
+export const ALERT_MESSAGES = {
+  fetchVendorsError: 'There was an error while fetching vendors.',
+};
+
   
