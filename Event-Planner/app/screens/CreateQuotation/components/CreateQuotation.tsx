@@ -50,7 +50,7 @@ const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({ label, value, o
 
     return (
         <View style={styles.field}>
-            <Animated.Text style={labelStyle}>
+            <Animated.Text style={styles.labelStyle}>
                 {label}
             </Animated.Text>
             <TextInput
@@ -193,7 +193,10 @@ const CreateQuotation: React.FC<Props> = () => {
                     <th>Price</th>
                     <th>Discount</th>
                     <th>Total Price</th>
+                    <th>Amount</th>
+                    <th>Balance</th>
                     <th>Misc</th>
+
                 </tr>
                 ${items.map(item => `
                     <tr>
@@ -202,7 +205,10 @@ const CreateQuotation: React.FC<Props> = () => {
                         <td>${item.itemPrice}</td>
                         <td>${item.itemDiscount}</td>
                         <td>${item.itemTotalPrice}</td>
+                         <td>${item.amount}</td>
+                        <td>${item.balance}</td>
                         <td>${item.itemMisc}</td>
+                        
                     </tr>
                 `).join('')}
             </table>
@@ -259,8 +265,8 @@ const CreateQuotation: React.FC<Props> = () => {
 
     const addItem = () => {
         navigation.navigate('AddItem', { fromScreen: 'CreateQuotation' });
-
     };
+    
 
     const handleSave1 = async () => {
         navigation.navigate('ViewInvoice', {
@@ -296,7 +302,7 @@ const CreateQuotation: React.FC<Props> = () => {
     return (
         <View style={{ flex: 1 }}>
             <ScrollView contentContainerStyle={styles.container}>
-                <Text style={styles.title}>Create Quotation</Text>
+              
 
                 <View style={styles.topField}>
                     <View style={styles.halfField}>
@@ -377,7 +383,8 @@ const CreateQuotation: React.FC<Props> = () => {
                         <Text style={{ fontSize: 18 }}>{item.itemName}</Text>
                         <Text>Quantity: {item.quantity}</Text>
                         <Text>Rate: {item.price}</Text>
-                        <Text>Total: {item.payableAmount}</Text>
+                        <Text>Total: {item.amount}</Text>
+                        <Text>Balance: {item.balance}</Text>
                     </View>
                 ))}
 

@@ -282,6 +282,16 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         flex: 1
-    }
+    },
+    labelStyle :{
+    position: 'absolute',
+    left: 10,
+    // top: animatedIsFocused.interpolate({
+    //     inputRange: [0, 1],
+    //     outputRange: [18, -8],
+    // }),
+    backgroundColor: '#fff',
+    paddingHorizontal: 2,
+   }
 });
 export default styles;
