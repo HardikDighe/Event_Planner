@@ -22,16 +22,16 @@ type CreateQuotationRouteProp = RouteProp<RootStackParamList, 'CreateQuotation'>
 
 
 // FloatingLabelInput as a functional component with typed props
-const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({ label, value, onChangeText, keyboardType }) => {
 
+const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({ label, value, onChangeText, keyboardType }) => {
     const [isFocused, setIsFocused] = useState(false);
     const animatedIsFocused = useRef(new Animated.Value(value ? 1 : 0)).current;
-    type SelectInvoiceFormatRouteProp = RouteProp<RootStackParamList, 'SelectInvoiceFormat'>;
+
     useEffect(() => {
         Animated.timing(animatedIsFocused, {
             toValue: isFocused || value ? 1 : 0,
             duration: 200,
-            useNativeDriver: false,
+            useNativeDriver: false, // Use native driver for better performance, but it may not work with all properties
         }).start();
     }, [isFocused, value]);
 
@@ -40,17 +40,20 @@ const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({ label, value, o
         left: 10,
         top: animatedIsFocused.interpolate({
             inputRange: [0, 1],
-            outputRange: [18, -8],
+            outputRange: [18, -8], // Adjust these values as needed
         }),
-
         backgroundColor: '#fff',
-
         paddingHorizontal: 2,
+        fontSize: animatedIsFocused.interpolate({
+            inputRange: [0, 1],
+            outputRange: [16, 12], // Adjust font size during animation
+        }),
+        color: isFocused ? '#000' : '#aaa', // Optional: change color based on focus
     };
 
     return (
         <View style={styles.field}>
-            <Animated.Text style={styles.labelStyle}>
+            <Animated.Text style={labelStyle}>
                 {label}
             </Animated.Text>
             <TextInput
@@ -59,11 +62,12 @@ const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({ label, value, o
                 onChangeText={onChangeText}
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
-
+                // keyboardType={keyboardType || 'default'}
             />
         </View>
     );
 };
+
 
 type SelectInvoiceFormatNavigationProp = StackNavigationProp<RootStackParamList, 'SelectInvoiceFormat'>;
 
