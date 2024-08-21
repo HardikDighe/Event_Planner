@@ -100,8 +100,9 @@ const CreateQuotation: React.FC<Props> = () => {
 
     useEffect(() => {
         if (route.params?.newItem) {
-            setItems(prevItems => [...prevItems, route.params.newItem]);
-        }
+            const newItem = route.params.newItem as Item;
+            setItems(prevItems => [...prevItems, newItem]);
+          }
     }, [route.params?.newItem]);
     
     useEffect(() => {
@@ -382,7 +383,7 @@ const CreateQuotation: React.FC<Props> = () => {
                         <Text style={{ fontSize: 18 }}>{item.itemName}</Text>
                         <Text>Quantity: {item.quantity}</Text>
                         <Text>Rate: {item.price}</Text>
-                        <Text>Total: {item.amount}</Text>
+                        <Text>Total: {item.paidAmount}</Text>
                         <Text>Balance: {item.balance}</Text>
                     </View>
                 ))}
