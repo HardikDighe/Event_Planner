@@ -62,7 +62,7 @@ const CreateEvent = () => {
   };
 
   const handleRegisterNavigate = () => {
-    navigation.navigate('RegisterEvent'); // Correctly typed navigation
+    navigation.navigate('CustomerDetails'); // Correctly typed navigation
   };
 
   return (

@@ -3,7 +3,7 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import AllEvents from '../components/AllEvents';
-import RegisterEvent from '../../RegisterEvent/components/RegisterEvent';
+import RegisterEvent from '../../RegisterEvent/components/CustomerDetails';
 RegisterEvent
 const Stack = createNativeStackNavigator();
 

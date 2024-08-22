@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { View, TextInput, TouchableOpacity, Text, ScrollView, Alert, Switch } from 'react-native';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
-import styles from '../../../../app/screens/RegisterEvent/styles/styles'; // Import the styles
-import { RootStackParamList } from '../../../../app/(tabs)/types'; // Adjust the import path as necessary
+import styles from '../styles/styles'; // Import the styles
+import { RootStackParamList } from '../../../(tabs)/types'; // Adjust the import path as necessary
 
 const RegisterEvent: React.FC = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();

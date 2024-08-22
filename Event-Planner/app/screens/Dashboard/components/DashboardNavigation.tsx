@@ -14,7 +14,7 @@ import AllQuotation from '../../All_Quotation/components/AllQuotations';
 import VendorListScreen from '../../All_Vendor/components/AllVendor';
 import VendorRegistration from '../../VendorRegistration/components/VendorRegistration';
 import AddItem from '../../AddItem/components/AddItem';
-import RegisterEvent from '../../RegisterEvent/components/RegisterEvent';
+import CustomerDetails from '../../RegisterEvent/components/CustomerDetails';
 import CreateInvoice from '../../CreateInvoice/components/CreateInvoice';
 import CreateQuotation from '../../CreateQuotation/components/CreateQuotation';
 import EditQuotation from '../../CreateQuotation/components/EditQuotation';
@@ -135,8 +135,8 @@ const DashNavigation: React.FC = () => {
           options={{ headerShown:true  }} // Optionally hide header if using custom header in SettingNavigation
         />
         <Stack.Screen
-          name="EventRegistration"
-          component={RegisterEvent} // Ensure SettingNavigation is a stack navigator
+          name="CreateEvent"
+          component={CreateEvent} // Ensure SettingNavigation is a stack navigator
           options={{ headerShown:true  }} // Optionally hide header if using custom header in SettingNavigation
         />
         <Stack.Screen
@@ -149,14 +149,9 @@ const DashNavigation: React.FC = () => {
           component={AllEvents} // Ensure SettingNavigation is a stack navigator
           options={{ headerShown:false}} // Optionally hide header if using custom header in SettingNavigation
         />
-        <Stack.Screen
-          name="CreateEvent"
-          component={CreateEvent} // Ensure SettingNavigation is a stack navigator
-          options={{ headerShown:true}} // Optionally hide header if using custom header in SettingNavigation
-        />
          <Stack.Screen
-          name="RegisterEvent"
-          component={RegisterEvent} // Ensure SettingNavigation is a stack navigator
+          name="CustomerDetails"
+          component={CustomerDetails} // Ensure SettingNavigation is a stack navigator
           options={{ headerShown:true}} // Optionally hide header if using custom header in SettingNavigation
         />
       </Stack.Navigator>

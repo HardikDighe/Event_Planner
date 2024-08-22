@@ -93,7 +93,7 @@ const DashboardScreen: React.FC<Props> = ({ navigation }) => {
           {/* Event Registration */}
           <TouchableOpacity
             style={styles.tile}
-            onPress={() => navigation.navigate('EventRegistration')}
+            onPress={() => navigation.navigate('CreateEvent')}
           >
             <View style={styles.iconBackground}>
               <MaterialIcons name="post-add" size={36} color="#1E90FF" style={styles.icon} />
