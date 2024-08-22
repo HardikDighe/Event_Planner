@@ -1,19 +1,25 @@
 import React, { useState } from 'react';
-import { View, TextInput, TouchableOpacity, Text, StyleSheet, ScrollView, Alert, Switch } from 'react-native';
-const RegisterEvent = (props) => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [numTickets, setNumTickets] = useState('');
-  const [isChecked, setIsChecked] = useState(false);
-  const [focusedField, setFocusedField] = useState('');
+import { View, TextInput, TouchableOpacity, Text, ScrollView, Alert, Switch } from 'react-native';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
+import styles from '../../../../app/screens/RegisterEvent/styles/styles'; // Import the styles
+import { RootStackParamList } from '../../../../app/(tabs)/types'; // Adjust the import path as necessary
+
+const RegisterEvent: React.FC = () => {
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const [name, setName] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [phone, setPhone] = useState<string>('');
+  const [numTickets, setNumTickets] = useState<string>('');
+  const [isChecked, setIsChecked] = useState<boolean>(false);
+  const [focusedField, setFocusedField] = useState<string>('');
   const [errors, setErrors] = useState({
     name: '',
     email: '',
     phone: '',
     policies: '',
   });
-  const handleRegister = () => {
+
+  const handleRegister = async () => {
     let valid = true;
     const newErrors = {
       name: '',
@@ -21,6 +27,7 @@ const RegisterEvent = (props) => {
       phone: '',
       policies: '',
     };
+
     if (!name) {
       newErrors.name = 'Name is required.';
       valid = false;
@@ -37,24 +44,56 @@ const RegisterEvent = (props) => {
       newErrors.policies = 'You must agree to the event policies and terms.';
       valid = false;
     }
+
     setErrors(newErrors);
+
     if (valid) {
-      // Handle registration logic here
-      Alert.alert('Registered successfully!', `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nTickets: ${numTickets}`);
+      try {
+        const response = await fetch('http://localhost:3000/EventRegistration', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name,
+            email,
+            phone,
+            numTickets,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        Alert.alert(
+          'Registered successfully!',
+          `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nTickets: ${numTickets}`
+        );
+
+        // Navigate back to CreateEvent page
+        navigation.navigate('CreateEvent');
+      } catch (error) {
+        Alert.alert('Registration failed', 'There was a problem with the registration. Please try again.');
+        console.error('Error:', error);
+      }
     } else {
       if (!isChecked) {
         Alert.alert('Please agree to the event policies and terms.');
       }
     }
   };
-  const validateEmail = (email) => {
+
+  const validateEmail = (email: string): boolean => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(String(email).toLowerCase());
   };
-  const validatePhone = (phone) => {
+
+  const validatePhone = (phone: string): boolean => {
     const re = /^\d{10}$/;
     return re.test(String(phone));
   };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Register Event</Text>
@@ -116,96 +155,11 @@ const RegisterEvent = (props) => {
         <Text style={styles.checkboxLabel}>Read Event Policies and Terms</Text>
       </View>
       {errors.policies ? <Text style={styles.errorText}>{errors.policies}</Text> : null}
-      <TouchableOpacity style={styles.button} onPress={()=>props.navigation.navigate("AllEvents")} >
+      <TouchableOpacity style={styles.button} onPress={handleRegister}>
         <Text style={styles.buttonText}>Register</Text>
       </TouchableOpacity>
     </ScrollView>
   );
 };
-const styles = StyleSheet.create({
-  container: {
-    flexGrow: 1,
-    justifyContent: 'center',
-    padding: 16,
-    backgroundColor: '#fff',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginVertical: 20,
-  },
-  inputContainer: {
-    marginVertical: 10,
-    position: 'relative',
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 10,
-    borderRadius: 5,
-    backgroundColor: '#fff',
-  },
-  inputError: {
-    borderColor: '#f00',
-  },
-  floatingLabel: {
-    position: 'absolute',
-    left: 10,
-    top: -10,
-    backgroundColor: '#fff',
-    paddingHorizontal: 5,
-    fontSize: 12,
-    color: 'black',
-  },
-  ticketsContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#E8EAF6',
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 20,
-  },
-  ticketsLabel: {
-    flex: 1,
-    fontSize: 16,
-  },
-  ticketsInput: {
-    height: 40,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    paddingLeft: 8,
-    borderRadius: 5,
-    backgroundColor: '#fff',
-    flex: 0.5,
-  },
-  checkboxContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 10,
-  },
-  checkboxLabel: {
-    marginLeft: 8,
-    fontSize: 16,
-  },
-  button: {
-    backgroundColor: '#051650',
-    padding: 15,
-    borderRadius: 5,
-    alignItems: 'center',
-    marginVertical: 10,
-    alignSelf: 'center',
-    width: '40%',
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  errorText: {
-    color: '#f00',
-    fontSize: 12,
-    marginTop: 5,
-  },
-});
+
 export default RegisterEvent;

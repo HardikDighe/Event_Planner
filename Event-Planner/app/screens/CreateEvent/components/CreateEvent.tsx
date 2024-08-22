@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
-import { View, TextInput, TouchableOpacity, Text, ScrollView } from 'react-native';
-import styles from '../../../../../Event-Planner/app/screens/CreateEvent/styles/styles'; // Adjust the path as necessary
+import { View, TextInput, TouchableOpacity, Text, ScrollView, Alert } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import styles from '../../../../../Event-Planner/app/screens/CreateEvent/styles/styles';
+import { RootStackParamList } from '../../../../app/(tabs)/types'; // Adjust the import path
+
+// Define the type for navigation
+type CreateEventNavigationProp = StackNavigationProp<RootStackParamList, 'CreateEvent'>;
 
 const CreateEvent = () => {
   const [eventTitle, setEventTitle] = useState('');
@@ -10,15 +16,53 @@ const CreateEvent = () => {
   const [eventDetails, setEventDetails] = useState('');
   const [focusedField, setFocusedField] = useState('');
 
-  const handleCreateEvent = () => {
-    // Handle event creation logic here
-    console.log({
-      eventTitle,
-      date,
-      time,
-      location,
-      eventDetails,
-    });
+  const navigation = useNavigation<CreateEventNavigationProp>(); // Typed navigation
+
+  const [data, setData] = useState();
+
+  
+
+  const handleCreateEvent = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/EventRegistration', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          eventTitle,
+          date,
+          time,
+          location,
+          eventDetails,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create event');
+      }
+
+      const result = await response.json();
+      Alert.alert('Event Created Successfully!', `Event Title: ${eventTitle}\nDate: ${date}\nTime: ${time}\nLocation: ${location}`);
+      
+      // Navigate to another page if necessary, or reset form fields
+      setEventTitle('');
+      setDate('');
+      setTime('');
+      setLocation('');
+      setEventDetails('');
+      
+      // Optionally, navigate to another screen
+      navigation.navigate('AllEvents'); // Replace with the actual screen name
+
+    } catch (error) {
+      Alert.alert('Error', 'There was an issue creating the event. Please try again.');
+      console.error('Error:', error);
+    }
+  };
+
+  const handleRegisterNavigate = () => {
+    navigation.navigate('RegisterEvent'); // Correctly typed navigation
   };
 
   return (
@@ -82,6 +126,12 @@ const CreateEvent = () => {
           multiline
         />
       </View>
+      
+      {/* +Register Button */}
+      <TouchableOpacity onPress={handleRegisterNavigate}>
+        <Text style={styles.registerText}>+ Register</Text>
+      </TouchableOpacity>
+
       <TouchableOpacity style={styles.button} onPress={handleCreateEvent}>
         <Text style={styles.buttonText}>Create Event</Text>
       </TouchableOpacity>

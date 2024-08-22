@@ -14,13 +14,14 @@ import AllQuotation from '../../All_Quotation/components/AllQuotations';
 import VendorListScreen from '../../All_Vendor/components/AllVendor';
 import VendorRegistration from '../../VendorRegistration/components/VendorRegistration';
 import AddItem from '../../AddItem/components/AddItem';
-import RegisterEvent from '../../All-Events/components/RegisterEvent';
+import RegisterEvent from '../../RegisterEvent/components/RegisterEvent';
 import CreateInvoice from '../../CreateInvoice/components/CreateInvoice';
 import CreateQuotation from '../../CreateQuotation/components/CreateQuotation';
 import EditQuotation from '../../CreateQuotation/components/EditQuotation';
 import SelectInvoiceFormat from '../../CreateQuotation/components/SelectInvoiceFromat';
 // import AllEventsNaviagtion from '../../All-Events/components/AllEventsNavigation';
 import AllEvents from '../../All-Events/components/AllEvents';
+import CreateEvent from '../../CreateEvent/components/CreateEvent';
 
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -147,6 +148,11 @@ const DashNavigation: React.FC = () => {
           name="AllEvents"
           component={AllEvents} // Ensure SettingNavigation is a stack navigator
           options={{ headerShown:false}} // Optionally hide header if using custom header in SettingNavigation
+        />
+        <Stack.Screen
+          name="CreateEvent"
+          component={CreateEvent} // Ensure SettingNavigation is a stack navigator
+          options={{ headerShown:true}} // Optionally hide header if using custom header in SettingNavigation
         />
          <Stack.Screen
           name="RegisterEvent"

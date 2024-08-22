@@ -127,6 +127,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16,
   },
+  button: {
+    backgroundColor: '#051650',
+    padding: 15,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginVertical: 10,
+    alignSelf: 'stretch',
+  },
 });
 
 export default styles;

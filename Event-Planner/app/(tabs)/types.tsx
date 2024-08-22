@@ -24,6 +24,7 @@ export type RootStackParamList = {
 };
 
   AllEvents:undefined;
+  CreateEvent:undefined;
   AllVendors:undefined;
   EventRegistration:undefined;
   AllEventsNaviagtion:undefined;
