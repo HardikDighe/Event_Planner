@@ -22,9 +22,8 @@ export type RootStackParamList = {
   CreateQuotation: {
     newItem?: Item;
 };
-
   AllEvents:undefined;
-  CreateEvent:undefined;
+  CreateEvent: { data: any };
   CustomerDetails:undefined;
   AllVendors:undefined;
   EventRegistration:undefined;

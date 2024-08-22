@@ -3,6 +3,7 @@ import { View, TextInput, TouchableOpacity, Text, ScrollView, Alert, Switch } fr
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import styles from '../styles/styles'; // Import the styles
 import { RootStackParamList } from '../../../(tabs)/types'; // Adjust the import path as necessary
+import CreateEvent from '../../CreateEvent/components/CreateEvent';
 
 const RegisterEvent: React.FC = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -48,35 +49,44 @@ const RegisterEvent: React.FC = () => {
     setErrors(newErrors);
 
     if (valid) {
-      try {
-        const response = await fetch('http://localhost:3000/EventRegistration', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            name,
-            email,
-            phone,
-            numTickets,
-          }),
-        });
+      // try {
+      //   const response = await fetch('http://localhost:3000/EventRegistration', {
+      //     method: 'POST',
+      //     headers: {
+      //       'Content-Type': 'application/json',
+      //     },
+      //     body: JSON.stringify({
+      //       name,
+      //       email,
+      //       phone,
+      //       numTickets,
+      //     }),
+      //   });
 
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
+      //   if (!response.ok) {
+      //     throw new Error('Network response was not ok');
+      //   }
 
-        Alert.alert(
-          'Registered successfully!',
-          `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nTickets: ${numTickets}`
-        );
+      //   Alert.alert(
+      //     'Registered successfully!',
+      //     `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nTickets: ${numTickets}`
+      //   );
 
-        // Navigate back to CreateEvent page
-        navigation.navigate('CreateEvent');
-      } catch (error) {
-        Alert.alert('Registration failed', 'There was a problem with the registration. Please try again.');
-        console.error('Error:', error);
-      }
+      //   // Navigate back to CreateEvent page
+      //   navigation.navigate('CreateEvent');
+      // } catch (error) {
+      //   Alert.alert('Registration failed', 'There was a problem with the registration. Please try again.');
+      //   console.error('Error:', error);
+      // }
+      // navigation.navigate(CreateEvent);
+      const data :any = {
+               name,
+               email,
+               phone,
+               numTickets,
+             }
+             navigation.navigate('CreateEvent', { data: data });
+
     } else {
       if (!isChecked) {
         Alert.alert('Please agree to the event policies and terms.');
@@ -96,7 +106,7 @@ const RegisterEvent: React.FC = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Register Event</Text>
+      <Text style={styles.title}>Customer Details</Text>
       <View style={styles.inputContainer}>
         {(focusedField === 'name' || name) && <Text style={styles.floatingLabel}>Name</Text>}
         <TextInput

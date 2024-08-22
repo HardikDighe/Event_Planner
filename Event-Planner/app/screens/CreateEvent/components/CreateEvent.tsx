@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, TextInput, TouchableOpacity, Text, ScrollView, Alert } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import styles from '../../../../../Event-Planner/app/screens/CreateEvent/styles/styles';
 import { RootStackParamList } from '../../../../app/(tabs)/types'; // Adjust the import path
+import { saveCreateEvent } from '../api/createevent.api';
 
 // Define the type for navigation
 type CreateEventNavigationProp = StackNavigationProp<RootStackParamList, 'CreateEvent'>;
@@ -17,48 +18,33 @@ const CreateEvent = () => {
   const [focusedField, setFocusedField] = useState('');
 
   const navigation = useNavigation<CreateEventNavigationProp>(); // Typed navigation
+  type CreateEventRouteProp = RouteProp<RootStackParamList, 'CreateEvent'>;
 
-  const [data, setData] = useState();
+  const [customerData, setCustomerData] = useState<any>(null);
+  const route = useRoute<CreateEventRouteProp>(); // Typed rout
+  // const route = useRoute(); // Access the route to get the passed parameters
 
-  
-
-  const handleCreateEvent = async () => {
-    try {
-      const response = await fetch('http://localhost:3000/EventRegistration', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          eventTitle,
-          date,
-          time,
-          location,
-          eventDetails,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to create event');
-      }
-
-      const result = await response.json();
-      Alert.alert('Event Created Successfully!', `Event Title: ${eventTitle}\nDate: ${date}\nTime: ${time}\nLocation: ${location}`);
-      
-      // Navigate to another page if necessary, or reset form fields
-      setEventTitle('');
-      setDate('');
-      setTime('');
-      setLocation('');
-      setEventDetails('');
-      
-      // Optionally, navigate to another screen
-      navigation.navigate('AllEvents'); // Replace with the actual screen name
-
-    } catch (error) {
-      Alert.alert('Error', 'There was an issue creating the event. Please try again.');
-      console.error('Error:', error);
+  // const [data, setData] = useState<any>(null); // State to store the passed data
+  useEffect(() => {
+    if (route.params?.data) {
+      setCustomerData(route.params.data);
     }
+  }, [route.params?.data]);
+  const handleCreateEvent = async () => {
+    const eventDetailsData ={
+            eventTitle,
+             date,
+             time,
+             location,
+             eventDetails,
+             customerData
+           }
+    const isSuccess = await saveCreateEvent(eventDetailsData);
+        console.warn(isSuccess);
+        // if (isSuccess) {
+        //   navigation.navigate('AllEvents');
+        // }
+        navigation.navigate('AllEvents');
   };
 
   const handleRegisterNavigate = () => {
