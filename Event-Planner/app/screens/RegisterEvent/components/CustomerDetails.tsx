@@ -49,36 +49,6 @@ const RegisterEvent: React.FC = () => {
     setErrors(newErrors);
 
     if (valid) {
-      // try {
-      //   const response = await fetch('http://localhost:3000/EventRegistration', {
-      //     method: 'POST',
-      //     headers: {
-      //       'Content-Type': 'application/json',
-      //     },
-      //     body: JSON.stringify({
-      //       name,
-      //       email,
-      //       phone,
-      //       numTickets,
-      //     }),
-      //   });
-
-      //   if (!response.ok) {
-      //     throw new Error('Network response was not ok');
-      //   }
-
-      //   Alert.alert(
-      //     'Registered successfully!',
-      //     `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nTickets: ${numTickets}`
-      //   );
-
-      //   // Navigate back to CreateEvent page
-      //   navigation.navigate('CreateEvent');
-      // } catch (error) {
-      //   Alert.alert('Registration failed', 'There was a problem with the registration. Please try again.');
-      //   console.error('Error:', error);
-      // }
-      // navigation.navigate(CreateEvent);
       const data :any = {
                name,
                email,

@@ -115,7 +115,7 @@ const CreateEvent = () => {
       
       {/* +Register Button */}
       <TouchableOpacity onPress={handleRegisterNavigate}>
-        <Text style={styles.registerText}>+ Register</Text>
+        <Text style={styles.registerText}>+ Registration Form</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.button} onPress={handleCreateEvent}>
