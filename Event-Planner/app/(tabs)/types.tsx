@@ -1,7 +1,7 @@
 // types.ts
 export type RootStackParamList = {
   Home: undefined;
-  
+
   VendorRegisteration: undefined;
   Dashboard: undefined;
   VendorRegistration: { newItem?: Item };
@@ -16,24 +16,22 @@ export type RootStackParamList = {
   AllInvoices: undefined;
   CreateInvoice: undefined;
   ForgotPassword: undefined;
-  Settings:undefined;
-  Notifications:undefined;
-  AllQuotations:undefined;
+  Settings: undefined;
+  Notifications: undefined;
+  AllQuotations: undefined;
   CreateQuotation: {
     newItem?: Item;
-};
-  AllEvents:undefined;
+  };
+  AllEvents: undefined;
   CreateEvent: { data: any };
-  CustomerDetails:undefined;
-  AllVendors:undefined;
-  EventRegistration:undefined;
-  AllEventsNaviagtion:undefined;
-  RegisterEvent:undefined;
+  CustomerDetails: undefined;
+  AllVendors: undefined;
+  EventRegistration: undefined;
+  AllEventsNaviagtion: undefined;
+  RegisterEvent: undefined;
   // EditQuotation:undefined;
   // SelectInvoiceFormat:undefined;
 
-
-  
   SelectInvoiceFormat: {
     customerName: string;
     phoneNumber: string;
@@ -45,8 +43,8 @@ export type RootStackParamList = {
     venueTime: Date;
     venueDetails: string;
     items: Item[];
-};
-ViewInvoice: {
+  };
+  ViewInvoice: {
     customerName: string;
     phoneNumber: string;
     address: string;
@@ -57,12 +55,11 @@ ViewInvoice: {
     venueTime: Date;
     venueDetails: string;
     items: Item[];
-};
-EditQuotation: {
+  };
+  EditQuotation: {
     quotationId: string;
-};
-// AddItem: undefined;
-
+  };
+  // AddItem: undefined;
 };
 
 export type RootDrawerParamList = {
@@ -74,9 +71,9 @@ export type RootDrawerParamList = {
   AllVendors: undefined;
   VendorRegistration: undefined;
   ServiceRegistration: undefined;
-  All_Vendors:undefined;
-  All_Events:undefined;
-  Vendor_Registration:undefined;
+  All_Vendors: undefined;
+  All_Events: undefined;
+  Vendor_Registration: undefined;
 };
 
 export interface Item {
@@ -84,8 +81,11 @@ export interface Item {
   quantity: number;
   price: number;
   discount: number;
-  payableAmount: number,
-  paidAmount: number,
+  payableAmount: number;
+  paidAmount: number;
   balance: number;
   miscellaneous: string;
 }
+export type RootStackParamList1 = {
+  CreateQuotation: undefined;
+};

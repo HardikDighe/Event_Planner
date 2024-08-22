@@ -1,11 +1,17 @@
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import { StackScreenProps } from '@react-navigation/stack';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { RootStackParamList } from '../../../(tabs)/types';
-import RevenueGraph from '../../RevenueGraph/components/RevenueGraph'; // Import the new component
+import React from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
+import { StackScreenProps } from "@react-navigation/stack";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { RootStackParamList, RootStackParamList1 } from "../../../(tabs)/types";
+import RevenueGraph from "../../RevenueGraph/components/RevenueGraph"; // Import the new component
 
-type Props = StackScreenProps<RootStackParamList, 'Dashboard'>;
+type Props = StackScreenProps<RootStackParamList, "Dashboard">;
 
 const DashboardScreen: React.FC<Props> = ({ navigation }) => {
   return (
@@ -17,10 +23,15 @@ const DashboardScreen: React.FC<Props> = ({ navigation }) => {
           {/* All Invoices */}
           <TouchableOpacity
             style={styles.tile}
-            onPress={() => navigation.navigate('AllInvoices')}
+            onPress={() => navigation.navigate("AllInvoices")}
           >
             <View style={styles.iconBackground}>
-              <MaterialIcons name="description" size={36} color="#FF6347" style={styles.icon} />
+              <MaterialIcons
+                name="description"
+                size={36}
+                color="#FF6347"
+                style={styles.icon}
+              />
             </View>
             <View style={styles.tileTextContainer}>
               <Text style={styles.tileText}>All</Text>
@@ -31,10 +42,15 @@ const DashboardScreen: React.FC<Props> = ({ navigation }) => {
           {/* All Quotations */}
           <TouchableOpacity
             style={styles.tile}
-            onPress={() => navigation.navigate('AllQuotations')}
+            onPress={() => navigation.navigate("AllQuotations")}
           >
             <View style={styles.iconBackground}>
-              <MaterialIcons name="request-quote" size={36} color="#4682B4" style={styles.icon} />
+              <MaterialIcons
+                name="request-quote"
+                size={36}
+                color="#4682B4"
+                style={styles.icon}
+              />
             </View>
             <View style={styles.tileTextContainer}>
               <Text style={styles.tileText}>All</Text>
@@ -45,10 +61,15 @@ const DashboardScreen: React.FC<Props> = ({ navigation }) => {
           {/* All Events */}
           <TouchableOpacity
             style={styles.tile}
-            onPress={() => navigation.navigate('AllEvents')}
+            onPress={() => navigation.navigate("AllEvents")}
           >
             <View style={styles.iconBackground}>
-              <MaterialIcons name="event" size={36} color="#32CD32" style={styles.icon} />
+              <MaterialIcons
+                name="event"
+                size={36}
+                color="#32CD32"
+                style={styles.icon}
+              />
             </View>
             <View style={styles.tileTextContainer}>
               <Text style={styles.tileText}>All</Text>
@@ -59,10 +80,15 @@ const DashboardScreen: React.FC<Props> = ({ navigation }) => {
           {/* All Vendors */}
           <TouchableOpacity
             style={styles.tile}
-            onPress={() => navigation.navigate('AllVendors')}
+            onPress={() => navigation.navigate("AllVendors")}
           >
             <View style={styles.iconBackground}>
-              <MaterialIcons name="people" size={36} color="#FFD700" style={styles.icon} />
+              <MaterialIcons
+                name="people"
+                size={36}
+                color="#FFD700"
+                style={styles.icon}
+              />
             </View>
             <View style={styles.tileTextContainer}>
               <Text style={styles.tileText}>All</Text>
@@ -79,10 +105,15 @@ const DashboardScreen: React.FC<Props> = ({ navigation }) => {
           {/* Create Quotation */}
           <TouchableOpacity
             style={styles.tile}
-            onPress={() => navigation.navigate('CreateQuotation')}
+            onPress={() => navigation.navigate("CreateQuotation")}
           >
             <View style={styles.iconBackground}>
-              <MaterialIcons name="add-circle-outline" size={36} color="#FF4500" style={styles.icon} />
+              <MaterialIcons
+                name="add-circle-outline"
+                size={36}
+                color="#FF4500"
+                style={styles.icon}
+              />
             </View>
             <View style={styles.tileTextContainer}>
               <Text style={styles.tileText}>Create</Text>
@@ -93,10 +124,15 @@ const DashboardScreen: React.FC<Props> = ({ navigation }) => {
           {/* Event Registration */}
           <TouchableOpacity
             style={styles.tile}
-            onPress={() => navigation.navigate('CreateEvent')}
+            onPress={() => navigation.navigate("CreateEvent")}
           >
             <View style={styles.iconBackground}>
-              <MaterialIcons name="post-add" size={36} color="#1E90FF" style={styles.icon} />
+              <MaterialIcons
+                name="post-add"
+                size={36}
+                color="#1E90FF"
+                style={styles.icon}
+              />
             </View>
             <View style={styles.tileTextContainer}>
               <Text style={styles.tileText}>Event</Text>
@@ -107,10 +143,15 @@ const DashboardScreen: React.FC<Props> = ({ navigation }) => {
           {/* Vendor Registration */}
           <TouchableOpacity
             style={styles.tile}
-            onPress={() => navigation.navigate('VendorRegistration')}
+            onPress={() => navigation.navigate("VendorRegistration")}
           >
             <View style={styles.iconBackground}>
-              <MaterialIcons name="person-add" size={36} color="#8A2BE2" style={styles.icon} />
+              <MaterialIcons
+                name="person-add"
+                size={36}
+                color="#8A2BE2"
+                style={styles.icon}
+              />
             </View>
             <View style={styles.tileTextContainer}>
               <Text style={styles.tileText}>Vendor</Text>
@@ -120,8 +161,7 @@ const DashboardScreen: React.FC<Props> = ({ navigation }) => {
         </View>
       </View>
 
-      {/* Revenue Graph Section */}
-      <RevenueGraph /> {/* Use the new component */}
+      {/* <RevenueGraph />  */}
     </ScrollView>
   );
 };
