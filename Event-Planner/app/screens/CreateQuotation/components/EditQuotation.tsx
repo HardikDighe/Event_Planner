@@ -6,7 +6,7 @@ import { shareAsync } from 'expo-sharing';
 import styles from '../../../../app/screens/CreateQuotation/styles/styles';
 import { fetchQuotationDetails, deleteQuotation, updateQuotation } from '../api/Quotation.api';
 import { ERROR_MESSAGES, STRINGS } from '../constants/string';
-
+import { Item } from '@/app/(tabs)/types';
 interface FloatingLabelInputProps {
     label: string;
     value: string;
@@ -57,10 +57,11 @@ const EditQuotation = () => {
     const [currentItemIndex, setCurrentItemIndex] = useState<number | null>(null);
     const [currentItem, setCurrentItem] = useState({
         itemName: '',
-        quantity: '',
-        price: '',
-        discount: '',
-        payableAmount: '',
+        quantity: Number(),
+        price: Number(),
+        discount: Number(),
+        payableAmount: Number(),
+        paidAmount: Number(),
         miscellaneous: '',
     });
     const [modalVisible, setModalVisible] = useState(false);

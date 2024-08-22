@@ -8,8 +8,8 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import styles from '../../../../app/screens/CreateQuotation/styles/styles';
 import { saveQuotation, deleteQuotation, fetchQuotationId } from '../api/Quotation.api';
 // import { fetchQuotationId } from '../api/getQuotationId.api';
-import { STRINGS,ERROR_MESSAGES, HEADERS } from '../../../../app/screens/CreateQuotation/constants/string';
-import { RootStackParamList,Item } from "../../../(tabs)/types";
+import { STRINGS, ERROR_MESSAGES, HEADERS } from '../../../../app/screens/CreateQuotation/constants/string';
+import { RootStackParamList, Item } from "../../../(tabs)/types";
 
 interface FloatingLabelInputProps {
     label: string;
@@ -22,16 +22,16 @@ type CreateQuotationRouteProp = RouteProp<RootStackParamList, 'CreateQuotation'>
 
 
 // FloatingLabelInput as a functional component with typed props
-const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({ label, value, onChangeText, keyboardType }) => {
 
+const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({ label, value, onChangeText, keyboardType }) => {
     const [isFocused, setIsFocused] = useState(false);
     const animatedIsFocused = useRef(new Animated.Value(value ? 1 : 0)).current;
-    type SelectInvoiceFormatRouteProp = RouteProp<RootStackParamList, 'SelectInvoiceFormat'>;
+
     useEffect(() => {
         Animated.timing(animatedIsFocused, {
             toValue: isFocused || value ? 1 : 0,
             duration: 200,
-            useNativeDriver: false,
+            useNativeDriver: false, // Use native driver for better performance, but it may not work with all properties
         }).start();
     }, [isFocused, value]);
 
@@ -40,17 +40,20 @@ const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({ label, value, o
         left: 10,
         top: animatedIsFocused.interpolate({
             inputRange: [0, 1],
-            outputRange: [18, -8],
+            outputRange: [18, -8], // Adjust these values as needed
         }),
-
         backgroundColor: '#fff',
-
         paddingHorizontal: 2,
+        fontSize: animatedIsFocused.interpolate({
+            inputRange: [0, 1],
+            outputRange: [16, 12], // Adjust font size during animation
+        }),
+        color: isFocused ? '#000' : '#aaa', // Optional: change color based on focus
     };
 
     return (
         <View style={styles.field}>
-            <Animated.Text style={styles.labelStyle}>
+            <Animated.Text style={labelStyle}>
                 {label}
             </Animated.Text>
             <TextInput
@@ -59,11 +62,12 @@ const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({ label, value, o
                 onChangeText={onChangeText}
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
-
+                // keyboardType={keyboardType || 'default'}
             />
         </View>
     );
 };
+
 
 type SelectInvoiceFormatNavigationProp = StackNavigationProp<RootStackParamList, 'SelectInvoiceFormat'>;
 
@@ -100,15 +104,16 @@ const CreateQuotation: React.FC<Props> = () => {
 
     useEffect(() => {
         if (route.params?.newItem) {
-            setItems(prevItems => [...prevItems, route.params.newItem]);
+            const newItem = route.params.newItem as Item;
+            setItems(prevItems => [...prevItems, newItem]);
         }
     }, [route.params?.newItem]);
-    
+
     useEffect(() => {
         setQuotationDate;
         const loadQuotationId = async () => {
             const id = await fetchQuotationId();
-            if (id !==  null) {
+            if (id !== null) {
                 setQuotationId(id);
             } else {
                 Alert.alert(ERROR_MESSAGES.loadIdFailed);
@@ -204,7 +209,8 @@ const CreateQuotation: React.FC<Props> = () => {
                         <td>${item.quantity}</td>
                         <td>${item.price}</td>
                         <td>${item.discount}</td>
-                         <td>${item.amount}</td>
+                        <td>${item.payableAmount}</td>
+                        <td>${item.paidAmount}</td>
                         <td>${item.balance}</td>
                         <td>${item.miscellaneous}</td>
                         
@@ -265,7 +271,7 @@ const CreateQuotation: React.FC<Props> = () => {
     const addItem = () => {
         navigation.navigate('AddItem', { fromScreen: 'CreateQuotation' });
     };
-    
+
 
     const handleSave1 = async () => {
         navigation.navigate('ViewInvoice', {
@@ -288,20 +294,20 @@ const CreateQuotation: React.FC<Props> = () => {
         venueDate,
         venueTime,
         venueDetails,
-        items, 
+        items,
     };
     const handleSave = async () => {
         const isSuccess = await saveQuotation(quotationData);
         console.warn(isSuccess);
-    if (isSuccess) {
-        setModalVisible(true);  // Show the modal if the save was successful
-    }
+        if (isSuccess) {
+            setModalVisible(true);  // Show the modal if the save was successful
+        }
     }
 
     return (
         <View style={{ flex: 1 }}>
             <ScrollView contentContainerStyle={styles.container}>
-              
+
 
                 <View style={styles.topField}>
                     <View style={styles.halfField}>
@@ -328,12 +334,12 @@ const CreateQuotation: React.FC<Props> = () => {
                     onChangeText={setPhoneNumber}
                     keyboardType="phone-pad"
                 />
-                 <FloatingLabelInput
-                label="Enter Address"
-                value={address}
-                onChangeText={setAddress}
+                <FloatingLabelInput
+                    label="Enter Address"
+                    value={address}
+                    onChangeText={setAddress}
                 //keyboardType="email-address"
-            />
+                />
                 <FloatingLabelInput
                     label="Enter Email ID"
                     value={emailId}
@@ -382,7 +388,7 @@ const CreateQuotation: React.FC<Props> = () => {
                         <Text style={{ fontSize: 18 }}>{item.itemName}</Text>
                         <Text>Quantity: {item.quantity}</Text>
                         <Text>Rate: {item.price}</Text>
-                        <Text>Total: {item.amount}</Text>
+                        <Text>Total: {item.paidAmount}</Text>
                         <Text>Balance: {item.balance}</Text>
                     </View>
                 ))}
@@ -416,7 +422,7 @@ const CreateQuotation: React.FC<Props> = () => {
                         </View>
                     </View>
                 </Modal>
-            </ScrollView> 
+            </ScrollView>
 
             <View style={styles.buttonsContainer}>
                 <TouchableOpacity style={styles.button} onPress={handleInvoiceFormat}>

@@ -5,18 +5,10 @@ import { TextInput } from "react-native-paper";
 import styles from "../../../../../Event-Planner/app/screens/VendorRegistration/styles/styles";
 import strings from "../../../../app/screens/VendorRegistration/constants/string";
 import { saveVendorData, VendorData } from "../../../../app/screens/VendorRegistration/api/vendorreg,api"; // Import the API function
-import { RootStackParamList } from "@/app/(tabs)/types";  
+import { RootStackParamList, Item } from "@/app/(tabs)/types";  
 
 interface Props {
   navigation: NavigationProp<any>;
-}
-interface Item {
-  itemName: string;
-  quantity: number;
-  price: number;
-  discount: number;
-  payableAmount: number;
-  miscellaneous: string;
 }
 
 const VendorRegistration: React.FC<Props> = ({ navigation }) => {

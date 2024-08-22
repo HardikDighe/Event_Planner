@@ -84,7 +84,8 @@ export interface Item {
   quantity: number;
   price: number;
   discount: number;
-  amount: Number;
+  payableAmount: number,
+  paidAmount: number,
   balance: number;
   miscellaneous: string;
 }
