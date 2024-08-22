@@ -239,13 +239,6 @@ const CreateQuotation: React.FC<Props> = () => {
         }
     };
 
-    const handleDateChange = (event: React.SyntheticEvent<any>, selectedDate?: Date) => {
-        setShowDatePicker(false);
-        if (selectedDate) {
-            setVenueDate(selectedDate);
-        }
-    };
-
     const handleInvoiceFormat = () => {
         navigation.navigate('SelectInvoiceFormat', {
             customerName,
@@ -259,6 +252,13 @@ const CreateQuotation: React.FC<Props> = () => {
             venueDetails,
             items
         });
+    };
+
+    const handleDateChange = (event: React.SyntheticEvent<any>, selectedDate?: Date) => {
+        setShowDatePicker(false);
+        if (selectedDate) {
+            setVenueDate(selectedDate);
+        }
     };
 
     const handleTimeChange = (event: Event, selectedTime?: Date) => {

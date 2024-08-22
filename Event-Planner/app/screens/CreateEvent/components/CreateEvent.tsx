@@ -5,6 +5,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import styles from '../../../../../Event-Planner/app/screens/CreateEvent/styles/styles';
 import { RootStackParamList } from '../../../../app/(tabs)/types'; // Adjust the import path
 import { saveCreateEvent } from '../api/createevent.api';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 // Define the type for navigation
 type CreateEventNavigationProp = StackNavigationProp<RootStackParamList, 'CreateEvent'>;
@@ -13,6 +14,12 @@ const CreateEvent = () => {
   const [eventTitle, setEventTitle] = useState('');
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
+
+  const [venueDate, setVenueDate] = useState(new Date());
+    const [venueTime, setVenueTime] = useState(new Date());
+    const [showDatePicker, setShowDatePicker] = useState(false);
+    const [showTimePicker, setShowTimePicker] = useState(false);
+
   const [location, setLocation] = useState('');
   const [eventDetails, setEventDetails] = useState('');
   const [focusedField, setFocusedField] = useState('');
@@ -51,6 +58,20 @@ const CreateEvent = () => {
     navigation.navigate('CustomerDetails'); // Correctly typed navigation
   };
 
+  const handleDateChange = (event: React.SyntheticEvent<any>, selectedDate?: Date) => {
+    setShowDatePicker(false);
+    if (selectedDate) {
+        setVenueDate(selectedDate);
+    }
+};
+
+const handleTimeChange = (event: Event, selectedTime?: Date) => {
+    setShowTimePicker(false);
+    if (selectedTime) {
+        setVenueTime(selectedTime);
+    }
+};
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Event Registration</Text>
@@ -66,7 +87,7 @@ const CreateEvent = () => {
         />
       </View>
       <View style={styles.row}>
-        <View style={styles.inputContainer}>
+        {/* <View style={styles.inputContainer}>
           {(focusedField === 'date' || date) && <Text style={styles.floatingLabel}>Date</Text>}
           <TextInput
             style={[styles.input, styles.halfInput]}
@@ -87,7 +108,34 @@ const CreateEvent = () => {
             onFocus={() => setFocusedField('time')}
             onBlur={() => setFocusedField('')}
           />
-        </View>
+        </View> */}
+
+
+<TouchableOpacity onPress={() => setShowDatePicker(true)}>
+                    <Text style={styles.label}>Venue Date: {venueDate.toDateString()}</Text>
+                </TouchableOpacity>
+                {showDatePicker && (
+                    <DateTimePicker
+                        value={venueDate}
+                        mode="date"
+                        display="default"
+                        onChange={() => handleDateChange}
+                    />
+                )}
+
+                {/* Venue Time Picker */}
+                <TouchableOpacity onPress={() => setShowTimePicker(true)}>
+                    <Text style={styles.label}>Venue Time: {venueTime.toTimeString().slice(0, 5)}</Text>
+                </TouchableOpacity>
+                {showTimePicker && (
+                    <DateTimePicker
+                        value={venueTime}
+                        mode="time"
+                        display="default"
+                        onChange={() => handleTimeChange}
+                    />
+                )}
+
       </View>
       <View style={styles.inputContainer}>
         {(focusedField === 'location' || location) && <Text style={styles.floatingLabel}>Location</Text>}

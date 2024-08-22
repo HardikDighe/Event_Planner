@@ -4,6 +4,7 @@ import { useNavigation, NavigationProp } from '@react-navigation/native';
 import styles from '../styles/styles'; // Import the styles
 import { RootStackParamList } from '../../../(tabs)/types'; // Adjust the import path as necessary
 import CreateEvent from '../../CreateEvent/components/CreateEvent';
+import Checkbox from 'expo-checkbox';
 
 const RegisterEvent: React.FC = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -11,7 +12,7 @@ const RegisterEvent: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [phone, setPhone] = useState<string>('');
   const [numTickets, setNumTickets] = useState<string>('');
-  const [isChecked, setIsChecked] = useState<boolean>(false);
+  // const [isChecked, setIsChecked] = useState<boolean>(false);
   const [focusedField, setFocusedField] = useState<string>('');
   const [errors, setErrors] = useState({
     name: '',
@@ -19,7 +20,7 @@ const RegisterEvent: React.FC = () => {
     phone: '',
     policies: '',
   });
-
+  const [isChecked, setChecked] = useState(false);
   const handleRegister = async () => {
     let valid = true;
     const newErrors = {
@@ -49,13 +50,13 @@ const RegisterEvent: React.FC = () => {
     setErrors(newErrors);
 
     if (valid) {
-      const data :any = {
-               name,
-               email,
-               phone,
-               numTickets,
-             }
-             navigation.navigate('CreateEvent', { data: data });
+      const data: any = {
+        name,
+        email,
+        phone,
+        numTickets,
+      }
+      navigation.navigate('CreateEvent', { data: data });
 
     } else {
       if (!isChecked) {
@@ -126,12 +127,13 @@ const RegisterEvent: React.FC = () => {
         />
       </View>
       <View style={styles.checkboxContainer}>
-        <Switch
+       <Checkbox
+          // style={styles.checkbox}
           value={isChecked}
-          onValueChange={setIsChecked}
-          trackColor={{ false: '#767577', true: '#81B0FF' }}
-          thumbColor={isChecked ? '#6200EE' : '#F4F3F4'}
+          onValueChange={setChecked}
+          color={isChecked ? '#4630EB' : undefined}
         />
+
         <Text style={styles.checkboxLabel}>Read Event Policies and Terms</Text>
       </View>
       {errors.policies ? <Text style={styles.errorText}>{errors.policies}</Text> : null}
