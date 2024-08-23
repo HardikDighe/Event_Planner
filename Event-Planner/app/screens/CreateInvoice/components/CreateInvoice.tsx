@@ -6,16 +6,23 @@ import {
   TouchableOpacity,
   Platform,
 } from "react-native";
-import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
+import DateTimePicker, {
+  DateTimePickerEvent,
+} from "@react-native-community/datetimepicker";
 import * as Print from "expo-print";
 import * as Sharing from "expo-sharing";
-import { useNavigation, NavigationProp, useRoute, RouteProp } from "@react-navigation/native";
+import {
+  useNavigation,
+  NavigationProp,
+  useRoute,
+  RouteProp,
+} from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 import { TextInput as PaperInput } from "react-native-paper";
 import { RootStackParamList } from "../../../(tabs)/types"; // Adjust the import path
 import styles from "../../../../../Event-Planner/app/screens/CreateInvoice/styles/styles";
-import axios from 'axios';
+import axios from "axios";
 
 interface FormData {
   customer: string;
@@ -40,7 +47,7 @@ interface Item {
 
 const CreateInvoice: React.FC = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>(); // Typed navigation prop
-  const route = useRoute<RouteProp<{ params: { newItem?: Item } }, 'params'>>();
+  const route = useRoute<RouteProp<{ params: { newItem?: Item } }, "params">>();
   const [customer, setCustomer] = useState<string>("");
   const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [address, setAddress] = useState<string>("");
@@ -62,8 +69,6 @@ const CreateInvoice: React.FC = () => {
     invoiceNumber: "01",
     items: items,
   });
-
-  
 
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
 
@@ -98,7 +103,10 @@ const CreateInvoice: React.FC = () => {
       items,
     };
     try {
-      const response = await axios.post('http://localhost:3000/CreateInvoice', formData1);
+      const response = await axios.post(
+        "http://localhost:3000/CreateInvoice",
+        formData1
+      );
       console.log("Invoice saved:", response.data);
       navigation.goBack(); // Navigate back after saving
     } catch (error) {
@@ -164,8 +172,7 @@ const CreateInvoice: React.FC = () => {
 
   const handleAddItem = () => {
     // navigation.navigate("AddItem"); // Typed navigation
-    navigation.navigate('AddItem', { fromScreen: 'CreateInvoice' });
-
+    navigation.navigate("AddItem", { fromScreen: "CreateInvoice" });
   };
 
   const handleBack = () => {
@@ -295,6 +302,21 @@ const CreateInvoice: React.FC = () => {
           />
           <PaperInput
             mode="outlined"
+            label="Date & Time"
+            value={formData.dateTime.toLocaleString()} // Display selected date and time
+            onFocus={() => setShowDatePicker(true)} // Show date picker when input is focused
+            style={styles.input}
+            theme={{
+              colors: {
+                text: "#051650",
+                primary: "#051650",
+                background: "white",
+              },
+            }}
+            editable={false} // Make the input non-editable, as it's managed by the DateTimePicker
+          />
+          <PaperInput
+            mode="outlined"
             label="Venue Details"
             value={venueDetails}
             onChangeText={setVenueDetails}
@@ -308,18 +330,15 @@ const CreateInvoice: React.FC = () => {
             }}
           />
         </View>
+        <TouchableOpacity style={styles.addItemButton} onPress={handleAddItem}>
+          <Text style={styles.addItemButtonText}>+ Add Item</Text>
+        </TouchableOpacity>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={handleSave}>
-            <Text style={styles.buttonText}>Save</Text>
+          <TouchableOpacity style={styles.pdfButton} onPress={handleViewAsPDF}>
+            <Text style={styles.pdfButtonText}>View as PDF</Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.button, styles.pdfButton]}
-            onPress={handleViewAsPDF}
-          >
-            <Text style={styles.buttonText}>View as PDF</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={handleAddItem}>
-            <Text style={styles.buttonText}>Add Item</Text>
+          <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
+            <Text style={styles.saveButtonText}>Save</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

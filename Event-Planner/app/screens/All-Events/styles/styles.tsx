@@ -46,6 +46,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginRight: 5,
   },
+  namePhoneText: {
+    fontSize: 16,
+    color: '#051650',
+    marginTop: 5,
+  },
   card: {
     backgroundColor: '#F9F9F9',
     borderRadius: 10,
@@ -126,14 +131,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
     fontSize: 16,
-  },
-  button: {
-    backgroundColor: '#051650',
-    padding: 15,
-    borderRadius: 5,
-    alignItems: 'center',
-    marginVertical: 10,
-    alignSelf: 'stretch',
   },
 });
 
