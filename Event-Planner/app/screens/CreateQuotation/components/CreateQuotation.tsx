@@ -53,7 +53,7 @@ const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({ label, value, o
 
     return (
         <View style={styles.field}>
-            <Animated.Text style={labelStyle}>
+            <Animated.Text>
                 {label}
             </Animated.Text>
             <TextInput
@@ -239,13 +239,6 @@ const CreateQuotation: React.FC<Props> = () => {
         }
     };
 
-    const handleDateChange = (event: React.SyntheticEvent<any>, selectedDate?: Date) => {
-        setShowDatePicker(false);
-        if (selectedDate) {
-            setVenueDate(selectedDate);
-        }
-    };
-
     const handleInvoiceFormat = () => {
         navigation.navigate('SelectInvoiceFormat', {
             customerName,
@@ -259,6 +252,13 @@ const CreateQuotation: React.FC<Props> = () => {
             venueDetails,
             items
         });
+    };
+
+    const handleDateChange = (event: React.SyntheticEvent<any>, selectedDate?: Date) => {
+        setShowDatePicker(false);
+        if (selectedDate) {
+            setVenueDate(selectedDate);
+        }
     };
 
     const handleTimeChange = (event: Event, selectedTime?: Date) => {

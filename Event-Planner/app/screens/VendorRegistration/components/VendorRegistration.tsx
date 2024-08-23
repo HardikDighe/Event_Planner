@@ -4,8 +4,11 @@ import { NavigationProp, RouteProp, useRoute } from "@react-navigation/native";
 import { TextInput } from "react-native-paper";
 import styles from "../../../../../Event-Planner/app/screens/VendorRegistration/styles/styles";
 import strings from "../../../../app/screens/VendorRegistration/constants/string";
-import { saveVendorData, VendorData } from "../../../../app/screens/VendorRegistration/api/vendorreg,api"; // Import the API function
-import { RootStackParamList, Item } from "@/app/(tabs)/types";  
+import {
+  saveVendorData,
+  VendorData,
+} from "../../../../app/screens/VendorRegistration/api/vendorreg,api"; // Import the API function
+import { RootStackParamList, Item } from "@/app/(tabs)/types";
 
 interface Props {
   navigation: NavigationProp<any>;
@@ -23,27 +26,39 @@ const VendorRegistration: React.FC<Props> = ({ navigation }) => {
   const [gstNumberFocused, setGstNumberFocused] = useState(false);
 
   const [phoneNumberError, setPhoneNumberError] = useState("");
+  const [gstNumberError, setGstNumberError] = useState("");
 
   const [items, setItems] = useState<Item[]>([]);
-  const route = useRoute<RouteProp<RootStackParamList, 'VendorRegistration'>>();
+  const route = useRoute<RouteProp<RootStackParamList, "VendorRegistration">>();
 
   useEffect(() => {
     if (route.params?.newItem) {
-        const newItem = route.params.newItem;
-        if (newItem) {
-            setItems(prevItems => [...prevItems, newItem]);
-        }
+      const newItem = route.params.newItem;
+      if (newItem) {
+        setItems((prevItems) => [...prevItems, newItem]);
+      }
     }
-}, [route.params?.newItem]);
-
+  }, [route.params?.newItem]);
 
   const handleSave = async () => {
+    let hasError = false;
+
     if (!phoneNumber) {
       setPhoneNumberError(strings.errors.phoneNumberRequired);
-      return;
+      hasError = true;
+    } else {
+      setPhoneNumberError("");
     }
 
-    setPhoneNumberError("");
+    const gstNumberRegex = /^[0-9]{15}$/;
+    if (!gstNumberRegex.test(gstNumber)) {
+      setGstNumberError(strings.errors.gstNumberInvalid);
+      hasError = true;
+    } else {
+      setGstNumberError("");
+    }
+
+    if (hasError) return;
 
     const vendorData: VendorData = {
       vendorName,
@@ -110,6 +125,7 @@ const VendorRegistration: React.FC<Props> = ({ navigation }) => {
         label={strings.labels.gstNumber}
         value={gstNumber}
         onChangeText={setGstNumber}
+        keyboardType="numeric"
         style={[styles.input, gstNumberFocused && styles.focusedInput]}
         onFocus={() => setGstNumberFocused(true)}
         onBlur={() => setGstNumberFocused(false)}
@@ -117,8 +133,16 @@ const VendorRegistration: React.FC<Props> = ({ navigation }) => {
         theme={{
           colors: { text: "black", primary: "black", background: "white" },
         }}
+        error={!!gstNumberError}
       />
-      <TouchableOpacity onPress={() => navigation.navigate("AddItem", { fromScreen: 'VendorRegistration' })}>
+      {gstNumberError ? (
+        <Text style={styles.errorText}>{gstNumberError}</Text>
+      ) : null}
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate("AddItem", { fromScreen: "VendorRegistration" })
+        }
+      >
         <Text style={[styles.addItemText, { color: "#051650" }]}>
           {strings.buttons.addItem}
         </Text>
@@ -126,10 +150,7 @@ const VendorRegistration: React.FC<Props> = ({ navigation }) => {
 
       <View style={styles.spacer} />
 
-      <TouchableOpacity
-        onPress={handleSave}
-        style={styles.button}
-      >
+      <TouchableOpacity onPress={handleSave} style={styles.button}>
         <Text style={styles.saveButtonText}>{strings.buttons.submit}</Text>
       </TouchableOpacity>
     </View>

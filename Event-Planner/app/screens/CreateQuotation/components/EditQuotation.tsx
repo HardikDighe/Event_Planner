@@ -36,7 +36,7 @@ const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({ label, value, o
                 onChangeText={onChangeText}
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
-                keyboardType={keyboardType}
+                // keyboardType={keyboardType}
             />
         </View>
     );

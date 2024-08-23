@@ -73,6 +73,15 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     elevation: 5,
   },
+  label: {
+    fontSize: 14,         // Font size for the label
+    fontWeight: 'bold',   // Bold text
+    color: '#333',        // Dark gray color
+    padding: 10,          // Padding around the text
+    backgroundColor: '#f0f0f0', // Light gray background
+    borderRadius: 5,      // Rounded corners
+    textAlign: 'left',  // Center text
+  },
 });
 
 export default styles;
