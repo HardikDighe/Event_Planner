@@ -1,54 +1,39 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, SafeAreaView, TextInput, Alert } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, FlatList, TouchableOpacity, SafeAreaView, TextInput, Alert } from 'react-native';
 import { FontAwesome, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
-import styles from '../styles/styles';
-
-// Sample event data
-const events = [
-  {
-    id: '1',
-    title: 'Event Title 1',
-    date: '12 August, 9:00 PM',
-    day: 'Wednesday',
-    location: 'AB Road, Indore 452002',
-    description: 'An event description is a piece of text or copy, outlining the details of your event',
-    name: 'Hardik',
-    phone: '9356805115',
-  },
-  {
-    id: '2',
-    title: 'Event Title 2',
-    date: '13 August, 10:00 AM',
-    day: 'Thursday',
-    location: 'CD Road, Indore 452003',
-    description: 'Another event description with different details.',
-    name: 'Hardik',
-    phone: '9356805115',
-  },
-  {
-    id: '3',
-    title: 'Event Title 3',
-    date: '14 August, 5:00 PM',
-    day: 'Friday',
-    location: 'EF Road, Indore 452004',
-    description: 'Yet another event description with unique information.',
-    name: 'Hardik',
-    phone: '9356805115',
-  },
-];
+import styles from '../styles/styles'; // Ensure the path is correct
+import axios from 'axios';
 
 // Event type definition
 type Event = {
   id: string;
   title: string;
   date: string;
-  day: string;
+  time: string;
   location: string;
   description: string;
   name: string;
   phone: string;
+};
+
+// Props type definition for AllEvents component
+type AllEventsProps = {
+  navigation: {
+    navigate: (screen: string) => void;
+  };
+};
+
+// Fetch events from API
+const fetchEvents = async () => {
+  try {
+    const response = await axios.get('http://localhost:3000/EventRegistration');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching events:', error);
+    return [];
+  }
 };
 
 // EventCard component
@@ -58,7 +43,7 @@ const EventCard: React.FC<{ event: Event }> = ({ event }) => {
       const htmlContent = `
         <h1>${event.title}</h1>
         <p>${event.date}</p>
-        <p>${event.day}</p>
+        <p>${event.time}</p>
         <p>${event.location}</p>
         <p>${event.description}</p>
       `;
@@ -78,7 +63,7 @@ const EventCard: React.FC<{ event: Event }> = ({ event }) => {
       const htmlContent = `
         <h1>${event.title}</h1>
         <p>${event.date}</p>
-        <p>${event.day}</p>
+        <p>${event.time}</p>
         <p>${event.location}</p>
         <p>${event.description}</p>
       `;
@@ -92,7 +77,7 @@ const EventCard: React.FC<{ event: Event }> = ({ event }) => {
     <View style={styles.card}>
       <View style={styles.cardHeader}>
         <Text style={styles.eventTitle}>{event.title}</Text>
-        <Text style={styles.eventDay}>{event.day}</Text>
+        <Text style={styles.eventDay}>{event.time}</Text>
       </View>
       <Text style={styles.namePhoneText}>{event.name} {event.phone}</Text>
       <View style={styles.cardBody}>
@@ -123,25 +108,40 @@ const EventCard: React.FC<{ event: Event }> = ({ event }) => {
   );
 };
 
-// Navigation prop type definition
-type AllEventsProps = {
-  navigation: {
-    navigate: (screen: string) => void;
-  };
-};
-
 // AllEvents component
 const AllEvents: React.FC<AllEventsProps> = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [filteredEvents, setFilteredEvents] = useState<Event[]>(events);
+  const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
   const [showSearchBar, setShowSearchBar] = useState<boolean>(false);
+
+  useEffect(() => {
+    const loadEvents = async () => {
+      const eventsFromApi = await fetchEvents();
+      const mappedEvents = eventsFromApi.map((event: any) => {
+        const customerData = event.customerData || {}; // Ensure customerData exists
+        return {
+          id: event.id || '',
+          title: event.eventTitle || '',
+          date: event.date || '',
+          time: event.time || '',
+          location: event.location || '',
+          description: event.eventDetails || '',
+          name: customerData.name || '',
+          phone: customerData.phone || '',
+        };
+      });
+      setFilteredEvents(mappedEvents);
+    };
+
+    loadEvents();
+  }, []);
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
     if (query === '') {
-      setFilteredEvents(events);
+      setFilteredEvents(filteredEvents);
     } else {
-      const filtered = events.filter(event =>
+      const filtered = filteredEvents.filter(event =>
         event.title.toLowerCase().includes(query.toLowerCase())
       );
       setFilteredEvents(filtered);
@@ -155,7 +155,7 @@ const AllEvents: React.FC<AllEventsProps> = ({ navigation }) => {
         ${filteredEvents.map(event => `
           <h2>${event.title}</h2>
           <p>${event.date}</p>
-          <p>${event.day}</p>
+          <p>${event.time}</p>
           <p>${event.location}</p>
           <p>${event.description}</p>
         `).join('')}

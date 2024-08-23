@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome'; // Import the icon from react-native-vector-icons
 import styles from '../styles/styles';
+
 interface FloatingLabelInputProps {
   label: string;
   value: string;
@@ -11,7 +12,14 @@ interface FloatingLabelInputProps {
   error?: string;
 }
 
-const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({ label, value, onChangeText, secureTextEntry = false, keyboardType = 'default', error }) => {
+const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
+  label,
+  value,
+  onChangeText,
+  secureTextEntry = false,
+  keyboardType = 'default',
+  error,
+}) => {
   const [isFocused, setIsFocused] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
@@ -21,17 +29,19 @@ const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({ label, value, o
 
   return (
     <View style={styles.inputContainer}>
-      <Text style={[
-        styles.label,
-        {
-          top: isFocused || value ? -10 : 12,
-          left: isFocused || value ? 10 : 15,
-          fontSize: isFocused || value ? 12 : 16,
-          color: isFocused || value ? 'black' : 'gray',
-          backgroundColor: isFocused || value ? 'white' : 'transparent',
-          paddingHorizontal: isFocused || value ? 5 : 0,
-        }
-      ]}>
+      <Text
+        style={[
+          styles.label,
+          {
+            top: isFocused || value ? -10 : 12,
+            left: isFocused || value ? 10 : 15,
+            fontSize: isFocused || value ? 12 : 16,
+            color: isFocused || value ? 'black' : 'gray',
+            backgroundColor: isFocused || value ? 'white' : 'transparent',
+            paddingHorizontal: isFocused || value ? 5 : 0,
+          },
+        ]}
+      >
         {label}
       </Text>
       <View style={styles.passwordContainer}>
@@ -100,7 +110,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ navigation }) => {
   const [emailError, setEmailError] = useState('');
   const [passwordErrors, setPasswordErrors] = useState<string[]>([]);
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     let valid = true;
 
     if (!isValidEmail(email)) {
@@ -119,7 +129,28 @@ const LoginPage: React.FC<LoginPageProps> = ({ navigation }) => {
     }
 
     if (valid) {
-      navigation.navigate('Dashboard', { email, password });
+      try {
+        const response = await fetch('http://localhost:3000/Login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, password }),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          // Handle successful login
+          navigation.navigate('Dashboard', { email, password });
+        } else {
+          // Handle login error
+          const errorData = await response.json();
+          Alert.alert('Login Failed', errorData.message || 'An error occurred while logging in');
+        }
+      } catch (error) {
+        console.error('Login error:', error);
+        Alert.alert('Login Failed', 'An error occurred while logging in. Please try again.');
+      }
     }
   };
 
@@ -148,7 +179,9 @@ const LoginPage: React.FC<LoginPageProps> = ({ navigation }) => {
           {passwordErrors.length > 0 && (
             <View style={{ marginBottom: 10 }}>
               {passwordErrors.map((error, index) => (
-                <Text key={index} style={styles.errorText}>{error}</Text>
+                <Text key={index} style={styles.errorText}>
+                  {error}
+                </Text>
               ))}
             </View>
           )}

@@ -15,6 +15,24 @@ const DashboardScreen: React.FC<Props> = ({ navigation }) => {
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Reports</Text>
         <View style={styles.row}>
+            {/* All Quotations */}
+            <TouchableOpacity
+            style={styles.tile}
+            onPress={() => navigation.navigate("AllQuotations")}
+          >
+            <View style={styles.iconBackground}>
+              <MaterialIcons
+                name="request-quote"
+                size={36}
+                color="#4682B4"
+                style={styles.icon}
+              />
+            </View>
+            <View style={styles.tileTextContainer}>
+              <Text style={styles.tileText}>All</Text>
+              <Text style={styles.tileText}>Quotations</Text>
+            </View>
+          </TouchableOpacity>
           {/* All Invoices */}
           <TouchableOpacity
             style={styles.tile}
@@ -34,24 +52,7 @@ const DashboardScreen: React.FC<Props> = ({ navigation }) => {
             </View>
           </TouchableOpacity>
 
-          {/* All Quotations */}
-          <TouchableOpacity
-            style={styles.tile}
-            onPress={() => navigation.navigate("AllQuotations")}
-          >
-            <View style={styles.iconBackground}>
-              <MaterialIcons
-                name="request-quote"
-                size={36}
-                color="#4682B4"
-                style={styles.icon}
-              />
-            </View>
-            <View style={styles.tileTextContainer}>
-              <Text style={styles.tileText}>All</Text>
-              <Text style={styles.tileText}>Quotations</Text>
-            </View>
-          </TouchableOpacity>
+        
 
           {/* All Events */}
           <TouchableOpacity

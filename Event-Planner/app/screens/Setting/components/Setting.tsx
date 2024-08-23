@@ -45,13 +45,7 @@ const SettingsScreen = () => {
                         onValueChange={setIsPushEnabled}
                     />
                 </View>
-                <View style={styles.item}>
-                    <Text>Promotions</Text>
-                    <Switch
-                        value={isPromotionsEnabled}
-                        onValueChange={setIsPromotionsEnabled}
-                    />
-                </View>
+              
                 <View style={styles.item}>
                     <Text>App Updates</Text>
                     <Switch
