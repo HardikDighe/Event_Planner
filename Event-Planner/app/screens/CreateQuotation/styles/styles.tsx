@@ -1,4 +1,4 @@
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView, Alert, Animated, Modal } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView, Alert, Animated, Modal, TextStyle } from 'react-native';
 const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
@@ -40,10 +40,11 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         paddingHorizontal: 10,
         marginBottom: 10,
-    },
+    } as TextStyle,
     inputFocused: {
-        borderColor: '#007BFF',
-    },label: {
+        borderColor: '#007BFF' // Highlight border color when focused
+    } as TextStyle,
+    label: {
         fontSize: 14,         // Font size for the label
         fontWeight: 'bold',   // Bold text
         color: '#333',        // Dark gray color
@@ -53,11 +54,15 @@ const styles = StyleSheet.create({
         textAlign: 'left',  // Center text
         marginBottom:22
       },
+    errorMasaage: {
+        color: 'red',
+        marginTop: -25,
+        marginBottom:10
+    },
     buttonsContainer: {
         //marginTop: 100,
         flexDirection: 'row',
         justifyContent: 'space-evenly',
-
     },
     button: {
         paddingVertical: 10,
@@ -284,15 +289,15 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         flex: 1
     },
-    labelStyle :{
-    position: 'absolute',
-    left: 10,
-    // top: animatedIsFocused.interpolate({
-    //     inputRange: [0, 1],
-    //     outputRange: [18, -8],
-    // }),
-    backgroundColor: '#fff',
-    paddingHorizontal: 2,
-   }
+//     labelStyle :{
+//     position: 'absolute',
+//     left: 10,
+//     // top: animatedIsFocused.interpolate({
+//     //     inputRange: [0, 1],
+//     //     outputRange: [18, -8],
+//     // }),
+//     backgroundColor: '#fff',
+//     paddingHorizontal: 2,
+//    }
 });
 export default styles;
