@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView, Alert, Animated, Modal } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView, Alert, Animated, Modal, TextStyle } from 'react-native';
 import { useNavigation, RouteProp, useRoute } from '@react-navigation/native';
 import * as Print from 'expo-print';
 import { shareAsync } from 'expo-sharing';
@@ -35,25 +35,57 @@ const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({ label, value, o
         }).start();
     }, [isFocused, value]);
 
-    const labelStyle = {
+    // const labelStyle = {
+    //     position: 'absolute',
+    //     left: 10,
+    //     top: animatedIsFocused.interpolate({
+    //         inputRange: [0, 1],
+    //         outputRange: [18, -8], // Adjust these values as needed
+    //     }),
+    //     backgroundColor: '#fff',
+    //     paddingHorizontal: 2,
+    //     fontSize: animatedIsFocused.interpolate({
+    //         inputRange: [0, 1],
+    //         outputRange: [16, 12], // Adjust font size during animation
+    //     }),
+    //     color: isFocused ? '#000' : '#aaa', // Optional: change color based on focus
+    // };
+
+    // const labelStyle: TextStyle = {
+    //     position: 'absolute',
+    //     left: 10,
+    //     top: animatedIsFocused.interpolate({
+    //         inputRange: [0, 1],
+    //         outputRange: [18, -8], // Adjust these values as needed
+    //     }),
+    //     backgroundColor: '#fff',
+    //     paddingHorizontal: 2,
+    //     fontSize: animatedIsFocused.interpolate({
+    //         inputRange: [0, 1],
+    //         outputRange: [16, 12], // Adjust font size during animation
+    //     }),
+    //     color: isFocused ? '#000' : '#aaa', // Optional: change color based on focus
+    // };
+
+    const labelStyle: Animated.WithAnimatedObject<TextStyle> = {
         position: 'absolute',
         left: 10,
         top: animatedIsFocused.interpolate({
             inputRange: [0, 1],
             outputRange: [18, -8], // Adjust these values as needed
-        }),
+        }) as Animated.AnimatedInterpolation<string | number>,
         backgroundColor: '#fff',
         paddingHorizontal: 2,
         fontSize: animatedIsFocused.interpolate({
             inputRange: [0, 1],
             outputRange: [16, 12], // Adjust font size during animation
-        }),
+        }) as Animated.AnimatedInterpolation<string | number>,
         color: isFocused ? '#000' : '#aaa', // Optional: change color based on focus
     };
 
     return (
         <View style={styles.field}>
-            <Animated.Text>
+            <Animated.Text style={labelStyle}>
                 {label}
             </Animated.Text>
             <TextInput
@@ -62,7 +94,7 @@ const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({ label, value, o
                 onChangeText={onChangeText}
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
-                // keyboardType={keyboardType || 'default'}
+            // keyboardType={keyboardType || 'default'}
             />
         </View>
     );
@@ -95,12 +127,19 @@ const CreateQuotation: React.FC<Props> = () => {
     const [showTimePicker, setShowTimePicker] = useState(false);
     const [quotationDate, setQuotationDate] = useState(new Date());
     const [venueDetails, setVenueDetails] = useState('');
-    //const [items, setItems] = useState([]);
+    const [items, setItems] = useState<Item[]>([]);
     const [modalVisible, setModalVisible] = useState(false);
+
+    const [customerNameError, setCustomerNameError] = useState<string>('');
+    const [phoneNumberError, setPhoneNumberError] = useState<string>('');
+    const [addressError, setAddressError] = useState<string>('');
+    const [emailIdError, setEmailIdError] = useState<string>('');
+    const [gstinError, setGstinError] = useState<string>('');
+
 
     const route1 = useRoute<RouteProp<RootStackParamList, 'SelectInvoiceFormat'>>();
 
-    const [items, setItems] = useState<Item[]>([]);
+
 
     useEffect(() => {
         if (route.params?.newItem) {
@@ -121,6 +160,65 @@ const CreateQuotation: React.FC<Props> = () => {
         };
         loadQuotationId();
     }, []);
+
+    const validateCustomerName = () => {
+        if (customerName.trim().length === 0) {
+            setCustomerNameError('Customer Name is required');
+            return false;
+        }
+        setCustomerNameError('');
+        return true;
+    };
+
+    const validatePhoneNumber = () => {
+        const phoneRegex = /^[0-9]{10}$/;
+        if (!phoneRegex.test(phoneNumber)) {
+            setPhoneNumberError('Enter a valid 10-digit phone number');
+            return false;
+        }
+        setPhoneNumberError('');
+        return true;
+    };
+
+    const validateAddress = () => {
+        if (address.trim().length === 0) {
+            setAddressError('Address is required');
+            return false;
+        }
+        setAddressError('');
+        return true;
+    };
+
+    const validateEmailId = () => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(emailId)) {
+            setEmailIdError('Enter a valid email address');
+            return false;
+        }
+        setEmailIdError('');
+        return true;
+    };
+
+    const validateGstin = () => {
+        const gstinRegex = /^.{15}$/;
+        if (!gstinRegex.test(gstin)) {
+            setGstinError('Enter a valid GSTIN');
+            return false;
+        }
+        setGstinError('');
+        return true;
+    };
+
+    const validateForm = () => {
+        const isCustomerNameValid = validateCustomerName();
+        const isPhoneNumberValid = validatePhoneNumber();
+        const isAddressValid = validateAddress();
+        const isEmailIdValid = validateEmailId();
+        const isGstinValid = validateGstin();
+    
+        return isCustomerNameValid && isPhoneNumberValid && isAddressValid && isEmailIdValid && isGstinValid;
+    };
+    
 
     const handleSharePDF = async () => {
         const htmlContent = `
@@ -241,16 +339,7 @@ const CreateQuotation: React.FC<Props> = () => {
 
     const handleInvoiceFormat = () => {
         navigation.navigate('SelectInvoiceFormat', {
-            customerName,
-            phoneNumber,
-            address,
-            emailId,
-            gstin,
-            quotationDate,
-            venueDate,
-            venueTime,
-            venueDetails,
-            items
+            customerName, phoneNumber, address, emailId, gstin, quotationDate, venueDate, venueTime, venueDetails, items
         });
     };
 
@@ -297,18 +386,18 @@ const CreateQuotation: React.FC<Props> = () => {
         items,
     };
     const handleSave = async () => {
-        const isSuccess = await saveQuotation(quotationData);
+        if(validateForm()){
+            const isSuccess = await saveQuotation(quotationData);
         console.warn(isSuccess);
         if (isSuccess) {
             setModalVisible(true);  // Show the modal if the save was successful
+        }
         }
     }
 
     return (
         <View style={{ flex: 1 }}>
             <ScrollView contentContainerStyle={styles.container}>
-
-
                 <View style={styles.topField}>
                     <View style={styles.halfField}>
                         <Text style={styles.label1}>{STRINGS.quotationNumberLabel}</Text>
@@ -328,30 +417,34 @@ const CreateQuotation: React.FC<Props> = () => {
                     value={customerName}
                     onChangeText={setCustomerName}
                 />
+                {customerNameError ? <Text style={styles.errorMasaage}>{customerNameError}</Text> : null}
                 <FloatingLabelInput
                     label="Enter Phone Number"
                     value={phoneNumber}
                     onChangeText={setPhoneNumber}
                     keyboardType="phone-pad"
                 />
+                {phoneNumberError ? <Text style={styles.errorMasaage}>{phoneNumberError}</Text> : null}
                 <FloatingLabelInput
                     label="Enter Address"
                     value={address}
                     onChangeText={setAddress}
                 //keyboardType="email-address"
                 />
+                {addressError ? <Text style={styles.errorMasaage}>{addressError}</Text> : null}
                 <FloatingLabelInput
                     label="Enter Email ID"
                     value={emailId}
                     onChangeText={setEmailId}
                     keyboardType="email-address"
                 />
+                {emailIdError ? <Text style={styles.errorMasaage}>{emailIdError}</Text> : null}
                 <FloatingLabelInput
                     label="Enter GSTIN"
                     value={gstin}
                     onChangeText={setGstin}
                 />
-
+                {gstinError ? <Text style={styles.errorMasaage}>{gstinError}</Text> : null}
                 <TouchableOpacity onPress={() => setShowDatePicker(true)}>
                     <Text style={styles.label}>Venue Date: {venueDate.toDateString()}</Text>
                 </TouchableOpacity>
