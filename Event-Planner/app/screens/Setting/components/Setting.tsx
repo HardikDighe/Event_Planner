@@ -1,10 +1,15 @@
 import React from 'react';
 import { View, Text, Switch, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import styles from '../../../../../Event-Planner/app/screens/Setting/styles/styles';  // Import the styles
+import {RootStackParamList} from "../../../../app/(tabs)/types"
+
+// Define the type for navigation
+type SettingsScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Settings'>;
 
 const SettingsScreen = () => {
-    const navigation = useNavigation();
+    const navigation = useNavigation<SettingsScreenNavigationProp>(); // Typed navigation
     const [isPushEnabled, setIsPushEnabled] = React.useState(false);
     const [isPromotionsEnabled, setIsPromotionsEnabled] = React.useState(false);
     const [isAppUpdatesEnabled, setIsAppUpdatesEnabled] = React.useState(false);
