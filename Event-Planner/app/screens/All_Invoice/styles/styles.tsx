@@ -1,5 +1,5 @@
 // styles.tsx
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
   container: {
@@ -165,10 +165,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  errorText:{
-    flex:1,
-  }
-  
+  errorText: {
+    flex: 1,
+  },
 });
 
 export default styles;
