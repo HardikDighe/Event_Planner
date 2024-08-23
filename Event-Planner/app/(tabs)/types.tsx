@@ -4,7 +4,7 @@ export type RootStackParamList = {
 
   VendorRegisteration: undefined;
   Dashboard: undefined;
-  VendorRegistration: { newItem?: Item };
+  VendorRegistration: undefined|{ newItem?: Item };
   // AddItem: undefined;
   Auth: undefined;
   Signup: undefined;
@@ -16,6 +16,8 @@ export type RootStackParamList = {
   AllInvoices: undefined;
   CreateInvoice: undefined;
   ForgotPassword: undefined;
+  
+
   Settings: undefined;
   Notifications: undefined;
   AllQuotations: undefined;
@@ -25,7 +27,7 @@ export type RootStackParamList = {
   AddItem: { fromScreen: string } | undefined; // Allow either an object or undefined
   CreateQuotation: undefined | {newItem?: Item};
   AllEvents: undefined;
-  CreateEvent: { data: any };
+  CreateEvent:undefined| { data?: any };
   CustomerDetails: undefined;
   AllVendors: undefined;
   EventRegistration: undefined;
