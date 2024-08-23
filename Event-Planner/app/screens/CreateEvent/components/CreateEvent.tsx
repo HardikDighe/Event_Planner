@@ -87,7 +87,7 @@ const handleTimeChange = (event: Event, selectedTime?: Date) => {
         />
       </View>
       <View style={styles.row}>
-        {/* <View style={styles.inputContainer}>
+        <View style={styles.inputContainer}>
           {(focusedField === 'date' || date) && <Text style={styles.floatingLabel}>Date</Text>}
           <TextInput
             style={[styles.input, styles.halfInput]}
@@ -108,9 +108,9 @@ const handleTimeChange = (event: Event, selectedTime?: Date) => {
             onFocus={() => setFocusedField('time')}
             onBlur={() => setFocusedField('')}
           />
-        </View> */}
+        </View>
 
-
+{/* 
 <TouchableOpacity onPress={() => setShowDatePicker(true)}>
                     <Text style={styles.label}>Venue Date: {venueDate.toDateString()}</Text>
                 </TouchableOpacity>
@@ -123,7 +123,6 @@ const handleTimeChange = (event: Event, selectedTime?: Date) => {
                     />
                 )}
 
-                {/* Venue Time Picker */}
                 <TouchableOpacity onPress={() => setShowTimePicker(true)}>
                     <Text style={styles.label}>Venue Time: {venueTime.toTimeString().slice(0, 5)}</Text>
                 </TouchableOpacity>
@@ -134,7 +133,7 @@ const handleTimeChange = (event: Event, selectedTime?: Date) => {
                         display="default"
                         onChange={() => handleTimeChange}
                     />
-                )}
+                )} */}
 
       </View>
       <View style={styles.inputContainer}>
