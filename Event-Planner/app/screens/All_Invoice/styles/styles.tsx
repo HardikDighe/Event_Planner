@@ -71,10 +71,6 @@ const styles = StyleSheet.create({
     marginRight: 8,
     fontWeight: "bold",
   },
-
-  activeSortOption: {
-    backgroundColor: "#e0e0e0",
-  },
   invoiceItem: {
     backgroundColor: "#fff",
     borderRadius: 8,
