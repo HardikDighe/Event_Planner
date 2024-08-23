@@ -81,7 +81,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#f0f0f0', // Light gray background
     borderRadius: 5,      // Rounded corners
     textAlign: 'left',  // Center text
-    // marginBottom:12
   },
 });
 

@@ -11,6 +11,8 @@ const events = [
     day: 'Wednesday',
     location: 'AB Road, Indore 452002',
     description: 'An event description is a piece of text or copy, outlining the details of your event',
+    name: 'Hardik',
+    phone: '9356805115',
   },
   {
     id: '2',
@@ -19,6 +21,8 @@ const events = [
     day: 'Thursday',
     location: 'CD Road, Indore 452003',
     description: 'Another event description with different details.',
+    name: 'Hardik',
+    phone: '9356805115',
   },
   {
     id: '3',
@@ -27,6 +31,8 @@ const events = [
     day: 'Friday',
     location: 'EF Road, Indore 452004',
     description: 'Yet another event description with unique information.',
+    name: 'Hardik',
+    phone: '9356805115',
   },
 ];
 type Event = {
@@ -36,6 +42,8 @@ type Event = {
   day: string;
   location: string;
   description: string;
+  name: string;
+  phone: string;
 };
 const EventCard = ({ event }: { event: Event }) => {
   const handleShare = async () => {
@@ -46,6 +54,8 @@ const EventCard = ({ event }: { event: Event }) => {
         <p>${event.day}</p>
         <p>${event.location}</p>
         <p>${event.description}</p>
+        <p>${event.name}</p>
+        <p>${event.phone}</p>
       `;
       // Generate the PDF
       const { uri } = await Print.printToFileAsync({ html: htmlContent });
@@ -67,6 +77,8 @@ const EventCard = ({ event }: { event: Event }) => {
         <p>${event.day}</p>
         <p>${event.location}</p>
         <p>${event.description}</p>
+        <p>${event.name}</p>
+        <p>${event.phone}</p>
       `;
       // Initiate the printing process
       await Print.printAsync({ html: htmlContent });
@@ -80,6 +92,7 @@ const EventCard = ({ event }: { event: Event }) => {
         <Text style={styles.eventTitle}>{event.title}</Text>
         <Text style={styles.eventDay}>{event.day}</Text>
       </View>
+      <Text style={styles.namePhoneText}>{event.name} {event.phone}</Text>
       <View style={styles.cardBody}>
         <View style={styles.eventInfo}>
           <FontAwesome name="calendar" size={20} color="#051650" />
@@ -132,6 +145,8 @@ const AllEvents= (props) => {
           <p>${event.day}</p>
           <p>${event.location}</p>
           <p>${event.description}</p>
+          <p>${event.name}</p>
+          <p>${event.phone}</p>
         `).join('')}
       `;
       // Generate the PDF
@@ -233,6 +248,11 @@ const styles = StyleSheet.create({
   sortByText: {
     fontSize: 16,
     marginRight: 5,
+  },
+  namePhoneText: {
+    fontSize: 16,
+    color: '#051650',
+    marginTop: 5,
   },
   card: {
     backgroundColor: '#F9F9F9',
