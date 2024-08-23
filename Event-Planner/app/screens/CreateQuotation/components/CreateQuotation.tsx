@@ -53,7 +53,7 @@ const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({ label, value, o
 
     return (
         <View style={styles.field}>
-            <Animated.Text style={labelStyle}>
+            <Animated.Text>
                 {label}
             </Animated.Text>
             <TextInput

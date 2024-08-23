@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert, ScrollView } from 'react-native';
-import {RouteProp, useRoute } from '@react-navigation/native';
+import { RouteProp, useRoute } from '@react-navigation/native';
 import Swiper from 'react-native-swiper';
 import * as Print from 'expo-print';
 import { shareAsync } from 'expo-sharing';
@@ -219,6 +219,7 @@ const SelectInvoiceFormat = () => {
                     <body>
                         <h1>Quotation Details - Format 2</h1>
                         <div class="header">
+                            <p>Event Planner</p>
                             <p>Quotation for: ${customerName}</p>
                             <p>Date: ${quotationDate.toDateString()}</p>
                         </div>
@@ -258,6 +259,7 @@ const SelectInvoiceFormat = () => {
             renderPreview: () => (
                 <View style={styles.previewContainer}>
                     <Text style={styles.previewTitle}>Invoice Details - 2</Text>
+                    <Text style={styles.previewSubTitle}>Event Planner</Text>
                     <Text style={styles.previewSubTitle}>Quotation for: {customerName}</Text>
                     <Text style={styles.previewSubTitle}>Date: {quotationDate.toDateString()}</Text>
                     <View style={styles.table}>
@@ -658,7 +660,7 @@ const SelectInvoiceFormat = () => {
 
                     <Text style={styles.previewSubtitle}>Items</Text>
                     <View style={styles.table}>
-                        <View style={[styles.tableRow, { backgroundColor: 'purple' }]}>
+                        <View style={[styles.tableRow, { backgroundColor: '#CC7DFF' }]}>
                             <Text style={styles.tableHeader}>Item Name</Text>
                             <Text style={styles.tableHeader}>Quantity</Text>
                             <Text style={styles.tableHeader}>Price</Text>
@@ -691,7 +693,7 @@ const SelectInvoiceFormat = () => {
                                 <Text style={styles.subtotal}>Total Discount :</Text>
                                 <Text style={[styles.subtotal, { textAlign: 'right', alignContent: 'center' }]}>₹{totalDiscount}</Text>
                             </View>
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', backgroundColor: 'purple', borderTopWidth: 2 }}>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', backgroundColor: '#CC7DFF', borderTopWidth: 2 }}>
                                 <Text style={styles.total}>Total:</Text>
                                 <Text style={[styles.total, { textAlign: 'right' }]}>₹{totalPrice}</Text>
                             </View>
