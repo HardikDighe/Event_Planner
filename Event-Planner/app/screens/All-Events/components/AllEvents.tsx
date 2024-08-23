@@ -3,6 +3,9 @@ import { View, Text, StyleSheet, FlatList, TouchableOpacity, SafeAreaView, TextI
 import { FontAwesome, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
+import styles from '../styles/styles';
+
+// Sample event data
 const events = [
   {
     id: '1',
@@ -35,6 +38,8 @@ const events = [
     phone: '9356805115',
   },
 ];
+
+// Event type definition
 type Event = {
   id: string;
   title: string;
@@ -45,7 +50,9 @@ type Event = {
   name: string;
   phone: string;
 };
-const EventCard = ({ event }: { event: Event }) => {
+
+// EventCard component
+const EventCard: React.FC<{ event: Event }> = ({ event }) => {
   const handleShare = async () => {
     try {
       const htmlContent = `
@@ -54,12 +61,8 @@ const EventCard = ({ event }: { event: Event }) => {
         <p>${event.day}</p>
         <p>${event.location}</p>
         <p>${event.description}</p>
-        <p>${event.name}</p>
-        <p>${event.phone}</p>
       `;
-      // Generate the PDF
       const { uri } = await Print.printToFileAsync({ html: htmlContent });
-      // Check if sharing is available
       if (await Sharing.isAvailableAsync()) {
         await Sharing.shareAsync(uri);
       } else {
@@ -69,6 +72,7 @@ const EventCard = ({ event }: { event: Event }) => {
       Alert.alert('Error', 'An error occurred while creating the PDF');
     }
   };
+
   const handlePrint = async () => {
     try {
       const htmlContent = `
@@ -77,15 +81,13 @@ const EventCard = ({ event }: { event: Event }) => {
         <p>${event.day}</p>
         <p>${event.location}</p>
         <p>${event.description}</p>
-        <p>${event.name}</p>
-        <p>${event.phone}</p>
       `;
-      // Initiate the printing process
       await Print.printAsync({ html: htmlContent });
     } catch (error) {
       Alert.alert('Error', 'An error occurred while printing');
     }
   };
+
   return (
     <View style={styles.card}>
       <View style={styles.cardHeader}>
@@ -120,10 +122,20 @@ const EventCard = ({ event }: { event: Event }) => {
     </View>
   );
 };
-const AllEvents= (props) => {
+
+// Navigation prop type definition
+type AllEventsProps = {
+  navigation: {
+    navigate: (screen: string) => void;
+  };
+};
+
+// AllEvents component
+const AllEvents: React.FC<AllEventsProps> = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [filteredEvents, setFilteredEvents] = useState<Event[]>(events);
   const [showSearchBar, setShowSearchBar] = useState<boolean>(false);
+
   const handleSearch = (query: string) => {
     setSearchQuery(query);
     if (query === '') {
@@ -135,6 +147,7 @@ const AllEvents= (props) => {
       setFilteredEvents(filtered);
     }
   };
+
   const handlePrint = async () => {
     try {
       const htmlContent = `
@@ -145,13 +158,9 @@ const AllEvents= (props) => {
           <p>${event.day}</p>
           <p>${event.location}</p>
           <p>${event.description}</p>
-          <p>${event.name}</p>
-          <p>${event.phone}</p>
         `).join('')}
       `;
-      // Generate the PDF
       const { uri } = await Print.printToFileAsync({ html: htmlContent });
-      // Check if sharing is available
       if (await Sharing.isAvailableAsync()) {
         await Sharing.shareAsync(uri);
       } else {
@@ -161,6 +170,7 @@ const AllEvents= (props) => {
       Alert.alert('Error', 'An error occurred while creating the PDF');
     }
   };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -197,143 +207,11 @@ const AllEvents= (props) => {
         renderItem={({ item }) => <EventCard event={item} />}
         keyExtractor={item => item.id}
       />
-      <TouchableOpacity style={styles.registerEventButton} onPress={()=>props.navigation.navigate("CreateEvent")}>
+      <TouchableOpacity style={styles.registerEventButton} onPress={() => navigation.navigate("CreateEvent")}>
         <Text style={styles.registerEventButtonText}>+ Register Event</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
 };
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    paddingHorizontal: 10,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginTop: 20,
-  },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginLeft: 10,
-  },
-  searchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  searchBar: {
-    backgroundColor: '#F0F0F0',
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    marginRight: 10,
-    width: 150,
-  },
-  listHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginVertical: 10,
-  },
-  eventsList: {
-    fontSize: 15,
-    fontWeight: 'bold',
-  },
-  sortByButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  sortByText: {
-    fontSize: 16,
-    marginRight: 5,
-  },
-  namePhoneText: {
-    fontSize: 16,
-    color: '#051650',
-    marginTop: 5,
-  },
-  card: {
-    backgroundColor: '#F9F9F9',
-    borderRadius: 10,
-    padding: 10,
-    marginBottom: 10,
-    elevation: 1,
-    borderWidth: 2,
-    borderColor: 'gray',
-  },
-  cardHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  eventTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  eventDay: {
-    fontSize: 16,
-    color: 'gray',
-  },
-  cardBody: {
-    marginTop: 10,
-  },
-  eventInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 5,
-  },
-  eventText: {
-    marginLeft: 10,
-    fontSize: 16,
-    color: 'gray',
-    flex: 1,
-  },
-  eventDescription: {
-    marginTop: 10,
-    fontSize: 14,
-    color: '#051650',
-  },
-  cardFooter: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 10,
-  },
-  registerButton: {
-    backgroundColor: '#D0E8FF',
-    padding: 5,
-    borderRadius: 5,
-    marginLeft: 10,
-  },
-  registerButtonText: {
-    color: '#051650',
-    fontWeight: '500',
-    fontSize: 10,
-  },
-  footerIcons: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  printIcon: {
-    marginRight: 10,
-  },
-  shareIcon: {
-    marginLeft: 10,
-  },
-  registerEventButton: {
-    backgroundColor: '#051650',
-    paddingVertical: 10,
-    borderRadius: 5,
-    alignItems: 'center',
-    marginVertical: 10,
-  },
-  registerEventButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-});
+
 export default AllEvents;
