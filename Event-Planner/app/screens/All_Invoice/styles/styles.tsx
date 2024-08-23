@@ -71,16 +71,7 @@ const styles = StyleSheet.create({
     marginRight: 8,
     fontWeight: "bold",
   },
-  sortOption: {
-    marginLeft: 10,
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-    borderRadius: 5,
-  },
-  sortOptionText: {
-    fontSize: 16,
-    color: "#051650",
-  },
+
   activeSortOption: {
     backgroundColor: "#e0e0e0",
   },
