@@ -5,6 +5,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Platform,
+  Alert,
 } from "react-native";
 import DateTimePicker, {
   DateTimePickerEvent,
@@ -34,6 +35,18 @@ interface FormData {
   venueDetails: string;
   invoiceNumber: string;
   items: Item[];
+}
+
+interface ValidationErrors {
+  customer: string;
+  phoneNumber: string;
+  address: string;
+  emailId: string;
+  gstinNumber: string;
+  dateTime: string;
+  venueDetails: string;
+  invoiceNumber: string;
+  items: string[];
 }
 
 interface Item {
@@ -71,6 +84,17 @@ const CreateInvoice: React.FC = () => {
   });
 
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
+  const [errors, setErrors] = useState<ValidationErrors>({
+    customer: "",
+    phoneNumber: "",
+    address: "",
+    emailId: "",
+    gstinNumber: "",
+    dateTime: "",
+    venueDetails: "",
+    invoiceNumber: "01",
+    items: [],
+  });
 
   const handleInputChange = (name: keyof FormData, value: string) => {
     setFormData({ ...formData, [name]: value });
@@ -84,13 +108,43 @@ const CreateInvoice: React.FC = () => {
     setShowDatePicker(false);
     setFormData({ ...formData, dateTime: currentDate });
   };
+
   useEffect(() => {
     if (route.params?.newItem) {
-      setItems((prevItems) => [...prevItems, route.params.newItem]);
+      setItems((prevItems) => [...prevItems, route.params.newItem as Item]);
     }
   }, [route.params?.newItem]);
 
+  const validateForm = (): boolean => {
+    const newErrors: ValidationErrors = {
+      customer: "",
+      phoneNumber: "",
+      address: "",
+      emailId: "",
+      gstinNumber: "",
+      dateTime: "",
+      venueDetails: "",
+      invoiceNumber: "01",
+      items: [],
+    };
+    if (!customer) newErrors.customer = "Customer is required";
+    if (!phoneNumber || !/^\d{10,12}$/.test(phoneNumber))
+      newErrors.phoneNumber = "Valid 10 digits phone number is required";
+    if (!address) newErrors.address = "Address is required";
+    if (!emailId || !/\S+@\S+\.\S+/.test(emailId))
+      newErrors.emailId = "Valid email is required";
+    if (!gstinNumber)
+      newErrors.gstinNumber = "GSTIN Number 15 digits is required";
+    if (!venueDetails) newErrors.venueDetails = "Venue Details are required";
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSave = async () => {
+    if (!validateForm()) return;
+
     const formData1 = {
       customer,
       phoneNumber,
@@ -242,6 +296,9 @@ const CreateInvoice: React.FC = () => {
               },
             }}
           />
+          {errors.customer && (
+            <Text style={styles.errorText}>{errors.customer}</Text>
+          )}
           <PaperInput
             mode="outlined"
             label="Phone Number"
@@ -257,6 +314,9 @@ const CreateInvoice: React.FC = () => {
               },
             }}
           />
+          {errors.phoneNumber && (
+            <Text style={styles.errorText}>{errors.phoneNumber}</Text>
+          )}
           <PaperInput
             mode="outlined"
             label="Address"
@@ -271,6 +331,9 @@ const CreateInvoice: React.FC = () => {
               },
             }}
           />
+          {errors.address && (
+            <Text style={styles.errorText}>{errors.address}</Text>
+          )}
           <PaperInput
             mode="outlined"
             label="Email Id"
@@ -286,6 +349,9 @@ const CreateInvoice: React.FC = () => {
               },
             }}
           />
+          {errors.emailId && (
+            <Text style={styles.errorText}>{errors.emailId}</Text>
+          )}
           <PaperInput
             mode="outlined"
             label="GSTIN Number"
@@ -300,6 +366,9 @@ const CreateInvoice: React.FC = () => {
               },
             }}
           />
+          {errors.gstinNumber && (
+            <Text style={styles.errorText}>{errors.gstinNumber}</Text>
+          )}
           <PaperInput
             mode="outlined"
             label="Date & Time"
@@ -315,6 +384,9 @@ const CreateInvoice: React.FC = () => {
             }}
             editable={false} // Make the input non-editable, as it's managed by the DateTimePicker
           />
+          {errors.dateTime && (
+            <Text style={styles.errorText}>{errors.dateTime}</Text>
+          )}
           <PaperInput
             mode="outlined"
             label="Venue Details"
@@ -329,6 +401,9 @@ const CreateInvoice: React.FC = () => {
               },
             }}
           />
+          {errors.venueDetails && (
+            <Text style={styles.errorText}>{errors.venueDetails}</Text>
+          )}
         </View>
         <TouchableOpacity style={styles.addItemButton} onPress={handleAddItem}>
           <Text style={styles.addItemButtonText}>+ Add Item</Text>
