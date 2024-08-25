@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     color: "#051650",
   },
   dateButton: {
-    padding: 15,
+    padding: 8,
     backgroundColor: "#f5f5f5",
     borderRadius: 4,
   },
@@ -66,87 +66,82 @@ const styles = StyleSheet.create({
     borderColor: "#051650",
     borderWidth: 2,
   },
-  // buttonContainer: {
-  //   flexDirection: "row",
-  //   justifyContent: "space-between",
-  // },
-  // button: {
-  //   flex: 1,
-  //   padding: 12,
-  //   borderRadius: 4,
-  //   backgroundColor: "#051650",
-  //   alignItems: "center",
-  //   justifyContent: "center",
-  //   marginHorizontal: 4,
-  // },
-  // pdfButton: {
-  //   backgroundColor: "#e63946",
-  // },
-  // buttonText: {
-  //   color: "#fff",
-  //   fontSize: 16,
-  // },
-  addItemButton: {
-    marginEnd: 250,
-    backgroundColor: "#bbdffb",
-    paddingHorizontal: 20,
-    paddingVertical: 5,
-    borderRadius: 30,
-    borderColor: "#000000", // Black border color
-    borderWidth: 1,
-    height: 40,
-    width: 200,
-  },
-  addItemButtonText: {
-    color: "#051650",
-    fontSize: 16,
-    textAlign: "center",
-    textDecorationLine: "underline",
-  },
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
   },
-  pdfButton: {
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    backgroundColor: "#bbdffb",
-    borderRadius: 0,
+  button: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 5,
-    marginTop: 15,
-  },
-
-  saveButton: {
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 16,
+    padding: 12,
+    borderRadius: 4,
     backgroundColor: "#051650",
-    borderRadius: 0,
-    paddingHorizontal: 24,
-    paddingVertical: 18,
-    flex: 1,
-    marginBottom: 5,
-    marginTop: 15,
+    alignItems: "center",
+    justifyContent: "center",
+    marginHorizontal: 4,
   },
+  pdfButton: {
+    backgroundColor: "#e63946",
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 16,
+  },
+  // addItemButton: {
+  //   marginEnd: 250,
+  //   backgroundColor: "#bbdffb",
+  //   paddingHorizontal: 20,
+  //   paddingVertical: 5,
+  //   borderRadius: 30,
+  //   borderColor: "#000000", // Black border color
+  //   borderWidth: 1,
+  //   height: 40,
+  //   width: 200,
+  // },
+  // addItemButtonText: {
+  //   color: "#051650",
+  //   fontSize: 16,
+  //   textAlign: "center",
 
-  pdfButtonText: {
-    color: "darkred",
-    fontSize: 16,
-    textAlign: "center",
-  },
-  saveButtonText: {
-    color: "white",
-    fontSize: 16,
-    textAlign: "center",
-  },
-  errorText: {
-    color: "red",
-    fontSize: 12,
-    marginBottom: 16,
-  },
+  // },
+  // buttonContainer: {
+  //   flexDirection: "row",
+  //   justifyContent: "space-between",
+  // },
+  // pdfButton: {
+  //   paddingVertical: 12,
+  //   paddingHorizontal: 24,
+  //   backgroundColor: "#bbdffb",
+  //   borderRadius: 0,
+  //   flex: 1,
+  //   justifyContent: "center",
+  //   alignItems: "center",
+  //   marginBottom: 5,
+  //   marginTop: 15,
+  // },
+
+  // saveButton: {
+  //   alignItems: "center",
+  //   justifyContent: "center",
+  //   padding: 16,
+  //   backgroundColor: "#051650",
+  //   borderRadius: 0,
+  //   paddingHorizontal: 24,
+  //   paddingVertical: 18,
+  //   flex: 1,
+  //   marginBottom: 5,
+  //   marginTop: 15,
+  // },
+
+  // pdfButtonText: {
+  //   color: "darkred",
+  //   fontSize: 16,
+  //   textAlign: "center",
+  // },
+  // saveButtonText: {
+  //   color: "white",
+  //   fontSize: 16,
+  //   textAlign: "center",
+  // },
 });
 
 export default styles;
