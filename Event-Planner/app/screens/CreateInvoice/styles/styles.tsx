@@ -71,18 +71,19 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginHorizontal: 10, // Adjust horizontal margin if needed
   },
-  
+
   addItemButton: {
     backgroundColor: "#bbdffb",
     paddingHorizontal: 20,
-    paddingVertical: 10, // Adjusted padding for better button height
+    paddingVertical: 8, // Adjusted padding for better button height
     borderRadius: 30,
     borderColor: "#000000", // Black border color
     borderWidth: 1,
     height: 40,
     marginEnd: 10, // Adjust spacing between buttons
-    marginTop:-10,
+    marginTop: -10,
   
+
   },
 
 
@@ -90,10 +91,12 @@ const styles = StyleSheet.create({
     color: "#051650",
     fontSize: 16,
     textAlign: "center",
+    justifyContent: "center",
+    alignItems: "center",
   },
-  
+
   pdfButton: {
-  height: 70,
+    height: 50,
     paddingHorizontal: 70, // Adjust horizontal margin if needed
     backgroundColor: "#bbdffb",
     borderRadius: 0,
@@ -101,26 +104,24 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginTop: 40, // Added margin-top for better spacing between buttons
-    
-    
     marginEnd: 0, // Adjust spacing between buttons
     marginLeft: -120, // Added margin-left
   },
   pdfButtonText: {
     color: "darkred",
-    fontSize: 16,
+    fontSize: 13,
     textAlign: "center",
   },
   saveButton: {
     paddingHorizontal: 70, // Adjust horizontal margin if needed
-
+    height: 50, // Adjust
     backgroundColor: "#051650",
     borderRadius: 0,
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     marginTop: 40, // Added margin-top for better spacing between buttons
-   
+
   },
 
   saveButtonText: {
@@ -129,7 +130,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
 
- 
+
 
 
 });
