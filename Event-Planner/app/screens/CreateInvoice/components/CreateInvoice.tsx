@@ -308,6 +308,20 @@ const CreateInvoice: React.FC = () => {
               },
             }}
           />
+             <PaperInput
+            mode="outlined"
+            label="Date and Time"
+            value={formData.dateTime.toLocaleString()} // Showing date and time
+            style={styles.input}
+            editable={false} // Make it non-editable
+            theme={{
+              colors: {
+                text: "#051650",
+                primary: "#051650",
+                background: "white",
+              },
+            }}
+          />
           <PaperInput
             mode="outlined"
             label="Venue Details"
