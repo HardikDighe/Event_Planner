@@ -51,7 +51,7 @@ const AllInvoices: React.FC = () => {
         setInvoices(fetchedInvoices);
         let balanceSum: number = 0;
         fetchedInvoices.forEach(invoice => {
-          const amount = Number(invoice.amount); // Properly cast the amount to a number
+          const amount = Number(invoice.amount);
           balanceSum += amount;
         });
         setTotalBalance(balanceSum);

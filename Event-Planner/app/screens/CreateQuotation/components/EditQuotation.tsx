@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView, Alert, Modal } from 'react-native';
+import { View, Text, TextInput,  TouchableOpacity, ScrollView, Alert, Modal,TextStyle } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import * as Print from 'expo-print';
 import { shareAsync } from 'expo-sharing';
@@ -17,7 +17,7 @@ interface FloatingLabelInputProps {
 const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({ label, value, onChangeText, keyboardType }) => {
     const [isFocused, setIsFocused] = useState(false);
 
-    const labelStyle = {
+    const  labelStyle:TextStyle = {
         position: 'absolute',
         left: 10,
         top: isFocused || value ? -8 : 18,

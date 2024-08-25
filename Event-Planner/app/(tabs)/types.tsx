@@ -1,11 +1,8 @@
 // types.ts
 export type RootStackParamList = {
   Home: undefined;
-
-  VendorRegisteration: undefined;
   Dashboard: undefined;
-  VendorRegistration: { newItem?: Item };
-  // AddItem: undefined;
+  VendorRegistration: undefined|{ newItem?: Item };
   Auth: undefined;
   Signup: undefined;
   SignUp: undefined;
@@ -16,16 +13,16 @@ export type RootStackParamList = {
   AllInvoices: undefined;
   CreateInvoice: undefined;
   ForgotPassword: undefined;
+  EditProfile: undefined;
+  ChangePassword: undefined;
+  PrivacyPolicy: undefined;
   Settings: undefined;
   Notifications: undefined;
   AllQuotations: undefined;
-  // CreateQuotation: {
-  //   newItem?: Item;
-  // };
   AddItem: { fromScreen: string } | undefined; // Allow either an object or undefined
   CreateQuotation: undefined | {newItem?: Item};
   AllEvents: undefined;
-  CreateEvent: { data: any };
+  CreateEvent:undefined| { data?: any };
   CustomerDetails: undefined;
   AllVendors: undefined;
   EventRegistration: undefined;
