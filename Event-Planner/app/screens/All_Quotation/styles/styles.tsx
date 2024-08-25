@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
   },
   createQuotationButton: {
     backgroundColor: "#051650",
-    padding: 16,
+    padding: 8,
     borderRadius: 8,
     alignItems: "center",
     marginTop: 16,

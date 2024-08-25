@@ -131,8 +131,8 @@ const DashboardScreen: React.FC<Props> = ({ navigation }) => {
               />
             </View>
             <View style={styles.tileTextContainer}>
+              <Text style={styles.tileText}>Create</Text>
               <Text style={styles.tileText}>Event</Text>
-              <Text style={styles.tileText}>Registration</Text>
             </View>
           </TouchableOpacity>
 

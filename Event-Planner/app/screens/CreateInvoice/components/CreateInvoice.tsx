@@ -86,7 +86,15 @@ const CreateInvoice: React.FC = () => {
   };
   useEffect(() => {
     if (route.params?.newItem) {
-      setItems((prevItems) => [...prevItems, route.params.newItem]);
+      const newItem = route.params.newItem;
+      if (newItem) {
+        setItems((prevItems) => [...prevItems, newItem]);
+        // Update formData with new items
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          items: [...prevFormData.items, newItem],
+        }));
+      }
     }
   }, [route.params?.newItem]);
 
@@ -316,18 +324,20 @@ const CreateInvoice: React.FC = () => {
           />
         </View>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={handleSave}>
-            <Text style={styles.buttonText}>Save</Text>
+        <TouchableOpacity style={styles.addItemButton} onPress={handleAddItem}>
+            <Text style={styles.addItemButtonText}>+Add Item</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.button, styles.pdfButton]}
+            style={styles.pdfButton}
             onPress={handleViewAsPDF}
           >
-            <Text style={styles.buttonText}>View as PDF</Text>
+            <Text style={styles.pdfButtonText}>View as PDF</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={handleAddItem}>
-            <Text style={styles.buttonText}>Add Item</Text>
+          <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
+            <Text style={styles.saveButtonText}>Save</Text>
           </TouchableOpacity>
+         
+         
         </View>
       </ScrollView>
     </View>
