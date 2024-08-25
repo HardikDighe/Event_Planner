@@ -5,6 +5,8 @@ import {
   FlatList,
   TouchableOpacity,
   TextInput,
+  Modal, // Import Modal
+  Button,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import Feather from "react-native-vector-icons/Feather";
@@ -42,6 +44,8 @@ const AllInvoices: React.FC = () => {
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [totalBalance, setTotalBalance] = useState<number>(0);
+  const [modalVisible, setModalVisible] = useState(false); // State for Modal visibility
+
 
   // Fetch data from API
   useEffect(() => {
@@ -61,6 +65,9 @@ const AllInvoices: React.FC = () => {
     };
     loadInvoices();
   }, []);
+  const handleSearchIconClick = () => {
+    setModalVisible(true); // Show the Modal when search icon is clicked
+  };
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
