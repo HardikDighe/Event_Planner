@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   headerText: {
-    fontSize: 24,
+    fontSize: 20,
     fontFamily: "Arial",
     color: "#051650",
     textAlign: "left",
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   },
   registerButton: {
     padding: 8,
-    borderRadius:8,
+    borderRadius: 8,
     backgroundColor: "#051650",
     alignItems: "center",
     justifyContent: "center",
