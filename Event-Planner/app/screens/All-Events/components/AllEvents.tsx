@@ -128,10 +128,12 @@ const AllEvents: React.FC<AllEventsProps> = ({ navigation }) => {
     if (searchQuery === '') {
       setFilteredEvents(events);
     } else {
-      const filtered = events.filter(event =>
-        event.eventTitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        event.location.toLowerCase().includes(searchQuery.toLowerCase())
-      );
+      const filtered = events.filter(event => {
+        const title = event.eventTitle ? event.eventTitle.toLowerCase() : '';
+        const location = event.location ? event.location.toLowerCase() : '';
+        return title.includes(searchQuery.toLowerCase()) ||
+          location.includes(searchQuery.toLowerCase());
+      });
       setFilteredEvents(filtered);
     }
   }, [searchQuery, events]);

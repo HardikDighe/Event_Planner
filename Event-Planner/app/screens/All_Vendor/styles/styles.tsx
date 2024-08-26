@@ -15,6 +15,19 @@ const styles = StyleSheet.create({
     paddingTop: 16,
     justifyContent: "space-between",
   },
+  phoneAndAddressContainer: {
+    marginTop: 8,
+    marginBottom: 8,
+  },
+  itemContainer: { // Add this style
+    padding: 8,
+    marginVertical: 4,
+    borderColor: '#ddd',
+    borderWidth: 1,
+    borderRadius: 4,
+    backgroundColor:"#e8f0f8",
+  
+  },
   headerText: {
     fontSize: 20,
     fontFamily: "Arial",
@@ -41,6 +54,10 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderBottomWidth: 1,
     borderBottomColor: "#ddd",
+  },
+  detailsText: {
+    fontSize: 14,
+    color:"#051650",
   },
   listTitle: {
     fontSize: 18,
@@ -78,6 +95,17 @@ const styles = StyleSheet.create({
   },
   detailsContainer: {
     marginTop: 8,
+  
+  },
+  
+  itemLabel: {
+    flex: 1, // Takes up 50% of the container
+    fontWeight: 'bold',
+    color: '#051650',
+  },
+  itemValue: {
+    flex: 2, // Takes up the remaining 50%
+    color: '#333',
   },
   addressText: {
     fontSize: 16,
