@@ -15,7 +15,7 @@ type Event = {
   time: string;
   location: string;
   description: string;
-  customerData: {
+  customerData?: {
     name: string;
     email: string;
     phone: string;
@@ -73,7 +73,9 @@ const EventCard: React.FC<{ event: Event }> = ({ event }) => {
         <Text style={styles.eventTitle}>{event.eventTitle}</Text>
         <Text style={styles.eventDay}>{event.time}</Text>
       </View>
-      <Text style={styles.namePhoneText}>{event.customerData.name} {event.customerData.phone}</Text>
+      <Text style={styles.namePhoneText}>
+        {event.customerData?.name || 'No Name'} {event.customerData?.phone || 'No Phone'}
+      </Text>
       <View style={styles.cardBody}>
         <View style={styles.eventInfo}>
           <FontAwesome name="calendar" size={20} color="#051650" />
@@ -104,10 +106,10 @@ const EventCard: React.FC<{ event: Event }> = ({ event }) => {
 
 // AllEvents component
 const AllEvents: React.FC<AllEventsProps> = ({ navigation }) => {
-  const [events, setEvents] = useState<any[]>([]);
+  const [events, setEvents] = useState<Event[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [locationQuery, setLocationQuery] = useState('');
-  const [dateQuery, setDateQuery] = useState('');
+  const [locationQuery, setLocationQuery] = useState<string>('');
+  const [dateQuery, setDateQuery] = useState<string>('');
   const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
   const [showSearchBar, setShowSearchBar] = useState<boolean>(false);
   const navigate = useNavigation(); // Use the navigation hook
@@ -129,13 +131,13 @@ const AllEvents: React.FC<AllEventsProps> = ({ navigation }) => {
     if (searchQuery && locationQuery) {
       filtered = filtered.filter(event =>
         (event.eventTitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        event.customerData.name.toLowerCase().includes(searchQuery.toLowerCase())) &&
+        event.customerData?.name.toLowerCase().includes(searchQuery.toLowerCase())) &&
         event.location.toLowerCase().includes(locationQuery.toLowerCase())
       );
     } else if (searchQuery) {
       filtered = filtered.filter(event =>
         event.eventTitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        event.customerData.name.toLowerCase().includes(searchQuery.toLowerCase())
+        event.customerData?.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
     } else if (locationQuery) {
       filtered = filtered.filter(event =>
@@ -147,7 +149,8 @@ const AllEvents: React.FC<AllEventsProps> = ({ navigation }) => {
     const uniqueEvents = Array.from(new Set(filtered.map(event => event.id)))
       .map(id => {
         return filtered.find(event => event.id === id);
-      });
+      })
+      .filter((event): event is Event => event !== undefined); // Filter out undefined
 
     setFilteredEvents(uniqueEvents);
   }, [searchQuery, locationQuery, events]);
@@ -197,16 +200,16 @@ const AllEvents: React.FC<AllEventsProps> = ({ navigation }) => {
               <TextInput
                 style={styles.searchBar}
                 placeholder="Search by location..."
-              value={locationQuery}
-              onChangeText={setLocationQuery}
+                value={locationQuery}
+                onChangeText={setLocationQuery}
               />
 
               {/* Search by Date */}
               <TextInput
                 style={styles.searchBar}
                 placeholder="Search by date..."
-              value={dateQuery}
-              onChangeText={setDateQuery}
+                value={dateQuery}
+                onChangeText={setDateQuery}
               />
             </>
           )}
