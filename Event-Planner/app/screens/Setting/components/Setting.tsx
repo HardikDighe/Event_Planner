@@ -22,9 +22,9 @@ const SettingsScreen = () => {
             </View> */}
             
             {/* Profile Section */}
-            <View style={styles.profileSection}>
+            {/* <View style={styles.profileSection}>
                 <Text style={styles.profileName}>ABC</Text>
-            </View>
+            </View> */}
             
             {/* Account Settings */}
             <View style={styles.section}>

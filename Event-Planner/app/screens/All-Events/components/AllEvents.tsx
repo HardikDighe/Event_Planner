@@ -3,6 +3,7 @@ import { View, Text, FlatList, TouchableOpacity, SafeAreaView, TextInput, Alert 
 import { FontAwesome, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
+import { useNavigation } from '@react-navigation/native'; // Import useNavigation hook
 import styles from '../styles/styles'; // Ensure the path is correct
 import axios from 'axios';
 
@@ -113,6 +114,7 @@ const AllEvents: React.FC<AllEventsProps> = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
   const [showSearchBar, setShowSearchBar] = useState<boolean>(false);
+  const navigate = useNavigation(); // Use the navigation hook
 
   useEffect(() => {
     const loadEvents = async () => {
@@ -174,7 +176,7 @@ const AllEvents: React.FC<AllEventsProps> = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigate.goBack()}>
           <MaterialIcons name="arrow-back" size={28} color="black" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>All Events</Text>

@@ -1,4 +1,3 @@
-// allinvoice.api.tsx
 import axios from 'axios';
 
 export type Invoice = {
@@ -8,6 +7,7 @@ export type Invoice = {
   balance: number;
   date: string;
   status: string;
+  phoneNumber: string; // Added phone number field
 };
 
 export const fetchInvoices = async (): Promise<Invoice[]> => {
@@ -25,6 +25,7 @@ export const fetchInvoices = async (): Promise<Invoice[]> => {
         balance: firstItem ? parseFloat(firstItem.balance) : 0,
         date: new Date(invoice.dateTime).toLocaleDateString(),
         status: "Approved", // You can set status as required
+        phoneNumber: invoice.phoneNumber || "", // Include phone number
       };
     });
   } catch (error) {

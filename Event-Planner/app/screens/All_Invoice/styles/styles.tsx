@@ -71,6 +71,10 @@ const styles = StyleSheet.create({
     marginRight: 8,
     fontWeight: "bold",
   },
+  phoneNumber: { // Added phone number styles
+    fontSize: 14,
+    color:  '#051650',
+  },
   invoiceItem: {
     backgroundColor: "#fff",
     borderRadius: 8,
@@ -102,6 +106,9 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     flex: 1,
+  },
+  namePhoneNumberContainer: {  // Added to group name and phone number
+    flexDirection: "column",
   },
   name: {
     fontSize: 16,
