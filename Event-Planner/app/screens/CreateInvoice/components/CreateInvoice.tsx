@@ -97,7 +97,6 @@ const CreateInvoice: React.FC = () => {
       }
     }
   }, [route.params?.newItem]);
-  
 
   const handleSave = async () => {
     const formData1 = {
@@ -309,7 +308,7 @@ const CreateInvoice: React.FC = () => {
               },
             }}
           />
-             <PaperInput
+          <PaperInput
             mode="outlined"
             label="Date and Time"
             value={formData.dateTime.toLocaleString()} // Showing date and time
@@ -339,20 +338,18 @@ const CreateInvoice: React.FC = () => {
           />
         </View>
         <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.addItemButton} onPress={handleAddItem}>
+          <TouchableOpacity
+            style={styles.addItemButton}
+            onPress={handleAddItem}
+          >
             <Text style={styles.addItemButtonText}>+Add Item</Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.pdfButton}
-            onPress={handleViewAsPDF}
-          >
+          <TouchableOpacity style={styles.pdfButton} onPress={handleViewAsPDF}>
             <Text style={styles.pdfButtonText}>View as PDF</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
             <Text style={styles.saveButtonText}>Save</Text>
           </TouchableOpacity>
-         
-         
         </View>
       </ScrollView>
     </View>
