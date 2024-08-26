@@ -125,35 +125,17 @@ const AllEvents: React.FC<AllEventsProps> = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    // Filter events based on search and location queries
-    let filtered = events;
-
-    if (searchQuery && locationQuery) {
-      filtered = filtered.filter(event =>
-        (event.eventTitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        event.customerData?.name.toLowerCase().includes(searchQuery.toLowerCase())) &&
-        event.location.toLowerCase().includes(locationQuery.toLowerCase())
-      );
-    } else if (searchQuery) {
-      filtered = filtered.filter(event =>
+    if (searchQuery === '') {
+      setFilteredEvents(events);
+    } else {
+      const filtered = events.filter(event =>
         event.eventTitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        event.customerData?.name.toLowerCase().includes(searchQuery.toLowerCase())
+        event.location.toLowerCase().includes(searchQuery.toLowerCase())
       );
-    } else if (locationQuery) {
-      filtered = filtered.filter(event =>
-        event.location.toLowerCase().includes(locationQuery.toLowerCase())
-      );
+      setFilteredEvents(filtered);
     }
+  }, [searchQuery, events]);
 
-    // Remove duplicates (if there are any)
-    const uniqueEvents = Array.from(new Set(filtered.map(event => event.id)))
-      .map(id => {
-        return filtered.find(event => event.id === id);
-      })
-      .filter((event): event is Event => event !== undefined); // Filter out undefined
-
-    setFilteredEvents(uniqueEvents);
-  }, [searchQuery, locationQuery, events]);
 
   const handlePrint = async () => {
     try {
@@ -194,22 +176,6 @@ const AllEvents: React.FC<AllEventsProps> = ({ navigation }) => {
                 placeholder="Search events..."
                 value={searchQuery}
                 onChangeText={setSearchQuery}
-              />
-
-              {/* Search by Location */}
-              <TextInput
-                style={styles.searchBar}
-                placeholder="Search by location..."
-                value={locationQuery}
-                onChangeText={setLocationQuery}
-              />
-
-              {/* Search by Date */}
-              <TextInput
-                style={styles.searchBar}
-                placeholder="Search by date..."
-                value={dateQuery}
-                onChangeText={setDateQuery}
               />
             </>
           )}
