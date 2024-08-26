@@ -1,49 +1,50 @@
-import React, { useState } from 'react';
-import { View, TextInput, TouchableOpacity, Text, ScrollView, Alert, Switch } from 'react-native';
-import { useNavigation, NavigationProp } from '@react-navigation/native';
-import styles from '../styles/styles'; // Import the styles
-import { RootStackParamList } from '../../../(tabs)/types'; // Adjust the import path as necessary
-import CreateEvent from '../../CreateEvent/components/CreateEvent';
-import Checkbox from 'expo-checkbox';
+import React, { useState } from "react";
+import {
+  View,
+  TextInput,
+  TouchableOpacity,
+  Text,
+  ScrollView,
+  Alert,
+  Switch,
+} from "react-native";
+import { useNavigation, NavigationProp } from "@react-navigation/native";
+import styles from "../styles/styles"; // Import the styles
+import { RootStackParamList } from "../../../(tabs)/types"; // Adjust the import path as necessary
+import CreateEvent from "../../CreateEvent/components/CreateEvent";
 
 const RegisterEvent: React.FC = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  const [name, setName] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
-  const [phone, setPhone] = useState<string>('');
-  const [numTickets, setNumTickets] = useState<string>('');
+  const [name, setName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [phone, setPhone] = useState<string>("");
+  const [numTickets, setNumTickets] = useState<string>("");
   // const [isChecked, setIsChecked] = useState<boolean>(false);
-  const [focusedField, setFocusedField] = useState<string>('');
+  const [focusedField, setFocusedField] = useState<string>("");
   const [errors, setErrors] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    policies: '',
+    name: "",
+    email: "",
+    phone: "",
   });
-  const [isChecked, setChecked] = useState(false);
+
   const handleRegister = async () => {
     let valid = true;
     const newErrors = {
-      name: '',
-      email: '',
-      phone: '',
-      policies: '',
+      name: "",
+      email: "",
+      phone: "",
     };
 
     if (!name) {
-      newErrors.name = 'Name is required.';
+      newErrors.name = "Name is required.";
       valid = false;
     }
     if (!validateEmail(email)) {
-      newErrors.email = 'Please enter a valid email address.';
+      newErrors.email = "Please enter a valid email address.";
       valid = false;
     }
     if (!validatePhone(phone)) {
-      newErrors.phone = 'Phone number must be exactly 10 digits.';
-      valid = false;
-    }
-    if (!isChecked) {
-      newErrors.policies = 'You must agree to the event policies and terms.';
+      newErrors.phone = "Phone number must be exactly 10 digits.";
       valid = false;
     }
 
@@ -55,13 +56,8 @@ const RegisterEvent: React.FC = () => {
         email,
         phone,
         numTickets,
-      }
-      navigation.navigate('CreateEvent', { data: data });
-
-    } else {
-      if (!isChecked) {
-        Alert.alert('Please agree to the event policies and terms.');
-      }
+      };
+      navigation.navigate("CreateEvent", { data: data });
     }
   };
 
@@ -79,42 +75,54 @@ const RegisterEvent: React.FC = () => {
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Customer Details</Text>
       <View style={styles.inputContainer}>
-        {(focusedField === 'name' || name) && <Text style={styles.floatingLabel}>Name</Text>}
+        {(focusedField === "name" || name) && (
+          <Text style={styles.floatingLabel}>Name</Text>
+        )}
         <TextInput
           style={[styles.input, errors.name ? styles.inputError : {}]}
-          placeholder={focusedField !== 'name' && !name ? 'Name' : ''}
+          placeholder={focusedField !== "name" && !name ? "Name" : ""}
           value={name}
           onChangeText={setName}
-          onFocus={() => setFocusedField('name')}
-          onBlur={() => setFocusedField('')}
+          onFocus={() => setFocusedField("name")}
+          onBlur={() => setFocusedField("")}
         />
-        {errors.name ? <Text style={styles.errorText}>{errors.name}</Text> : null}
+        {errors.name ? (
+          <Text style={styles.errorText}>{errors.name}</Text>
+        ) : null}
       </View>
       <View style={styles.inputContainer}>
-        {(focusedField === 'email' || email) && <Text style={styles.floatingLabel}>Email</Text>}
+        {(focusedField === "email" || email) && (
+          <Text style={styles.floatingLabel}>Email</Text>
+        )}
         <TextInput
           style={[styles.input, errors.email ? styles.inputError : {}]}
-          placeholder={focusedField !== 'email' && !email ? 'Email' : ''}
+          placeholder={focusedField !== "email" && !email ? "Email" : ""}
           value={email}
           onChangeText={setEmail}
-          onFocus={() => setFocusedField('email')}
-          onBlur={() => setFocusedField('')}
+          onFocus={() => setFocusedField("email")}
+          onBlur={() => setFocusedField("")}
           keyboardType="email-address"
         />
-        {errors.email ? <Text style={styles.errorText}>{errors.email}</Text> : null}
+        {errors.email ? (
+          <Text style={styles.errorText}>{errors.email}</Text>
+        ) : null}
       </View>
       <View style={styles.inputContainer}>
-        {(focusedField === 'phone' || phone) && <Text style={styles.floatingLabel}>Phone</Text>}
+        {(focusedField === "phone" || phone) && (
+          <Text style={styles.floatingLabel}>Phone</Text>
+        )}
         <TextInput
           style={[styles.input, errors.phone ? styles.inputError : {}]}
-          placeholder={focusedField !== 'phone' && !phone ? 'Phone' : ''}
+          placeholder={focusedField !== "phone" && !phone ? "Phone" : ""}
           value={phone}
           onChangeText={setPhone}
-          onFocus={() => setFocusedField('phone')}
-          onBlur={() => setFocusedField('')}
+          onFocus={() => setFocusedField("phone")}
+          onBlur={() => setFocusedField("")}
           keyboardType="phone-pad"
         />
-        {errors.phone ? <Text style={styles.errorText}>{errors.phone}</Text> : null}
+        {errors.phone ? (
+          <Text style={styles.errorText}>{errors.phone}</Text>
+        ) : null}
       </View>
       <View style={styles.ticketsContainer}>
         <Text style={styles.ticketsLabel}>Number of tickets</Text>
@@ -126,17 +134,6 @@ const RegisterEvent: React.FC = () => {
           keyboardType="numeric"
         />
       </View>
-      <View style={styles.checkboxContainer}>
-       <Checkbox
-          // style={styles.checkbox}
-          value={isChecked}
-          onValueChange={setChecked}
-          color={isChecked ? '#4630EB' : undefined}
-        />
-
-        <Text style={styles.checkboxLabel}>Read Event Policies and Terms</Text>
-      </View>
-      {errors.policies ? <Text style={styles.errorText}>{errors.policies}</Text> : null}
       <TouchableOpacity style={styles.button} onPress={handleRegister}>
         <Text style={styles.buttonText}>Register</Text>
       </TouchableOpacity>
