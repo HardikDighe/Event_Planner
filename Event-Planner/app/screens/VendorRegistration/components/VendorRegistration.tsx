@@ -25,8 +25,9 @@ const VendorRegistration: React.FC<Props> = ({ navigation }) => {
   const [addressFocused, setAddressFocused] = useState(false);
   const [gstNumberFocused, setGstNumberFocused] = useState(false);
 
+  const [vendorNameError, setVendorNameError] = useState("");
   const [phoneNumberError, setPhoneNumberError] = useState("");
-  const [gstNumberError, setGstNumberError] = useState("");
+  const [addressError, setAddressError] = useState("");
 
   const [items, setItems] = useState<Item[]>([]);
   const route = useRoute<RouteProp<RootStackParamList, "VendorRegistration">>();
@@ -43,6 +44,13 @@ const VendorRegistration: React.FC<Props> = ({ navigation }) => {
   const handleSave = async () => {
     let hasError = false;
 
+    if (!vendorName) {
+      setVendorNameError(strings.errors.vendorNameRequired);
+      hasError = true;
+    } else {
+      setVendorNameError("");
+    }
+
     if (!phoneNumber) {
       setPhoneNumberError(strings.errors.phoneNumberRequired);
       hasError = true;
@@ -50,12 +58,11 @@ const VendorRegistration: React.FC<Props> = ({ navigation }) => {
       setPhoneNumberError("");
     }
 
-    const gstNumberRegex = /^[0-9]{15}$/;
-    if (!gstNumberRegex.test(gstNumber)) {
-      setGstNumberError(strings.errors.gstNumberInvalid);
+    if (!address) {
+      setAddressError(strings.errors.addressRequired);
       hasError = true;
     } else {
-      setGstNumberError("");
+      setAddressError("");
     }
 
     if (hasError) return;
@@ -91,7 +98,12 @@ const VendorRegistration: React.FC<Props> = ({ navigation }) => {
         theme={{
           colors: { text: "black", primary: "black", background: "white" },
         }}
+        error={!!vendorNameError}
       />
+      {vendorNameError ? (
+        <Text style={styles.errorText}>{vendorNameError}</Text>
+      ) : null}
+
       <TextInput
         label={strings.labels.phoneNumber}
         value={phoneNumber}
@@ -120,7 +132,12 @@ const VendorRegistration: React.FC<Props> = ({ navigation }) => {
         theme={{
           colors: { text: "black", primary: "black", background: "white" },
         }}
+        error={!!addressError}
       />
+      {addressError ? (
+        <Text style={styles.errorText}>{addressError}</Text>
+      ) : null}
+
       <TextInput
         label={strings.labels.gstNumber}
         value={gstNumber}
@@ -133,11 +150,7 @@ const VendorRegistration: React.FC<Props> = ({ navigation }) => {
         theme={{
           colors: { text: "black", primary: "black", background: "white" },
         }}
-        error={!!gstNumberError}
       />
-      {gstNumberError ? (
-        <Text style={styles.errorText}>{gstNumberError}</Text>
-      ) : null}
       <TouchableOpacity
         onPress={() =>
           navigation.navigate("AddItem", { fromScreen: "VendorRegistration" })

@@ -9,7 +9,8 @@ const strings = {
     },
     errors: {
       phoneNumberRequired: "Phone number is required.",
-      gstNumberInvalid: "GST number must be exactly 15 digits.",
+      vendorNameRequired: "Vendor name is required.",
+      addressRequired: "Address is required.",
     },
     alerts: {
       success: "Vendor data saved successfully.",
