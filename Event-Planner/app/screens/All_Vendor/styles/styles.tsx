@@ -19,14 +19,14 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginBottom: 8,
   },
-  itemContainer: { // Add this style
+  itemContainer: {
+    // Add this style
     padding: 8,
     marginVertical: 4,
-    borderColor: '#ddd',
+    borderColor: "#ddd",
     borderWidth: 1,
     borderRadius: 4,
-    backgroundColor:"#e8f0f8",
-  
+    backgroundColor: "#e8f0f8",
   },
   headerText: {
     fontSize: 20,
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
   },
   detailsText: {
     fontSize: 14,
-    color:"#051650",
+    color: "#051650",
   },
   listTitle: {
     fontSize: 18,
@@ -95,17 +95,16 @@ const styles = StyleSheet.create({
   },
   detailsContainer: {
     marginTop: 8,
-  
   },
-  
+
   itemLabel: {
     flex: 1, // Takes up 50% of the container
-    fontWeight: 'bold',
-    color: '#051650',
+    fontWeight: "bold",
+    color: "#051650",
   },
   itemValue: {
     flex: 2, // Takes up the remaining 50%
-    color: '#333',
+    color: "#333",
   },
   addressText: {
     fontSize: 16,
@@ -129,6 +128,9 @@ const styles = StyleSheet.create({
   registerButtonText: {
     color: "#fff",
     fontSize: 18,
+  },
+  icon: {
+    color: "#051650",
   },
 });
 
