@@ -28,6 +28,8 @@ import {
   SHARE_ERROR,
   GENERATE_PDF_ERROR,
 } from "../../../../app/screens/All_Invoice/constants/string"; // Import the strings
+import { FaMobileAlt } from "react-icons/fa";
+
 
 type RootStackParamList = {
   AllInvoices: undefined;
@@ -156,7 +158,7 @@ const InvoiceItem: React.FC<{ item: Invoice }> = ({ item }) => {
         <View style={styles.nameAmountContainer}>
           <View style={styles.namePhoneNumberContainer}>
           <Text style={styles.name}>{item.name}</Text>
-          <Text style={styles.phoneNumber}>{item.phoneNumber}</Text> {/* Added phone number */}
+          <Text style={styles.phoneNumber}><FaMobileAlt style={styles.icon1}/>{item.phoneNumber}</Text> 
           </View>
           <Text style={styles.amount}>₹{item.amount.toLocaleString()}</Text>
         </View>

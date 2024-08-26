@@ -175,6 +175,9 @@ const styles = StyleSheet.create({
   errorText: {
     flex: 1,
   },
+  icon1:{
+    color:"#051650",
+  }
 });
 
 export default styles;
