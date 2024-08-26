@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -6,19 +6,19 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
-} from 'react-native';
-import { Card, IconButton } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
-import * as Sharing from 'expo-sharing';
-import * as FileSystem from 'expo-file-system';
-import * as Print from 'expo-print';
-import { fetchAllVendors } from '../api/allvendor.api';
-import styles from '../../../../../Event-Planner/app/screens/All_Vendor/styles/styles';
-import { RootStackParamList } from '../../../../app/(tabs)/types';
-import { StackNavigationProp } from '@react-navigation/stack';
+} from "react-native";
+import { Card, IconButton } from "react-native-paper";
+import { useNavigation } from "@react-navigation/native";
+import * as Sharing from "expo-sharing";
+import * as FileSystem from "expo-file-system";
+import * as Print from "expo-print";
+import { fetchAllVendors } from "../api/allvendor.api";
+import styles from "../../../../../Event-Planner/app/screens/All_Vendor/styles/styles";
+import { RootStackParamList } from "../../../../app/(tabs)/types";
+import { StackNavigationProp } from "@react-navigation/stack";
 import { FaMobileAlt } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
-import { IoMdContact } from "react-icons/io";
+
 // Type definition for Vendor
 type Item = {
   itemName: string;
@@ -41,9 +41,12 @@ type Vendor = {
 };
 
 // Header Component
-const Header: React.FC<{ onSearch: (query: string) => void; allVendorData: Vendor[] }> = ({ onSearch, allVendorData }) => {
+const Header: React.FC<{
+  onSearch: (query: string) => void;
+  allVendorData: Vendor[];
+}> = ({ onSearch, allVendorData }) => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Function to generate and share PDF
   const generatePDF = async () => {
@@ -63,7 +66,7 @@ const Header: React.FC<{ onSearch: (query: string) => void; allVendorData: Vendo
                 </li>
               `
                 )
-                .join('')}
+                .join("")}
             </ul>
           </body>
         </html>
@@ -73,14 +76,14 @@ const Header: React.FC<{ onSearch: (query: string) => void; allVendorData: Vendo
 
       if (await Sharing.isAvailableAsync()) {
         await Sharing.shareAsync(uri, {
-          mimeType: 'application/pdf',
-          dialogTitle: 'Share PDF',
+          mimeType: "application/pdf",
+          dialogTitle: "Share PDF",
         });
       } else {
-        alert('Sharing is not available on this device');
+        alert("Sharing is not available on this device");
       }
     } catch (error) {
-      console.error('Error generating PDF:', error);
+      console.error("Error generating PDF:", error);
     }
   };
 
@@ -115,19 +118,19 @@ const VendorCard: React.FC<{ vendor: Vendor }> = ({ vendor }) => {
   // Function to share content
   const shareContent = async () => {
     try {
-      const fileUri = FileSystem.documentDirectory + 'sample.txt';
-      await FileSystem.writeAsStringAsync(fileUri, 'Hello, World!');
+      const fileUri = FileSystem.documentDirectory + "sample.txt";
+      await FileSystem.writeAsStringAsync(fileUri, "Hello, World!");
 
       if (await Sharing.isAvailableAsync()) {
         await Sharing.shareAsync(fileUri, {
-          mimeType: 'text/plain',
-          dialogTitle: 'Share Content',
+          mimeType: "text/plain",
+          dialogTitle: "Share Content",
         });
       } else {
-        alert('Sharing is not available on this device');
+        alert("Sharing is not available on this device");
       }
     } catch (error) {
-      console.error('Error sharing content:', error);
+      console.error("Error sharing content:", error);
     }
   };
 
@@ -145,7 +148,7 @@ const VendorCard: React.FC<{ vendor: Vendor }> = ({ vendor }) => {
 
       await Print.printAsync({ html });
     } catch (error) {
-      console.error('Error printing content:', error);
+      console.error("Error printing content:", error);
     }
   };
 
@@ -155,8 +158,14 @@ const VendorCard: React.FC<{ vendor: Vendor }> = ({ vendor }) => {
         <Text style={styles.vendorName}>{vendor.vendorName}</Text>
         <View style={styles.phoneRow}>
           <View style={styles.phoneAndAddressContainer}>
-          <Text><FaMobileAlt  style={{color:"#051650"}}/>{vendor.phoneNumber}</Text>
-          <Text style={styles.addressText}><FaLocationDot style={{color:"#051650"}}/>{vendor.address}</Text>
+            <Text>
+              <FaMobileAlt style={styles.icon} />
+              {vendor.phoneNumber}
+            </Text>
+            <Text style={styles.addressText}>
+              <FaLocationDot style={styles.icon} />
+              {vendor.address}
+            </Text>
           </View>
           <TouchableOpacity
             style={styles.viewDetailsButton}
@@ -167,17 +176,32 @@ const VendorCard: React.FC<{ vendor: Vendor }> = ({ vendor }) => {
         </View>
         {showDetails && (
           <View style={styles.detailsContainer}>
-            
             {vendor.items.map((item, index) => (
               <View key={index} style={styles.itemContainer}>
-                <Text style={styles.detailsText}>Item Name: {item.itemName || 'N/A'}</Text>
-                <Text style={styles.detailsText}>Quantity: {item.quantity || 'N/A'}</Text>
-                <Text style={styles.detailsText}>Price: {item.price || 'N/A'}</Text>
-                <Text style={styles.detailsText}>Discount: {item.discount || 'N/A'}</Text>
-                <Text style={styles.detailsText}>Payable Amount: {item.payableAmount || 'N/A'}</Text>
-                <Text style={styles.detailsText}>Paid Amount: {item.paidAmount || 'N/A'}</Text>
-                <Text style={styles.detailsText}>Balance: {item.balance || 'N/A'}</Text>
-                <Text style={styles.detailsText}>Miscellaneous: {item.miscellaneous || 'N/A'}</Text>
+                <Text style={styles.detailsText}>
+                  Item Name: {item.itemName || "N/A"}
+                </Text>
+                <Text style={styles.detailsText}>
+                  Quantity: {item.quantity || "N/A"}
+                </Text>
+                <Text style={styles.detailsText}>
+                  Price: {item.price || "N/A"}
+                </Text>
+                <Text style={styles.detailsText}>
+                  Discount: {item.discount || "N/A"}
+                </Text>
+                <Text style={styles.detailsText}>
+                  Payable Amount: {item.payableAmount || "N/A"}
+                </Text>
+                <Text style={styles.detailsText}>
+                  Paid Amount: {item.paidAmount || "N/A"}
+                </Text>
+                <Text style={styles.detailsText}>
+                  Balance: {item.balance || "N/A"}
+                </Text>
+                <Text style={styles.detailsText}>
+                  Miscellaneous: {item.miscellaneous || "N/A"}
+                </Text>
               </View>
             ))}
           </View>
@@ -202,12 +226,12 @@ const VendorListScreen: React.FC = () => {
   useEffect(() => {
     const loadAllVendorData = async () => {
       const data = await fetchAllVendors();
-      console.log('Fetched Vendor Data:', data); // Log the fetched data to see if it includes the necessary fields
+      console.log("Fetched Vendor Data:", data); // Log the fetched data to see if it includes the necessary fields
       if (data !== null) {
         setAllVendorData(data);
         setFilteredVendors(data);
       } else {
-        Alert.alert('Error', 'All vendors not loaded.');
+        Alert.alert("Error", "All vendors not loaded.");
       }
     };
     loadAllVendorData();
@@ -238,7 +262,7 @@ const VendorListScreen: React.FC = () => {
       </ScrollView>
       <TouchableOpacity
         style={styles.registerButton}
-        onPress={() => navigation.navigate('VendorRegistration')}
+        onPress={() => navigation.navigate("VendorRegistration")}
       >
         <Text style={styles.registerButtonText}>+ Register Vendor</Text>
       </TouchableOpacity>
