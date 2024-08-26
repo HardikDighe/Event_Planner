@@ -5,18 +5,22 @@ import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
 import { useNavigation } from '@react-navigation/native'; // Import useNavigation hook
 import styles from '../styles/styles'; // Ensure the path is correct
-import axios from 'axios';
+import { fetchEvents } from '../api/allevents.api';
 
 // Event type definition
 type Event = {
   id: string;
-  title: string;
+  eventTitle: string;
   date: string;
   time: string;
   location: string;
   description: string;
-  name: string;
-  phone: string;
+  customerData: {
+    name: string;
+    email: string;
+    phone: string;
+    numTickets: string;
+  };
 };
 
 // Props type definition for AllEvents component
@@ -26,23 +30,12 @@ type AllEventsProps = {
   };
 };
 
-// Fetch events from API
-const fetchEvents = async () => {
-  try {
-    const response = await axios.get('http://localhost:3000/EventRegistration');
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching events:', error);
-    return [];
-  }
-};
-
 // EventCard component
 const EventCard: React.FC<{ event: Event }> = ({ event }) => {
   const handleShare = async () => {
     try {
       const htmlContent = `
-        <h1>${event.title}</h1>
+        <h1>${event.eventTitle}</h1>
         <p>${event.date}</p>
         <p>${event.time}</p>
         <p>${event.location}</p>
@@ -62,7 +55,7 @@ const EventCard: React.FC<{ event: Event }> = ({ event }) => {
   const handlePrint = async () => {
     try {
       const htmlContent = `
-        <h1>${event.title}</h1>
+        <h1>${event.eventTitle}</h1>
         <p>${event.date}</p>
         <p>${event.time}</p>
         <p>${event.location}</p>
@@ -77,10 +70,10 @@ const EventCard: React.FC<{ event: Event }> = ({ event }) => {
   return (
     <View style={styles.card}>
       <View style={styles.cardHeader}>
-        <Text style={styles.eventTitle}>{event.title}</Text>
+        <Text style={styles.eventTitle}>{event.eventTitle}</Text>
         <Text style={styles.eventDay}>{event.time}</Text>
       </View>
-      <Text style={styles.namePhoneText}>{event.name} {event.phone}</Text>
+      <Text style={styles.namePhoneText}>{event.customerData.name} {event.customerData.phone}</Text>
       <View style={styles.cardBody}>
         <View style={styles.eventInfo}>
           <FontAwesome name="calendar" size={20} color="#051650" />
@@ -111,51 +104,60 @@ const EventCard: React.FC<{ event: Event }> = ({ event }) => {
 
 // AllEvents component
 const AllEvents: React.FC<AllEventsProps> = ({ navigation }) => {
+  const [events, setEvents] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [locationQuery, setLocationQuery] = useState('');
+  const [dateQuery, setDateQuery] = useState('');
   const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
   const [showSearchBar, setShowSearchBar] = useState<boolean>(false);
   const navigate = useNavigation(); // Use the navigation hook
 
   useEffect(() => {
     const loadEvents = async () => {
-      const eventsFromApi = await fetchEvents();
-      const mappedEvents = eventsFromApi.map((event: any) => {
-        const customerData = event.customerData || {}; // Ensure customerData exists
-        return {
-          id: event.id || '',
-          title: event.eventTitle || '',
-          date: event.date || '',
-          time: event.time || '',
-          location: event.location || '',
-          description: event.eventDetails || '',
-          name: customerData.name || '',
-          phone: customerData.phone || '',
-        };
-      });
-      setFilteredEvents(mappedEvents);
+      const data = await fetchEvents();
+      setEvents(data);
+      setFilteredEvents(data); // Initialize filteredEvents with all events
     };
 
     loadEvents();
   }, []);
 
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
-    if (query === '') {
-      setFilteredEvents(filteredEvents);
-    } else {
-      const filtered = filteredEvents.filter(event =>
-        event.title.toLowerCase().includes(query.toLowerCase())
+  useEffect(() => {
+    // Filter events based on search and location queries
+    let filtered = events;
+
+    if (searchQuery && locationQuery) {
+      filtered = filtered.filter(event =>
+        (event.eventTitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        event.customerData.name.toLowerCase().includes(searchQuery.toLowerCase())) &&
+        event.location.toLowerCase().includes(locationQuery.toLowerCase())
       );
-      setFilteredEvents(filtered);
+    } else if (searchQuery) {
+      filtered = filtered.filter(event =>
+        event.eventTitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        event.customerData.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    } else if (locationQuery) {
+      filtered = filtered.filter(event =>
+        event.location.toLowerCase().includes(locationQuery.toLowerCase())
+      );
     }
-  };
+
+    // Remove duplicates (if there are any)
+    const uniqueEvents = Array.from(new Set(filtered.map(event => event.id)))
+      .map(id => {
+        return filtered.find(event => event.id === id);
+      });
+
+    setFilteredEvents(uniqueEvents);
+  }, [searchQuery, locationQuery, events]);
 
   const handlePrint = async () => {
     try {
       const htmlContent = `
         <h1>All Events</h1>
         ${filteredEvents.map(event => `
-          <h2>${event.title}</h2>
+          <h2>${event.eventTitle}</h2>
           <p>${event.date}</p>
           <p>${event.time}</p>
           <p>${event.location}</p>
@@ -182,13 +184,33 @@ const AllEvents: React.FC<AllEventsProps> = ({ navigation }) => {
         <Text style={styles.headerTitle}>All Events</Text>
         <View style={styles.searchContainer}>
           {showSearchBar && (
-            <TextInput
-              style={styles.searchBar}
-              placeholder="Search events..."
-              value={searchQuery}
-              onChangeText={handleSearch}
-            />
+            <>
+              {/* Search by Event Title */}
+              <TextInput
+                style={styles.searchBar}
+                placeholder="Search events..."
+                value={searchQuery}
+                onChangeText={setSearchQuery}
+              />
+
+              {/* Search by Location */}
+              <TextInput
+                style={styles.searchBar}
+                placeholder="Search by location..."
+              value={locationQuery}
+              onChangeText={setLocationQuery}
+              />
+
+              {/* Search by Date */}
+              <TextInput
+                style={styles.searchBar}
+                placeholder="Search by date..."
+              value={dateQuery}
+              onChangeText={setDateQuery}
+              />
+            </>
           )}
+
           <TouchableOpacity onPress={() => setShowSearchBar(!showSearchBar)}>
             <MaterialIcons name="search" size={28} color="black" />
           </TouchableOpacity>
