@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, TouchableOpacity, Text, ScrollView } from "react-native";
+import { View, TouchableOpacity, Text, ScrollView, Alert } from "react-native";
 import { NavigationProp, RouteProp, useRoute } from "@react-navigation/native";
 import { TextInput } from "react-native-paper";
 import { styles } from "../../../../app/screens/AddItem/styles/styles";
@@ -62,10 +62,24 @@ const AddItem: React.FC<Props> = ({ navigation }) => {
   const handleQuantityChange = (value: string) => setQuantity(value);
   const handlePriceChange = (value: string) => setPrice(value);
   const handleDiscountChange = (value: string) => setDiscount(value);
-  const handleMiscellaneousChange = (value: string) => setMiscellaneous(value);
+  const handleMiscellaneousChange = (value: string) =>
+    setMiscellaneous(value);
   const handlePaidAmountChange = (value: string) => setPaidAmount(value);
 
   const handleSaveItem = () => {
+    if (!itemName.trim()) {
+      Alert.alert("Validation Error", "Item name cannot be empty.");
+      return;
+    }
+
+    if (!quantity || isNaN(Number(quantity)) || Number(quantity) <= 0) {
+      Alert.alert(
+        "Validation Error",
+        "Please enter a valid quantity greater than 0."
+      );
+      return;
+    }
+
     const newItem = {
       itemName,
       quantity,
@@ -114,8 +128,9 @@ const AddItem: React.FC<Props> = ({ navigation }) => {
         onFocus={() => setQuantityFocused(true)}
         onBlur={() => setQuantityFocused(false)}
         mode="outlined"
+        keyboardType="numeric"
         theme={{
-          colors: { text: "black", primary: "black", background: "white" },
+          colors: { text: "red", primary: "red", background: "white" },
         }}
       />
       <TextInput
@@ -262,8 +277,7 @@ const AddItem: React.FC<Props> = ({ navigation }) => {
           colors: { text: "black", primary: "black", background: "white" },
         }}
       />
-
-      <TouchableOpacity style={styles.button} onPress={handleSaveItem}>
+ <TouchableOpacity style={styles.button} onPress={handleSaveItem}>
         <Text style={styles.buttonText}>Add Item</Text>
       </TouchableOpacity>
     </ScrollView>
