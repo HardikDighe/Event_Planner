@@ -27,7 +27,7 @@ import {
   GENERATE_PDF_ERROR,
   EMPTY_SEARCH_QUERY,
 } from "../../All_Quotation/constants/string"; // Import the strings
-
+import { FaMobileAlt } from "react-icons/fa";
 // Define types for navigation
 type RootStackParamList = {
   AllQuotation: undefined;
@@ -129,7 +129,7 @@ const AllQuotation: React.FC = () => {
           <View style={styles.nameAmountContainer}>
             <View style={styles.namePhoneNumberContainer}>
             <Text style={styles.name}>{item.name}</Text>
-            <Text style={styles.phoneNumber}>{item.phoneNumber}</Text> {/* Display phone number */}
+            <Text style={styles.phoneNumber}><FaMobileAlt style={styles.icon1}/>{item.phoneNumber}</Text> {/* Display phone number */}
             </View>
             <Text style={styles.amount}>₹{item.amount.toLocaleString()}</Text>
           </View>

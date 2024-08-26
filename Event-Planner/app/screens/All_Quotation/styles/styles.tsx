@@ -148,6 +148,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  icon1:{
+    color:"#051650",
+  }
 });
 
 export default styles;
