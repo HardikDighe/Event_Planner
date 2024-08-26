@@ -5,7 +5,7 @@ import {
   FlatList,
   TouchableOpacity,
   TextInput,
-  Modal, // Import Modal
+  Modal,
   Button,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
@@ -44,8 +44,7 @@ const AllInvoices: React.FC = () => {
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [totalBalance, setTotalBalance] = useState<number>(0);
-  const [modalVisible, setModalVisible] = useState(false); // State for Modal visibility
-
+  const [modalVisible, setModalVisible] = useState(false);
 
   // Fetch data from API
   useEffect(() => {
@@ -65,8 +64,9 @@ const AllInvoices: React.FC = () => {
     };
     loadInvoices();
   }, []);
+
   const handleSearchIconClick = () => {
-    setModalVisible(true); // Show the Modal when search icon is clicked
+    setModalVisible(true);
   };
 
   const handleSearch = (query: string) => {
@@ -113,6 +113,7 @@ const InvoiceItem: React.FC<{ item: Invoice }> = ({ item }) => {
         html: `
           <h1>Invoice #${item.id}</h1>
           <p>Name: ${item.name}</p>
+          <p>Phone Number: ${item.phoneNumber}</p> <!-- Added phone number -->
           <p>Amount: ₹${item.amount.toLocaleString()}</p>
           <p>Balance: ₹${item.balance.toLocaleString()}</p>
           <p>Date: ${item.date}</p>
@@ -131,6 +132,7 @@ const InvoiceItem: React.FC<{ item: Invoice }> = ({ item }) => {
         html: `
           <h1>Invoice #${item.id}</h1>
           <p>Name: ${item.name}</p>
+          <p>Phone Number: ${item.phoneNumber}</p> <!-- Added phone number -->
           <p>Amount: ₹${item.amount.toLocaleString()}</p>
           <p>Balance: ₹${item.balance.toLocaleString()}</p>
           <p>Date: ${item.date}</p>
@@ -152,7 +154,10 @@ const InvoiceItem: React.FC<{ item: Invoice }> = ({ item }) => {
       </View>
       <View style={styles.row}>
         <View style={styles.nameAmountContainer}>
+          <View style={styles.namePhoneNumberContainer}>
           <Text style={styles.name}>{item.name}</Text>
+          <Text style={styles.phoneNumber}>{item.phoneNumber}</Text> {/* Added phone number */}
+          </View>
           <Text style={styles.amount}>₹{item.amount.toLocaleString()}</Text>
         </View>
       </View>

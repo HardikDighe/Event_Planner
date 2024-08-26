@@ -28,7 +28,7 @@ const strings = {
 export const API_BASE_URL = 'http://localhost:3000';
 
 export const ENDPOINTS = {
-  getVendors: '/ALlVendors',
+  getVendors: '/AllVendors',
   // Add other endpoints here
 };
 
