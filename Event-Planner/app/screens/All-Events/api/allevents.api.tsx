@@ -1,17 +1,20 @@
-// api.js
+import axios from 'axios';
+import { Alert } from 'react-native';
 
-// Define your API endpoint
-const API_URL = 'http://localhost:3000/AllEvent';
+import { ENDPOINTS, ERROR_MESSAGES, API_BASE_URL } from '../constants/string';
 
 // Fetch data from the API
-export const fetchEvents = async () => {
+export const fetchEvents = async (): Promise<any[]> => {
   try {
-    const response = await fetch(API_URL);
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
+    const response = await axios.get(`${API_BASE_URL}${ENDPOINTS.fetchEvents}`);
+    if (response.status === 200) {
+      return response.data; // Return the data if the response is successful
+    } else {
+      Alert.alert('Error', ERROR_MESSAGES.fetchError);
+      return [];
     }
-    return await response.json();
   } catch (error) {
-    throw error;
+    Alert.alert('Error', ERROR_MESSAGES.fetchError);
+    return [];
   }
 };
