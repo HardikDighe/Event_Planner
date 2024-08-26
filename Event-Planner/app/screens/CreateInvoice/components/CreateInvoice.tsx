@@ -97,6 +97,7 @@ const CreateInvoice: React.FC = () => {
       }
     }
   }, [route.params?.newItem]);
+  
 
   const handleSave = async () => {
     const formData1 = {
