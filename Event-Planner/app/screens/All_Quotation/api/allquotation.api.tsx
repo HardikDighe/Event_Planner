@@ -18,6 +18,7 @@ export const fetchQuotations = async () => {
       return {
         id: item.id || "N/A",
         name: item.customerName || "Unknown",
+        phoneNumber: item.phoneNumber || "N/A", // Add phone number
         amount: parseFloat(firstItem.payableAmount) || 0,
         balance: parseFloat(firstItem.balance) || 0,
         date: item.quotationDate

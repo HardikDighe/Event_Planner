@@ -42,6 +42,7 @@ type NavigationProp = NativeStackNavigationProp<
 type Quotation = {
   id: string;
   name: string;
+  phoneNumber: string; // Added phoneNumber field
   amount: number;
   balance: number;
   date: string;
@@ -85,6 +86,7 @@ const AllQuotation: React.FC = () => {
           html: `
             <h1>Quotation #${item.id}</h1>
             <p>Name: ${item.name}</p>
+            <p>Phone: ${item.phoneNumber}</p> <!-- Added phone number -->
             <p>Amount: ₹${item.amount.toLocaleString()}</p>
             <p>Balance: ₹${item.balance.toLocaleString()}</p>
             <p>Date: ${item.date}</p>
@@ -103,6 +105,7 @@ const AllQuotation: React.FC = () => {
           html: `
             <h1>Quotation #${item.id}</h1>
             <p>Name: ${item.name}</p>
+            <p>Phone: ${item.phoneNumber}</p> <!-- Added phone number -->
             <p>Amount: ₹${item.amount.toLocaleString()}</p>
             <p>Balance: ₹${item.balance.toLocaleString()}</p>
             <p>Date: ${item.date}</p>
@@ -124,7 +127,10 @@ const AllQuotation: React.FC = () => {
         </View>
         <View style={styles.row}>
           <View style={styles.nameAmountContainer}>
+            <View style={styles.namePhoneNumberContainer}>
             <Text style={styles.name}>{item.name}</Text>
+            <Text style={styles.phoneNumber}>{item.phoneNumber}</Text> {/* Display phone number */}
+            </View>
             <Text style={styles.amount}>₹{item.amount.toLocaleString()}</Text>
           </View>
         </View>
@@ -179,6 +185,7 @@ const AllQuotation: React.FC = () => {
                   <h2>Quotation #${quotation.id}</h2>
                   <p>Status: ${quotation.status}</p>
                   <p>Name: ${quotation.name}</p>
+                  <p>Phone: ${quotation.phoneNumber}</p> <!-- Added phone number -->
                   <p>Amount: ₹${quotation.amount.toLocaleString()}</p>
                   <p>Balance: ₹${quotation.balance.toLocaleString()}</p>
                   <p>Date: ${quotation.date}</p>
