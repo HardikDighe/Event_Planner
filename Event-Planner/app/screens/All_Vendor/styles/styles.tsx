@@ -110,6 +110,8 @@ const styles = StyleSheet.create({
   addressText: {
     fontSize: 16,
     color: "#333",
+    marginTop: 5,
+    
   },
   cardActions: {
     justifyContent: "center",
