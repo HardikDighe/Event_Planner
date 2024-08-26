@@ -129,10 +129,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 16,
   },
+ 
   createQuotationButtonText: {
     color: "#fff",
     fontSize: 16,
     fontWeight: "bold",
+  },
+  namePhoneNumberContainer: {  // Added to group name and phone number
+    flexDirection: "column",
+  },
+  phoneNumber: {
+    fontSize: 16,
+    color: "#333",
+    marginVertical: 4,
   },
   loadingContainer: {
     flex: 1,
