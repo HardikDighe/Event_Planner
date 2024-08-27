@@ -132,13 +132,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16,
   },
-
-
-
-
   
   modalContainer: {
-    flex: 1,
+    flex: 1, 
     justifyContent: 'flex-start',
     alignItems: 'flex-end',
     marginTop: '23%', // Adjust this value to move the modal up or down
@@ -151,67 +147,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 8,
   },
-  sortOption: {
-    padding: 15,
-    fontSize: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-  },
-  eventCard: {
-    padding: 15,
-    marginVertical: 5,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
-  },
-
-
-  dropdownContainer: {
-    width: 300,
-    marginRight: 10,
-  },
-  dropdown: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
-  },
-
-
-
-
-
-
-
-  // modalContainer: {
-  //   flex: 1,
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  //   backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  // },
-  // modalContent: {
-  //   width: 300,
-  //   padding: 20,
-  //   backgroundColor: 'white',
-  //   borderRadius: 8,
-  // },
   optionButton: {
     padding: 16,
   },
   optionText: {
     fontSize: 18,
   },
-  cancelButton: {
-    padding: 16,
-    marginTop: 10,
-    backgroundColor: '#ddd',
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  cancelText: {
-    fontSize: 18,
-    color: '#333',
-  },
-
 });
 
 export default styles;
