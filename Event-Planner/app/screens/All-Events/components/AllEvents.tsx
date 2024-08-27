@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TouchableOpacity, SafeAreaView, TextInput, Alert } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, SafeAreaView, TextInput, Alert, Modal, TouchableWithoutFeedback } from 'react-native';
 import { FontAwesome, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
@@ -114,6 +114,13 @@ const AllEvents: React.FC<AllEventsProps> = ({ navigation }) => {
   const [showSearchBar, setShowSearchBar] = useState<boolean>(false);
   const navigate = useNavigation(); // Use the navigation hook
 
+  const [isSortModalVisible, setIsSortModalVisible] = useState(false);
+
+  const toggleSortModal = () => {
+    console.warn("aaaaa")
+    setIsSortModalVisible(!isSortModalVisible);
+  };
+
   useEffect(() => {
     const loadEvents = async () => {
       const data = await fetchEvents();
@@ -135,6 +142,21 @@ const AllEvents: React.FC<AllEventsProps> = ({ navigation }) => {
       setFilteredEvents(filtered);
     }
   }, [searchQuery, events]);
+
+
+  const sortByName = () => {
+    const sortedByName = [...events].sort((a, b) =>
+      a.eventTitle.localeCompare(b.eventTitle)
+    );
+    setEvents(sortedByName);
+  };
+
+  const sortByDate = () => {
+    const sortedByDate = [...events].sort((a, b) =>
+      new Date(a.date).getTime() - new Date(b.date).getTime()
+    );
+    setEvents(sortedByDate);
+  };
 
 
   const handlePrint = async () => {
@@ -190,11 +212,42 @@ const AllEvents: React.FC<AllEventsProps> = ({ navigation }) => {
       </View>
       <View style={styles.listHeader}>
         <Text style={styles.eventsList}>Events List</Text>
-        <TouchableOpacity style={styles.sortByButton}>
+        <TouchableOpacity style={styles.sortByButton} onPress={toggleSortModal}>
           <Text style={styles.sortByText}>Sort By</Text>
           <MaterialIcons name="filter-list" size={24} color="black" />
         </TouchableOpacity>
       </View>
+      <Modal
+        transparent={true}
+        visible={isSortModalVisible}
+        onRequestClose={toggleSortModal}
+        animationType="slide"
+      >
+        <TouchableWithoutFeedback onPress={toggleSortModal}>
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <TouchableOpacity
+                style={styles.optionButton}
+                onPress={() => {
+                  sortByName();
+                  setIsSortModalVisible(false);
+                }}
+              >
+                <Text style={styles.optionText}>By Name</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.optionButton}
+                onPress={() => {
+                  sortByDate();
+                  setIsSortModalVisible(false);
+                }}
+              >
+                <Text style={styles.optionText}>By Date</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
       <FlatList
         data={filteredEvents}
         renderItem={({ item }) => <EventCard event={item} />}
