@@ -29,6 +29,7 @@ import {
   GENERATE_PDF_ERROR,
 } from "../../../../app/screens/All_Invoice/constants/string"; // Import the strings
 import { FaMobileAlt } from "react-icons/fa";
+import constantStyles from "../../../../app/(tabs)/constants/styles"
 
 
 type RootStackParamList = {
@@ -148,7 +149,7 @@ const InvoiceItem: React.FC<{ item: Invoice }> = ({ item }) => {
   };
 
   return (
-    <View style={styles.invoiceItem}>
+    <View style={constantStyles.constantbox}>
       <View style={styles.row}>
         <View style={styles.statusContainer}>
           <Text style={styles.status}>{item.status}</Text>

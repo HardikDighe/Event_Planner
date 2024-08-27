@@ -28,6 +28,8 @@ import {
   EMPTY_SEARCH_QUERY,
 } from "../../All_Quotation/constants/string"; // Import the strings
 import { FaMobileAlt } from "react-icons/fa";
+import constantStyles from "../../../../app/(tabs)/constants/styles"
+
 // Define types for navigation
 type RootStackParamList = {
   AllQuotation: undefined;
@@ -119,7 +121,7 @@ const AllQuotation: React.FC = () => {
     };
 
     return (
-      <View style={styles.quotationItem}>
+      <View style={constantStyles.constantbox}>
         <View style={styles.row}>
           <View style={styles.statusContainer}>
             <Text style={styles.status}>{item.status}</Text>
