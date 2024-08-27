@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { constantSortedByModalStyles } from "@/app/(tabs)/constants/styles";
 
 const styles = StyleSheet.create({
   container: {
@@ -137,26 +138,7 @@ const styles = StyleSheet.create({
     color: "#051650",
   },
 
-  modalContainer: {
-    flex: 1, 
-    justifyContent: 'flex-start',
-    alignItems: 'flex-end',
-    marginTop: '25%', // Adjust this value to move the modal up or down
-    marginRight: 15,  // Adjust this value to move the modal left or right
-    // backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalContent: {
-    width: 150,
-    padding: 20,
-    backgroundColor: 'white',
-    borderRadius: 8,
-  },
-  optionButton: {
-    padding: 16,
-  },
-  optionText: {
-    fontSize: 18,
-  },
+  ...constantSortedByModalStyles
 });
 
 export default styles;

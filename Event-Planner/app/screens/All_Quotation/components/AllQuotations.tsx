@@ -4,7 +4,7 @@ import {
   Text,
   FlatList,
   TouchableOpacity,
-  TextInput,
+  TextInput,Modal, TouchableWithoutFeedback
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import Feather from "react-native-vector-icons/Feather";
@@ -58,6 +58,8 @@ const AllQuotation: React.FC = () => {
   const [quotations, setQuotations] = useState<Quotation[]>([]);
   const [filteredQuotations, setFilteredQuotations] = useState<Quotation[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isSortModalVisible, setIsSortModalVisible] = useState(false);
+
 
   // Fetch data from your API
   useEffect(() => {
@@ -82,6 +84,59 @@ const AllQuotation: React.FC = () => {
       );
     }
   };
+
+
+  const toggleSortModal = () => {
+    setIsSortModalVisible(!isSortModalVisible);
+  };
+
+  const sortByName = () => {
+    const sortedByName = [...quotations].sort((a, b) =>
+      a.name.localeCompare(b.name)
+    );
+    setFilteredQuotations(sortedByName);
+  };
+
+  const sortByDate = () => {
+    const sortedByDate = [...quotations].sort((a, b) =>
+      new Date(a.date).getTime() - new Date(b.date).getTime()
+    );
+    setFilteredQuotations(sortedByDate);
+  };
+
+  const renderSortModal = () => (
+    <Modal
+      transparent={true}
+      visible={isSortModalVisible}
+      onRequestClose={toggleSortModal}
+      animationType="slide"
+    >
+      <TouchableWithoutFeedback onPress={toggleSortModal}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <TouchableOpacity
+              style={styles.optionButton}
+              onPress={() => {
+                sortByName();
+                toggleSortModal();
+              }}
+            >
+              <Text style={styles.optionText}>By Name</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+            style={styles.optionButton}
+            onPress={() => {
+              sortByDate();
+              toggleSortModal();
+            }}
+          >
+            <Text style={styles.optionText}>By Date</Text>
+          </TouchableOpacity>
+          </View>
+        </View>
+      </TouchableWithoutFeedback>
+    </Modal>
+  );
 
   const QuotationItem: React.FC<{ item: Quotation }> = ({ item }) => {
     const handlePrint = async () => {
@@ -239,8 +294,12 @@ const AllQuotation: React.FC = () => {
       <View style={styles.quotationsHeader}>
         <Text style={styles.quotationsListText}>{QUOTATIONS_LIST_TEXT}</Text>
         <View style={styles.sortByContainer}>
-          <Text style={styles.sortByText}>{SORT_BY_TEXT}</Text>
+        <TouchableOpacity style={styles.sortByContainer} onPress={toggleSortModal}>
+          <Text style={styles.sortByText}>Sort By</Text>
           <Icon name="sort" size={24} color="#000" />
+        </TouchableOpacity>
+          {/* <Text style={styles.sortByText}>{SORT_BY_TEXT}</Text>
+          <Icon name="sort" size={24} color="#000" /> */}
         </View>
       </View>
       <FlatList
@@ -255,6 +314,8 @@ const AllQuotation: React.FC = () => {
       >
         <Text style={constantStyles.footerButtonText}>{CREATE_QUOTATION_BUTTON_TEXT}</Text>
       </TouchableOpacity>
+      
+      {renderSortModal()}
     </View>
   );
 };
