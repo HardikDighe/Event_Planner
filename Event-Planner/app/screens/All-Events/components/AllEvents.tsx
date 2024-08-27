@@ -97,7 +97,7 @@ const EventCard: React.FC<{ event: Event }> = ({ event }) => {
             <MaterialIcons name="print" size={24} color="black" style={constantStyles.printIcon} />
           </TouchableOpacity>
           <TouchableOpacity onPress={handleShare}>
-            <MaterialCommunityIcons name="share-outline" size={24} color="black" style={constantStyles.shareIcon} />
+            <MaterialCommunityIcons name="share" size={24} color="black" style={constantStyles.shareIcon} />
           </TouchableOpacity>
         </View>
       </View>

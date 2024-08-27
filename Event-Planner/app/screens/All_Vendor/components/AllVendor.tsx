@@ -5,7 +5,7 @@ import {
   ScrollView,
   TouchableOpacity,
   TextInput,
-  Alert,Modal,TouchableWithoutFeedback
+  Alert, Modal, TouchableWithoutFeedback
 } from "react-native";
 import { Card, IconButton } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
@@ -18,7 +18,9 @@ import { RootStackParamList } from "../../../../app/(tabs)/types";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { FaMobileAlt } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
-import constantStyles from "../../../../app/(tabs)/constants/styles"
+import constantStyles from "../../../../app/(tabs)/constants/styles";
+import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
+
 
 // Type definition for Vendor
 type Item = {
@@ -58,16 +60,16 @@ const Header: React.FC<{
             <h1>Vendor List</h1>
             <ul>
               ${allVendorData
-                .map(
-                  (vendor) => `
+          .map(
+            (vendor) => `
                 <li>
                   <strong>${vendor.vendorName}</strong><br />
                   ${vendor.phoneNumber}<br />
                   ${vendor.address}
                 </li>
               `
-                )
-                .join("")}
+          )
+          .join("")}
             </ul>
           </body>
         </html>
@@ -208,12 +210,21 @@ const VendorCard: React.FC<{ vendor: Vendor }> = ({ vendor }) => {
           </View>
         )}
       </Card.Content>
-      <Card.Actions style={styles.cardActions}>
-        <View style={styles.iconButtons}>
-          <IconButton icon="printer" onPress={printContent} />
-          <IconButton icon="share" onPress={shareContent} />
-        </View>
-      </Card.Actions>
+      {/* <Card.Actions style={constantStyles.footerIcons}> */}
+      <View style={constantStyles.footerIcons}>
+        <TouchableOpacity onPress={printContent} style={constantStyles
+          .footerIcons}>
+          <MaterialIcons name="print" size={24} color="black" style={constantStyles
+            .printIcon} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={shareContent} style={constantStyles
+          .footerIcons}>
+          <MaterialCommunityIcons name="share" size={24} style={constantStyles
+            .shareIcon} />
+        </TouchableOpacity>
+
+      </View>
+      {/* </Card.Actions> */}
     </Card>
   );
 };
@@ -267,18 +278,18 @@ const VendorListScreen: React.FC = () => {
       animationType="slide"
     >
       <TouchableWithoutFeedback onPress={toggleSortModal}>
-      <View style={styles.modalContainer}>
-        <View style={styles.modalContent}>
-          <TouchableOpacity
-            style={styles.optionButton}
-            onPress={() => {
-              sortByName();
-              toggleSortModal();
-            }}
-          >
-            <Text style={styles.optionText}>By Name</Text>
-          </TouchableOpacity>
-          {/* <TouchableOpacity
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <TouchableOpacity
+              style={styles.optionButton}
+              onPress={() => {
+                sortByName();
+                toggleSortModal();
+              }}
+            >
+              <Text style={styles.optionText}>By Name</Text>
+            </TouchableOpacity>
+            {/* <TouchableOpacity
             style={styles.optionButton}
             onPress={() => {
               sortByDate();
@@ -287,8 +298,8 @@ const VendorListScreen: React.FC = () => {
           >
             <Text style={styles.optionText}>By Date</Text>
           </TouchableOpacity> */}
+          </View>
         </View>
-      </View>
       </TouchableWithoutFeedback>
     </Modal>
   );
