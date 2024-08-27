@@ -5,7 +5,7 @@ import {
   ScrollView,
   TouchableOpacity,
   TextInput,
-  Alert,
+  Alert,Modal,TouchableWithoutFeedback
 } from "react-native";
 import { Card, IconButton } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
@@ -222,6 +222,7 @@ const VendorListScreen: React.FC = () => {
   const [allVendorData, setAllVendorData] = useState<Vendor[]>([]);
   const [filteredVendors, setFilteredVendors] = useState<Vendor[]>([]);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const [isSortModalVisible, setIsSortModalVisible] = useState(false);
 
   useEffect(() => {
     const loadAllVendorData = async () => {
@@ -246,12 +247,57 @@ const VendorListScreen: React.FC = () => {
     );
   };
 
+  const toggleSortModal = () => {
+    setIsSortModalVisible(!isSortModalVisible);
+  };
+
+  const sortByName = () => {
+    const sortedByName = [...allVendorData].sort((a, b) =>
+      a.vendorName.localeCompare(b.vendorName)
+    );
+    setFilteredVendors(sortedByName);
+  };
+
+  const renderSortModal = () => (
+    <Modal
+      transparent={true}
+      visible={isSortModalVisible}
+      onRequestClose={toggleSortModal}
+      animationType="slide"
+    >
+      <TouchableWithoutFeedback onPress={toggleSortModal}>
+      <View style={styles.modalContainer}>
+        <View style={styles.modalContent}>
+          <TouchableOpacity
+            style={styles.optionButton}
+            onPress={() => {
+              sortByName();
+              toggleSortModal();
+            }}
+          >
+            <Text style={styles.optionText}>By Name</Text>
+          </TouchableOpacity>
+          {/* <TouchableOpacity
+            style={styles.optionButton}
+            onPress={() => {
+              sortByDate();
+              toggleSortModal();
+            }}
+          >
+            <Text style={styles.optionText}>By Date</Text>
+          </TouchableOpacity> */}
+        </View>
+      </View>
+      </TouchableWithoutFeedback>
+    </Modal>
+  );
+
   return (
     <View style={styles.container}>
       <Header onSearch={handleSearch} allVendorData={allVendorData} />
       <View style={styles.listHeader}>
         <Text style={styles.listTitle}>Vendor List</Text>
-        <TouchableOpacity style={styles.sortButton}>
+        <TouchableOpacity style={styles.sortButton} onPress={toggleSortModal}>
           <Text style={styles.sortText}>Sort By</Text>
         </TouchableOpacity>
       </View>
@@ -266,6 +312,8 @@ const VendorListScreen: React.FC = () => {
       >
         <Text style={styles.registerButtonText}>+ Register Vendor</Text>
       </TouchableOpacity>
+
+      {renderSortModal()}
     </View>
   );
 };
