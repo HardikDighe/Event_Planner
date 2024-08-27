@@ -4,11 +4,10 @@ import {
   Text,
   FlatList,
   TouchableOpacity,
-  TextInput,Modal, TouchableWithoutFeedback
+  TextInput, Modal, TouchableWithoutFeedback
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import Feather from "react-native-vector-icons/Feather";
-// import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+
 import { FontAwesome, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 import * as Sharing from "expo-sharing";
@@ -124,14 +123,14 @@ const AllQuotation: React.FC = () => {
               <Text style={styles.optionText}>By Name</Text>
             </TouchableOpacity>
             <TouchableOpacity
-            style={styles.optionButton}
-            onPress={() => {
-              sortByDate();
-              toggleSortModal();
-            }}
-          >
-            <Text style={styles.optionText}>By Date</Text>
-          </TouchableOpacity>
+              style={styles.optionButton}
+              onPress={() => {
+                sortByDate();
+                toggleSortModal();
+              }}
+            >
+              <Text style={styles.optionText}>By Date</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </TouchableWithoutFeedback>
@@ -294,10 +293,10 @@ const AllQuotation: React.FC = () => {
       <View style={styles.quotationsHeader}>
         <Text style={styles.quotationsListText}>{QUOTATIONS_LIST_TEXT}</Text>
         <View style={styles.sortByContainer}>
-        <TouchableOpacity style={styles.sortByContainer} onPress={toggleSortModal}>
-          <Text style={styles.sortByText}>Sort By</Text>
-          <Icon name="sort" size={24} color="#000" />
-        </TouchableOpacity>
+          <TouchableOpacity style={styles.sortByContainer} onPress={toggleSortModal}>
+            <Text style={styles.sortByText}>Sort By</Text>
+            <Icon name="sort" size={24} color="#000" />
+          </TouchableOpacity>
           {/* <Text style={styles.sortByText}>{SORT_BY_TEXT}</Text>
           <Icon name="sort" size={24} color="#000" /> */}
         </View>
@@ -314,7 +313,7 @@ const AllQuotation: React.FC = () => {
       >
         <Text style={constantStyles.footerButtonText}>{CREATE_QUOTATION_BUTTON_TEXT}</Text>
       </TouchableOpacity>
-      
+
       {renderSortModal()}
     </View>
   );
