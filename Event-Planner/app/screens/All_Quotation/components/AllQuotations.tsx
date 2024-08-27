@@ -250,10 +250,10 @@ const AllQuotation: React.FC = () => {
         contentContainerStyle={{ paddingBottom: 16 }}
       />
       <TouchableOpacity
-        style={styles.createQuotationButton}
+        style={constantStyles.footerButton}
         onPress={() => navigation.navigate("CreateQuotation")}
       >
-        <Text style={styles.createQuotationButtonText}>{CREATE_QUOTATION_BUTTON_TEXT}</Text>
+        <Text style={constantStyles.footerButtonText}>{CREATE_QUOTATION_BUTTON_TEXT}</Text>
       </TouchableOpacity>
     </View>
   );

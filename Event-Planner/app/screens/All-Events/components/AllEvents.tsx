@@ -256,8 +256,8 @@ const AllEvents: React.FC<AllEventsProps> = ({ navigation }) => {
         renderItem={({ item }) => <EventCard event={item} />}
         keyExtractor={item => item.id}
       />
-      <TouchableOpacity style={styles.registerEventButton} onPress={() => navigation.navigate("CreateEvent")}>
-        <Text style={styles.registerEventButtonText}>+ Register Event</Text>
+      <TouchableOpacity style={constantStyles.footerButton} onPress={() => navigation.navigate("CreateEvent")}>
+        <Text style={constantStyles.footerButtonText}>+ Register Event</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );

@@ -25,6 +25,19 @@ const constantStyles = StyleSheet.create({
   shareIcon: {
     marginLeft: 10,
   },
+  footerButton: {
+    backgroundColor: "#051650",
+    padding: 8,
+    borderRadius: 8,
+    alignItems: "center",
+    marginTop: 16,
+  },
+  
+  footerButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
   
 })
 export default constantStyles;

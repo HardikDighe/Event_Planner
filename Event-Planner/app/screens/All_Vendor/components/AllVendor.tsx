@@ -319,10 +319,10 @@ const VendorListScreen: React.FC = () => {
         ))}
       </ScrollView>
       <TouchableOpacity
-        style={styles.registerButton}
+        style={constantStyles.footerButton}
         onPress={() => navigation.navigate("VendorRegistration")}
       >
-        <Text style={styles.registerButtonText}>+ Register Vendor</Text>
+        <Text style={constantStyles.footerButtonText}>+ Register Vendor</Text>
       </TouchableOpacity>
 
       {renderSortModal()}

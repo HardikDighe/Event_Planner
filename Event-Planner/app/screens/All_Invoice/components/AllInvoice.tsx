@@ -100,10 +100,10 @@ const AllInvoices: React.FC = () => {
         renderItem={({ item }) => <InvoiceItem item={item} />}
       />
       <TouchableOpacity
-        style={styles.createInvoiceButton}
+        style={constantStyles.footerButton}
         onPress={() => navigation.navigate("CreateInvoice")}
       >
-        <Text style={styles.createInvoiceButtonText}>{CREATE_INVOICE_BUTTON_TEXT}</Text>
+        <Text style={constantStyles.footerButtonText}>{CREATE_INVOICE_BUTTON_TEXT}</Text>
       </TouchableOpacity>
     </View>
   );
