@@ -8,7 +8,9 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import Feather from "react-native-vector-icons/Feather";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+// import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import { FontAwesome, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
+
 import * as Sharing from "expo-sharing";
 import * as Print from "expo-print";
 import { useNavigation } from "@react-navigation/native";
@@ -130,8 +132,8 @@ const AllQuotation: React.FC = () => {
         <View style={styles.row}>
           <View style={styles.nameAmountContainer}>
             <View style={styles.namePhoneNumberContainer}>
-            <Text style={styles.name}>{item.name}</Text>
-            <Text style={styles.phoneNumber}><FaMobileAlt style={styles.icon1}/>{item.phoneNumber}</Text> {/* Display phone number */}
+              <Text style={styles.name}>{item.name}</Text>
+              <Text style={styles.phoneNumber}><FaMobileAlt style={styles.icon1} />{item.phoneNumber}</Text> {/* Display phone number */}
             </View>
             <Text style={styles.amount}>₹{item.amount.toLocaleString()}</Text>
           </View>
@@ -149,14 +151,14 @@ const AllQuotation: React.FC = () => {
           </View>
         </View>
         <View style={styles.icons}>
-          <TouchableOpacity onPress={handlePrint} style={styles.iconContainer}>
-            <Feather name="printer" size={24} style={styles.icon} />
+          <TouchableOpacity onPress={handlePrint} style={constantStyles.footerIcons}>
+            <MaterialIcons name="print" size={24} color="black" style={constantStyles.printIcon} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={handleShare} style={styles.iconContainer}>
+          <TouchableOpacity onPress={handleShare} style={constantStyles.footerIcons}>
             <MaterialCommunityIcons
               name="share"
               size={24}
-              style={styles.icon}
+              style={constantStyles.shareIcon}
             />
           </TouchableOpacity>
         </View>

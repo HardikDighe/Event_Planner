@@ -13,7 +13,18 @@ const constantStyles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 1,
-  }
+  },
+  footerIcons: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  printIcon: {
+    marginRight: 10,
+  },
+  shareIcon: {
+    marginLeft: 10,
+  },
   
 })
 export default constantStyles;

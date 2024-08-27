@@ -6,6 +6,7 @@ import * as Sharing from 'expo-sharing';
 import { useNavigation } from '@react-navigation/native'; // Import useNavigation hook
 import styles from '../styles/styles'; // Ensure the path is correct
 import { fetchEvents } from '../api/allevents.api';
+import constantStyles from "../../../../app/(tabs)/constants/styles"
 
 // Event type definition
 type Event = {
@@ -68,7 +69,7 @@ const EventCard: React.FC<{ event: Event }> = ({ event }) => {
   };
 
   return (
-    <View style={styles.card}>
+    <View style={constantStyles.constantbox}>
       <View style={styles.cardHeader}>
         <Text style={styles.eventTitle}>{event.eventTitle}</Text>
         <Text style={styles.eventDay}>{event.time}</Text>
@@ -91,12 +92,12 @@ const EventCard: React.FC<{ event: Event }> = ({ event }) => {
         <Text style={styles.eventDescription}>{event.description}</Text>
       </View>
       <View style={styles.cardFooter}>
-        <View style={styles.footerIcons}>
+        <View style={constantStyles.footerIcons}>
           <TouchableOpacity onPress={handlePrint}>
-            <MaterialIcons name="print" size={24} color="black" style={styles.printIcon} />
+            <MaterialIcons name="print" size={24} color="black" style={constantStyles.printIcon} />
           </TouchableOpacity>
           <TouchableOpacity onPress={handleShare}>
-            <MaterialCommunityIcons name="share-outline" size={24} color="black" style={styles.shareIcon} />
+            <MaterialCommunityIcons name="share-outline" size={24} color="black" style={constantStyles.shareIcon} />
           </TouchableOpacity>
         </View>
       </View>

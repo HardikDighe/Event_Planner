@@ -9,13 +9,13 @@ import {
   Button,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import Feather from "react-native-vector-icons/Feather";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import * as Sharing from "expo-sharing";
 import * as Print from "expo-print";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import styles from "../../../../..//Event-Planner/app/screens/All_Invoice/styles/styles"; // Import styles
+import { FontAwesome, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
+
 import { fetchInvoices, Invoice } from "../../../screens/All_Invoice/api/allinvoice.api"; // Import the fetch function and types
 import {
   HEADER_TITLE,
@@ -158,8 +158,8 @@ const InvoiceItem: React.FC<{ item: Invoice }> = ({ item }) => {
       <View style={styles.row}>
         <View style={styles.nameAmountContainer}>
           <View style={styles.namePhoneNumberContainer}>
-          <Text style={styles.name}>{item.name}</Text>
-          <Text style={styles.phoneNumber}><FaMobileAlt style={styles.icon1}/>{item.phoneNumber}</Text> 
+            <Text style={styles.name}>{item.name}</Text>
+            <Text style={styles.phoneNumber}><FaMobileAlt style={styles.icon1} />{item.phoneNumber}</Text>
           </View>
           <Text style={styles.amount}>₹{item.amount.toLocaleString()}</Text>
         </View>
@@ -177,11 +177,15 @@ const InvoiceItem: React.FC<{ item: Invoice }> = ({ item }) => {
         </View>
       </View>
       <View style={styles.icons}>
-        <TouchableOpacity onPress={handlePrint} style={styles.iconContainer}>
-          <Feather name="printer" size={24} style={styles.icon} />
+        <TouchableOpacity onPress={handlePrint} style={constantStyles
+          .footerIcons}>
+          <MaterialIcons name="print" size={24} color="black" style={constantStyles
+            .printIcon} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={handleShare} style={styles.iconContainer}>
-          <MaterialCommunityIcons name="share" size={24} style={styles.icon} />
+        <TouchableOpacity onPress={handleShare} style={constantStyles
+          .footerIcons}>
+          <MaterialCommunityIcons name="share" size={24} style={constantStyles
+            .shareIcon} />
         </TouchableOpacity>
       </View>
     </View>

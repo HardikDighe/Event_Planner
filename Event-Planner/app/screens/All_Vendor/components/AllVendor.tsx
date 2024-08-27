@@ -18,6 +18,7 @@ import { RootStackParamList } from "../../../../app/(tabs)/types";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { FaMobileAlt } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
+import constantStyles from "../../../../app/(tabs)/constants/styles"
 
 // Type definition for Vendor
 type Item = {
@@ -153,7 +154,7 @@ const VendorCard: React.FC<{ vendor: Vendor }> = ({ vendor }) => {
   };
 
   return (
-    <Card style={styles.card}>
+    <Card style={constantStyles.constantbox}>
       <Card.Content>
         <Text style={styles.vendorName}>{vendor.vendorName}</Text>
         <View style={styles.phoneRow}>
