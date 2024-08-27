@@ -79,11 +79,13 @@ const styles = StyleSheet.create({
   vendorName: {
     fontSize: 18,
     fontWeight: "bold",
+    marginLeft: -14,
   },
   phoneRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    marginLeft: -20,
   },
   viewDetailsButton: {
     padding: 8,
