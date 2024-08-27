@@ -9,7 +9,7 @@ import styles from '../../../../app/screens/CreateQuotation/styles/styles';
 import { saveQuotation, deleteQuotation, fetchQuotationId } from '../api/Quotation.api';
 // import { fetchQuotationId } from '../api/getQuotationId.api';
 import { STRINGS, ERROR_MESSAGES, HEADERS } from '../../../../app/screens/CreateQuotation/constants/string';
-import { RootStackParamList, Item } from "../../../(tabs)/constants/types";
+import { RootStackParamList, Item } from "../../../../app/(tabs)/constants/types";
 
 interface FloatingLabelInputProps {
     label: string;

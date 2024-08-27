@@ -10,7 +10,7 @@ import {
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import styles from "../../../../../Event-Planner/app/screens/CreateEvent/styles/styles";
-import { RootStackParamList } from "../../../(tabs)/constants/types"; // Adjust the import path
+import { RootStackParamList } from "../../../../app/(tabs)/constants/types"; // Adjust the import path
 import { saveCreateEvent } from "../api/createevent.api";
 import DateTimePicker from "@react-native-community/datetimepicker";
 

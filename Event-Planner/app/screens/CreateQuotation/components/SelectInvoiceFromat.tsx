@@ -5,7 +5,7 @@ import Swiper from 'react-native-swiper';
 import * as Print from 'expo-print';
 import { shareAsync } from 'expo-sharing';
 import { ToWords } from 'to-words';
-import { RootStackParamList } from "../../../(tabs)/constants/types";
+import { RootStackParamList } from "../../../../app/(tabs)/constants/types";
 import styles from '../../../../app/screens/CreateQuotation/styles/styles';
 import { ERROR_MESSAGES, STRINGS } from '../constants/string';
 
