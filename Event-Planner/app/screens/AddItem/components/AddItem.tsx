@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, TouchableOpacity, Text, ScrollView } from "react-native";
+import { View, TouchableOpacity, Text, ScrollView, Alert } from "react-native";
 import { NavigationProp, RouteProp, useRoute } from "@react-navigation/native";
 import { TextInput } from "react-native-paper";
 import { styles } from "../../../../app/screens/AddItem/styles/styles";
@@ -23,11 +23,13 @@ const AddItem: React.FC<Props> = ({ navigation }) => {
   const [paidAmount, setPaidAmount] = useState("");
   const [balance, setBalance] = useState("");
 
-  const [itemNameFocused, setItemNameFocused] = useState(false);
-  const [quantityFocused, setQuantityFocused] = useState(false);
-  const [priceFocused, setPriceFocused] = useState(false);
-  const [miscellaneousFocused, setMiscellaneousFocused] = useState(false);
+  const [itemNameError, setItemNameError] = useState("");
+  const [quantityError, setQuantityError] = useState("");
+  const [priceError, setPriceError] = useState("");
   const [paidAmountFocused, setPaidAmountFocused] = useState(false);
+
+  const [miscellaneousFocused, setMiscellaneousFocused] = useState(false);
+
 
   useEffect(() => {
     if (!isNaN(parseFloat(quantity)) && !isNaN(parseFloat(price))) {
@@ -62,10 +64,38 @@ const AddItem: React.FC<Props> = ({ navigation }) => {
   const handleQuantityChange = (value: string) => setQuantity(value);
   const handlePriceChange = (value: string) => setPrice(value);
   const handleDiscountChange = (value: string) => setDiscount(value);
-  const handleMiscellaneousChange = (value: string) => setMiscellaneous(value);
+  const handleMiscellaneousChange = (value: string) =>
+    setMiscellaneous(value);
   const handlePaidAmountChange = (value: string) => setPaidAmount(value);
 
   const handleSaveItem = () => {
+    let isValid = true;
+
+    if (!itemName.trim()) {
+      setItemNameError("Item name cannot be empty.");
+      isValid = false;
+    } else {
+      setItemNameError("");
+    }
+
+    if (!quantity || isNaN(Number(quantity)) || Number(quantity) <= 0) {
+      setQuantityError("Please enter a valid quantity greater than 0.");
+      isValid = false;
+    } else {
+      setQuantityError("");
+    }
+
+    if (!price || isNaN(Number(price)) || Number(price) <= 0) {
+      setPriceError("Please enter a valid price greater than 0.");
+      isValid = false;
+    } else {
+      setPriceError("");
+    }
+
+    if (!isValid) {
+      return;
+    }
+
     const newItem = {
       itemName,
       quantity,
@@ -76,6 +106,7 @@ const AddItem: React.FC<Props> = ({ navigation }) => {
       balance,
       miscellaneous,
     };
+
     const fromScreen = route.params?.fromScreen;
     if (fromScreen === "CreateInvoice") {
       navigation.navigate("CreateInvoice", { newItem });
@@ -94,43 +125,62 @@ const AddItem: React.FC<Props> = ({ navigation }) => {
         label={STRINGS.labels.name}
         value={itemName}
         onChangeText={setItemName}
-        style={[
-          styles.input,
-          itemNameFocused && styles.focusedInput,
-          { color: itemNameFocused ? "black" : "rgba(0, 0, 0, 0.54)" },
-        ]}
-        onFocus={() => setItemNameFocused(true)}
-        onBlur={() => setItemNameFocused(false)}
+        style={styles.input}
+        onFocus={() => setItemNameError("")}
         mode="outlined"
         theme={{
-          colors: { text: "black", primary: "black", background: "white" },
+          colors: {
+            text: itemNameError ? "red" : "black",
+            primary: itemNameError ? "red" : "black",
+            background: "white",
+          },
         }}
       />
+      {itemNameError ? (
+        <Text style={{ color: "red", marginTop: 5 }}>{itemNameError}</Text>
+      ) : null}
+    
       <TextInput
         label={STRINGS.labels.quantity}
         value={quantity}
         onChangeText={handleQuantityChange}
-        style={[styles.input, quantityFocused && styles.focusedInput]}
-        onFocus={() => setQuantityFocused(true)}
-        onBlur={() => setQuantityFocused(false)}
+        style={styles.input}
+        onFocus={() => setQuantityError("")}
         mode="outlined"
+        keyboardType="numeric"
         theme={{
-          colors: { text: "black", primary: "black", background: "white" },
+          colors: {
+            text: quantityError ? "red" : "black",
+            primary: quantityError ? "red" : "black",
+            background: "white",
+          },
         }}
       />
+      {quantityError ? (
+        <Text style={{ color: "red", marginTop: 5 }}>{quantityError}</Text>
+      ) : null}
+
       <TextInput
         label={STRINGS.labels.price}
         value={price}
         onChangeText={handlePriceChange}
-        style={[styles.input, priceFocused && styles.focusedInput]}
-        onFocus={() => setPriceFocused(true)}
-        onBlur={() => setPriceFocused(false)}
+        style={styles.input}
+        onFocus={() => setPriceError("")}
         mode="outlined"
+        keyboardType="numeric"
         theme={{
-          colors: { text: "black", primary: "black", background: "white" },
+          colors: {
+            text: priceError ? "red" : "black",
+            primary: priceError ? "red" : "black",
+            background: "white",
+          },
         }}
       />
+      {priceError ? (
+        <Text style={{ color: "red", marginTop: 5 }}>{priceError}</Text>
+      ) : null}
 
+      {/* ...remaining fields... */}
       <View style={styles.combinedFieldsContainer}>
         <View style={styles.row}>
           <Text style={styles.rowLabel}>{STRINGS.labels.totalAmount}</Text>

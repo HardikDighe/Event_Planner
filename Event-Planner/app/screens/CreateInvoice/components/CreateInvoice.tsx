@@ -23,7 +23,6 @@ import { TextInput as PaperInput } from "react-native-paper";
 import { RootStackParamList } from "../../../(tabs)/types"; // Adjust the import path
 import styles from "../../../../../Event-Planner/app/screens/CreateInvoice/styles/styles";
 import axios from "axios";
-
 interface FormData {
   customer: string;
   phoneNumber: string;
@@ -35,7 +34,6 @@ interface FormData {
   invoiceNumber: string;
   items: Item[];
 }
-
 interface Item {
   itemName: string;
   quantity: string;
@@ -48,8 +46,10 @@ interface Item {
 const CreateInvoice: React.FC = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>(); // Typed navigation prop
   const route = useRoute<RouteProp<{ params: { newItem?: Item } }, "params">>();
+
   const [customer, setCustomer] = useState<string>("");
   const [phoneNumber, setPhoneNumber] = useState<string>("");
+
   const [address, setAddress] = useState<string>("");
   const [emailId, setEmailId] = useState<string>("");
   const [gstinNumber, setGstinNumber] = useState<string>("");
@@ -57,6 +57,12 @@ const CreateInvoice: React.FC = () => {
   const [venueDetails, setVenueDetails] = useState<string>("");
   const [invoiceNumber, setInvoiceNumber] = useState<string>("01");
   const [items, setItems] = useState<Item[]>([]); // State for items
+
+  const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
+
+  // State for validation
+  const [customerError, setCustomerError] = useState<boolean>(false);
+  const [phoneNumberError, setPhoneNumberError] = useState<boolean>(false);
 
   const [formData, setFormData] = useState<FormData>({
     customer: "",
@@ -70,7 +76,7 @@ const CreateInvoice: React.FC = () => {
     items: items,
   });
 
-  const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
+
 
   const handleInputChange = (name: keyof FormData, value: string) => {
     setFormData({ ...formData, [name]: value });
@@ -89,17 +95,33 @@ const CreateInvoice: React.FC = () => {
       const newItem = route.params.newItem;
       if (newItem) {
         setItems((prevItems) => [...prevItems, newItem]);
-        // Update formData with new items
-        setFormData((prevFormData) => ({
-          ...prevFormData,
-          items: [...prevFormData.items, newItem],
-        }));
       }
     }
   }, [route.params?.newItem]);
 
   const handleSave = async () => {
-    const formData1 = {
+    let valid = true;
+
+    if (!customer.trim()) {
+      setCustomerError(true);
+      valid = false;
+    } else {
+      setCustomerError(false);
+    }
+
+    const phoneNumberPattern = /^\d{10}$/;
+    if (!phoneNumberPattern.test(phoneNumber.trim())) {
+      setPhoneNumberError(true);
+      valid = false;
+    } else {
+      setPhoneNumberError(false);
+    }
+
+    if (!valid) {
+      return;
+    }
+
+    const formData = {
       customer,
       phoneNumber,
       address,
@@ -110,10 +132,11 @@ const CreateInvoice: React.FC = () => {
       invoiceNumber,
       items,
     };
+
     try {
       const response = await axios.post(
         "http://localhost:3000/CreateInvoice",
-        formData1
+        formData
       );
       console.log("Invoice saved:", response.data);
       navigation.goBack(); // Navigate back after saving
@@ -127,14 +150,14 @@ const CreateInvoice: React.FC = () => {
       <html>
         <body>
           <h1>Invoice</h1>
-          <p><strong>Invoice Number:</strong> ${formData.invoiceNumber}</p>
-          <p><strong>Customer:</strong> ${formData.customer}</p>
-          <p><strong>Phone Number:</strong> ${formData.phoneNumber}</p>
-          <p><strong>Address:</strong> ${formData.address}</p>
-          <p><strong>Email ID:</strong> ${formData.emailId}</p>
-          <p><strong>GSTIN Number:</strong> ${formData.gstinNumber}</p>
-          <p><strong>Date & Time:</strong> ${formData.dateTime.toDateString()}</p>
-          <p><strong>Venue Details:</strong> ${formData.venueDetails}</p>
+          <p><strong>Invoice Number:</strong> ${invoiceNumber}</p>
+          <p><strong>Customer:</strong> ${customer}</p>
+          <p><strong>Phone Number:</strong> ${phoneNumber}</p>
+          <p><strong>Address:</strong> ${address}</p>
+          <p><strong>Email ID:</strong> ${emailId}</p>
+          <p><strong>GSTIN Number:</strong> ${gstinNumber}</p>
+          <p><strong>Date & Time:</strong> ${dateTime.toDateString()}</p>
+          <p><strong>Venue Details:</strong> ${venueDetails}</p>
         </body>
       </html>
     `;
@@ -147,7 +170,6 @@ const CreateInvoice: React.FC = () => {
       console.error("Error generating or sharing PDF:", error);
     }
   };
-
   const handleShare = async () => {
     const html = `
       <html>
@@ -179,7 +201,6 @@ const CreateInvoice: React.FC = () => {
   };
 
   const handleAddItem = () => {
-    // navigation.navigate("AddItem"); // Typed navigation
     navigation.navigate("AddItem", { fromScreen: "CreateInvoice" });
   };
 
@@ -203,10 +224,8 @@ const CreateInvoice: React.FC = () => {
           <View style={styles.column}>
             <Text style={styles.label}>Invoice Number</Text>
             <Picker
-              selectedValue={formData.invoiceNumber}
-              onValueChange={(itemValue) =>
-                handleInputChange("invoiceNumber", itemValue)
-              }
+              selectedValue={invoiceNumber}
+              onValueChange={(itemValue) => setInvoiceNumber(itemValue)}
               style={styles.picker}
             >
               <Picker.Item label="01" value="01" />
@@ -221,16 +240,18 @@ const CreateInvoice: React.FC = () => {
               style={styles.dateButton}
               onPress={() => setShowDatePicker(true)}
             >
-              <Text style={styles.dateText}>
-                {formData.dateTime.toDateString()}
-              </Text>
+              <Text style={styles.dateText}>{dateTime.toDateString()}</Text>
             </TouchableOpacity>
             {showDatePicker && (
               <DateTimePicker
-                value={formData.dateTime}
+                value={dateTime}
                 mode="date"
                 display="default"
-                onChange={handleDateChange}
+                onChange={(event, selectedDate) => {
+                  const currentDate = selectedDate || dateTime;
+                  setShowDatePicker(false);
+                  setDateTime(currentDate);
+                }}
               />
             )}
           </View>
@@ -241,30 +262,46 @@ const CreateInvoice: React.FC = () => {
             label="Customer"
             value={customer}
             onChangeText={setCustomer}
-            style={styles.input}
+            style={[
+              styles.input,
+              customerError && { borderColor: "red" }, // Apply red border if error
+            ]}
             theme={{
               colors: {
                 text: "#051650",
-                primary: "#051650",
+                primary: customerError ? "red" : "#051650",
                 background: "white",
               },
             }}
           />
+          {customerError && (
+            <Text style={{ color: "red", marginBottom: 8 }}>
+              This is a required field.
+            </Text>
+          )}
           <PaperInput
             mode="outlined"
             label="Phone Number"
             value={phoneNumber}
             onChangeText={setPhoneNumber}
             keyboardType="phone-pad"
-            style={styles.input}
+            style={[
+              styles.input,
+              phoneNumberError && { borderColor: "red" }, // Apply red border if error
+            ]}
             theme={{
               colors: {
                 text: "#051650",
-                primary: "#051650",
+                primary: phoneNumberError ? "red" : "#051650",
                 background: "white",
               },
             }}
           />
+          {phoneNumberError && (
+            <Text style={{ color: "red", marginBottom: 8 }}>
+              Enter a 10 digits Mobile Number
+            </Text>
+          )}
           <PaperInput
             mode="outlined"
             label="Address"
@@ -357,3 +394,4 @@ const CreateInvoice: React.FC = () => {
 };
 
 export default CreateInvoice;
+
