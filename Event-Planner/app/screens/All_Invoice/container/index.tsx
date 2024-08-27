@@ -4,7 +4,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import CreateInvoice from "../../CreateInvoice/components/CreateInvoice";
 import AddItem from "../../../screens/AddItem/components/AddItem";
-import { RootStackParamList } from "../../../(tabs)/types"; // Adjust the import path
+import { RootStackParamList } from "../../../(tabs)/constants/types"; // Adjust the import path
 import AllInvoices from "../../../screens/All_Invoice/components/AllInvoice";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { TouchableOpacityBase } from "react-native";

@@ -6,7 +6,7 @@ import { shareAsync } from 'expo-sharing';
 import styles from '../../../../app/screens/CreateQuotation/styles/styles';
 import { fetchQuotationDetails, deleteQuotation, updateQuotation } from '../api/Quotation.api';
 import { ERROR_MESSAGES, STRINGS } from '../constants/string';
-import { Item } from '@/app/(tabs)/types';
+import { Item } from '@/app/(tabs)/constants/types';
 interface FloatingLabelInputProps {
     label: string;
     value: string;

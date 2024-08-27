@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios";
-import { Item } from "@/app/(tabs)/types";
+import { Item } from "@/app/(tabs)/constants/types";
 
 export interface VendorData {
   vendorName: string;

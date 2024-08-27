@@ -8,7 +8,7 @@ import {
   saveVendorData,
   VendorData,
 } from "../../../../app/screens/VendorRegistration/api/vendorreg,api"; // Import the API function
-import { RootStackParamList, Item } from "@/app/(tabs)/types";
+import { RootStackParamList, Item } from "@/app/(tabs)/constants/types";
 
 interface Props {
   navigation: NavigationProp<any>;

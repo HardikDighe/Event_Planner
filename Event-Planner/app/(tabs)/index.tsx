@@ -1,7 +1,7 @@
 import React from 'react';
 import { SafeAreaView, StatusBar, StyleSheet } from 'react-native';
 import AppNavigator from '../../app/(tabs)/AppNAvigator';
-import   {RootStackParamList}  from './types'; // Adjust the path
+import   {RootStackParamList}  from './constants/types'; // Adjust the path
 
 const App = () => {
   return (

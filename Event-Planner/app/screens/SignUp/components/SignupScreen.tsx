@@ -5,7 +5,7 @@ import { TextInput as PaperTextInput, Provider as PaperProvider } from 'react-na
 import styles from '../styles/styles';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../../../(tabs)/types'; 
+import { RootStackParamList } from '../../../(tabs)/constants/types'; 
 import { Strings } from '../constants/string';
 import { signupUser } from '../api/signup.api';
 

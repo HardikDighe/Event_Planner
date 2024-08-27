@@ -14,7 +14,7 @@ import * as FileSystem from "expo-file-system";
 import * as Print from "expo-print";
 import { fetchAllVendors } from "../api/allvendor.api";
 import styles from "../../../../../Event-Planner/app/screens/All_Vendor/styles/styles";
-import { RootStackParamList } from "../../../../app/(tabs)/types";
+import { RootStackParamList } from "../../../(tabs)/constants/types";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { FaMobileAlt } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";

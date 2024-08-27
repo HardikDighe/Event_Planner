@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import styles from "../styles/styles"; // Import the styles
-import { RootStackParamList } from "../../../(tabs)/types"; // Adjust the import path as necessary
+import { RootStackParamList } from "../../../(tabs)/constants/types"; // Adjust the import path as necessary
 import CreateEvent from "../../CreateEvent/components/CreateEvent";
 
 const RegisterEvent: React.FC = () => {

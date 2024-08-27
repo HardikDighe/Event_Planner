@@ -3,7 +3,7 @@ import { View, Text, Switch, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import styles from '../../../../../Event-Planner/app/screens/Setting/styles/styles';  // Import the styles
-import {RootStackParamList} from "../../../../app/(tabs)/types"
+import {RootStackParamList} from "../../../(tabs)/constants/types"
 
 // Define the type for navigation
 type SettingsScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Settings'>;

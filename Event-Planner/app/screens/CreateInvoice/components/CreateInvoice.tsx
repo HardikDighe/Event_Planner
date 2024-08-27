@@ -20,7 +20,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 import { TextInput as PaperInput } from "react-native-paper";
-import { RootStackParamList } from "../../../(tabs)/types"; // Adjust the import path
+import { RootStackParamList } from "../../../(tabs)/constants/types"; // Adjust the import path
 import styles from "../../../../../Event-Planner/app/screens/CreateInvoice/styles/styles";
 import axios from "axios";
 interface FormData {

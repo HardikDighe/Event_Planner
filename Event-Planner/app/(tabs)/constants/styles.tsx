@@ -38,6 +38,8 @@ const constantStyles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
+
   
 })
+
 export default constantStyles;

@@ -5,7 +5,7 @@ import LoginPage from '../components/LoginPage';
 import ForgotPassword from '../../ForgotPassword/components/ForgotPassword';
 import SignupScreen from '../../SignUp/components/SignupScreen'; // Import the SignUp component
 import DashboardScreen from '../../Dashboard/components/Dashboard';
-import { RootStackParamList } from '../../../(tabs)/types';
+import { RootStackParamList } from '../../../(tabs)/constants/types';
 
 
 const Stack = createStackNavigator<RootStackParamList>();

@@ -7,7 +7,7 @@ import { FontAwesome } from '@expo/vector-icons'; // Adjust based on your icon l
 import DashboardScreen from '../../../../app/screens/Dashboard/components/Dashboard';
 import SettingNavigation from '../../../../app/screens/Setting/components/SettingNavigation'; // Adjust the path to your SettingNavigation
 import DrawerContent from '../../DrawerContent/components/DrawerContent'; // Adjust the path to your DrawerContent
-import { RootStackParamList, RootDrawerParamList } from '../../../(tabs)/types';
+import { RootStackParamList, RootDrawerParamList } from '../../../(tabs)/constants/types';
 import NotificationScreen from '../../Notification/components/Notification';
 import AllInvoices from '../../All_Invoice/components/AllInvoice';
 import AllQuotation from '../../All_Quotation/components/AllQuotations';

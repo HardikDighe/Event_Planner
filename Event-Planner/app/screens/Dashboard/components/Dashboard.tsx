@@ -3,7 +3,7 @@ import React from "react";
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import { StackScreenProps } from "@react-navigation/stack";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import { RootStackParamList } from "../../../(tabs)/types";
+import { RootStackParamList } from "../../../(tabs)/constants/types";
 import styles from "../../../../app/screens/Dashboard/styles/style"; // Import the styles from styles.tsx
 
 type Props = StackScreenProps<RootStackParamList, "Dashboard">;
