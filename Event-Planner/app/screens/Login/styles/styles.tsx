@@ -69,7 +69,8 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: 'red',
-    marginTop: 5,
+    fontSize: 14,
+    marginBottom: 15, // Add margin to create space below the error message
   },
 });
 

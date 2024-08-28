@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -8,7 +8,7 @@ import {
   Alert, Modal, TouchableWithoutFeedback
 } from "react-native";
 import { Card, IconButton } from "react-native-paper";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import * as Sharing from "expo-sharing";
 import * as FileSystem from "expo-file-system";
 import Icon from "react-native-vector-icons/MaterialIcons";
@@ -254,7 +254,8 @@ const VendorListScreen: React.FC = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const [isSortModalVisible, setIsSortModalVisible] = useState(false);
 
-  useEffect(() => {
+  useFocusEffect(
+    useCallback(() => {
     const loadAllVendorData = async () => {
       const data = await fetchAllVendors();
       console.log("Fetched Vendor Data:", data); // Log the fetched data to see if it includes the necessary fields
@@ -266,7 +267,8 @@ const VendorListScreen: React.FC = () => {
       }
     };
     loadAllVendorData();
-  }, []);
+  }, [])
+)
 
   const handleSearch = (query: string) => {
     const lowercasedQuery = query.toLowerCase();

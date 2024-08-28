@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -13,7 +13,7 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 import { FontAwesome, MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import * as Sharing from "expo-sharing";
 import * as Print from "expo-print";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import styles from "../../../../../Event-Planner/app/screens/All_Quotation/styles/styles"; // Import the styles
 import { fetchQuotations } from "../../All_Quotation/api/allquotation.api"; // Import the API function
@@ -130,15 +130,17 @@ const AllQuotation: React.FC = () => {
   };
 
   // Fetch data from your API
-  useEffect(() => {
-    const fetchData = async () => {
+  useFocusEffect(
+    useCallback(() => {
+    const loadQuotations = async () => {
       const data = await fetchQuotations();
       setQuotations(data);
       setFilteredQuotations(data);
     };
 
-    fetchData();
-  }, []);
+    loadQuotations();
+  }, [])
+)
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);

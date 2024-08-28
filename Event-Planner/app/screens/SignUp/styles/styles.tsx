@@ -53,6 +53,68 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginBottom: 10,
   },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    width: '80%',
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  modalSectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginTop: 15,
+  },
+  modalText: {
+    fontSize: 16,
+    marginTop: 5,
+    lineHeight: 22,
+  },
+  closeButton: {
+    marginTop: 20,
+    backgroundColor: '#051650',
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+  },
+  closeButtonText: {
+    color: 'white',
+    fontSize: 16,
+  },
+  checkboxContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  checkbox: {
+    width: 20,
+    height: 20,
+    borderWidth: 1,
+    borderColor: 'gray',
+    marginRight: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  checkboxChecked: {
+    backgroundColor: 'black',
+  },
+  checkboxLabel: {
+    fontSize: 16,
+  },
+  termsLink: {
+    color: 'blue',
+    textDecorationLine: 'underline',
+  },
 });
 
 export default styles;
