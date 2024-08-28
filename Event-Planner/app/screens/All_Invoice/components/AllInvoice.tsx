@@ -83,10 +83,6 @@ const AllInvoices: React.FC = () => {
   return (
     <View style={styles.container}>
       <Header onSearch={handleSearch} />
-      <View style={styles.totalSalesContainer}>
-        <Text style={styles.totalSales}>{TOTAL_SALES_TEXT}</Text>
-        <Text style={styles.totalAmount}>{totalBalance.toLocaleString()}</Text>
-      </View>
       <View style={styles.invoicesHeader}>
         <Text style={styles.invoicesListText}>{INVOICES_LIST_TEXT}</Text>
         <View style={styles.sortByContainer}>
@@ -94,6 +90,11 @@ const AllInvoices: React.FC = () => {
           <Icon name="sort" size={24} color="#051650" />
         </View>
       </View>
+      <View style={styles.totalSalesContainer}>
+        <Text style={styles.totalSales}>{TOTAL_SALES_TEXT}</Text>
+        <Text style={styles.totalAmount}>{totalBalance.toLocaleString()}</Text>
+      </View>
+      
       <FlatList
         data={filteredInvoices}
         keyExtractor={(item) => item.id}
