@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import axios from 'axios'; // Import axios for making API calls
 import Icon from 'react-native-vector-icons/FontAwesome'; // Import the icon from react-native-vector-icons
 import styles from '../styles/styles';
 
@@ -109,6 +110,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ navigation }) => {
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordErrors, setPasswordErrors] = useState<string[]>([]);
+  const [loginError, setLoginError] = useState('');
 
   const handleLogin = async () => {
     let valid = true;
@@ -130,26 +132,22 @@ const LoginPage: React.FC<LoginPageProps> = ({ navigation }) => {
 
     if (valid) {
       try {
-        const response = await fetch('http://localhost:3000/Login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ email, password }),
-        });
+        const response = await axios.get('http://localhost:3000/signup');
+        const users = response.data;
 
-        if (response.ok) {
-          const data = await response.json();
-          // Handle successful login
+        const user = users.find((user: any) => user.email === email && user.password === password);
+
+        if (user) {
+          // Successful login
+          setLoginError('');
           navigation.navigate('Dashboard', { email, password });
         } else {
-          // Handle login error
-          const errorData = await response.json();
-          Alert.alert('Login Failed', errorData.message || 'An error occurred while logging in');
+          // Invalid email or password
+          setLoginError('You don’t have an Account, Please Sign Up');
         }
       } catch (error) {
-        console.error('Login error:', error);
-        Alert.alert('Login Failed', 'An error occurred while logging in. Please try again.');
+        console.error(error);
+        setLoginError('An error occurred. Please try again.');
       }
     }
   };
@@ -185,6 +183,9 @@ const LoginPage: React.FC<LoginPageProps> = ({ navigation }) => {
               ))}
             </View>
           )}
+          {loginError ? (
+            <Text style={styles.errorText}>{loginError}</Text>
+          ) : null}
           <TouchableOpacity style={styles.button} onPress={handleLogin}>
             <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>

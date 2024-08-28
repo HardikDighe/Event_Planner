@@ -10,6 +10,7 @@ export const Strings = {
     firmNameLabel: 'Firm Name',
     gstinLabel: 'GSTIN No.',
     passwordLabel: 'Password',
+    privacyPolicyError: 'You must accept the Privacy Policy to continue.',
     confirmPasswordLabel: 'Confirm Password',
     signupButton: 'Signup',
     emailError: 'Please enter a valid email address',
