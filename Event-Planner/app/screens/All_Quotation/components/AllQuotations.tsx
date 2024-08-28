@@ -144,7 +144,7 @@ const AllQuotation: React.FC = () => {
           html: `
             <h1>Quotation #${item.id}</h1>
             <p>Name: ${item.name}</p>
-            <p>Phone: ${item.phoneNumber}</p> <!-- Added phone number -->
+           <p>Phone: ${item.phoneNumber}</p> <!-- Added phone number -->
             <p>Amount: ₹${item.amount.toLocaleString()}</p>
             <p>Balance: ₹${item.balance.toLocaleString()}</p>
             <p>Date: ${item.date}</p>

@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/native'; // Import useNavigatio
 import styles from '../styles/styles'; // Ensure the path is correct
 import { fetchEvents } from '../api/allevents.api';
 import constantStyles from "../../../../app/(tabs)/constants/styles"
+import { ERROR_MESSAGES, STRINGS } from '../constants/string';
 
 // Event type definition
 type Event = {
@@ -64,7 +65,7 @@ const EventCard: React.FC<{ event: Event }> = ({ event }) => {
       `;
       await Print.printAsync({ html: htmlContent });
     } catch (error) {
-      Alert.alert('Error', 'An error occurred while printing');
+      Alert.alert(ERROR_MESSAGES.printingError);
     }
   };
 
@@ -75,7 +76,7 @@ const EventCard: React.FC<{ event: Event }> = ({ event }) => {
         <Text style={styles.eventDay}>{event.time}</Text>
       </View>
       <Text style={styles.namePhoneText}>
-        {event.customerData?.name || 'No Name'} {event.customerData?.phone || 'No Phone'}
+        {event.customerData?.name || STRINGS.noName} {event.customerData?.phone || STRINGS.noPhone}
       </Text>
       <View style={styles.cardBody}>
         <View style={styles.eventInfo}>
@@ -109,12 +110,9 @@ const EventCard: React.FC<{ event: Event }> = ({ event }) => {
 const AllEvents: React.FC<AllEventsProps> = ({ navigation }) => {
   const [events, setEvents] = useState<Event[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [locationQuery, setLocationQuery] = useState<string>('');
-  const [dateQuery, setDateQuery] = useState<string>('');
   const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
   const [showSearchBar, setShowSearchBar] = useState<boolean>(false);
   const navigate = useNavigation(); // Use the navigation hook
-
   const [isSortModalVisible, setIsSortModalVisible] = useState(false);
 
   const toggleSortModal = () => {
@@ -161,6 +159,40 @@ const AllEvents: React.FC<AllEventsProps> = ({ navigation }) => {
     setEvents(sortedByDate);
   };
 
+  
+  const renderSortModal = () => (
+    <Modal
+      transparent={true}
+      visible={isSortModalVisible}
+      onRequestClose={toggleSortModal}
+      animationType="slide"
+    >
+      <TouchableWithoutFeedback onPress={toggleSortModal}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <TouchableOpacity
+              style={styles.optionButton}
+              onPress={() => {
+                sortByName();
+                toggleSortModal();
+              }}
+            >
+              <Text style={styles.optionText}>By Name</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+            style={styles.optionButton}
+            onPress={() => {
+              sortByDate();
+              toggleSortModal();
+            }}
+          >
+            <Text style={styles.optionText}>By Date</Text>
+          </TouchableOpacity>
+          </View>
+        </View>
+      </TouchableWithoutFeedback>
+    </Modal>
+  );
 
   const handlePrint = async () => {
     try {
@@ -178,10 +210,10 @@ const AllEvents: React.FC<AllEventsProps> = ({ navigation }) => {
       if (await Sharing.isAvailableAsync()) {
         await Sharing.shareAsync(uri);
       } else {
-        Alert.alert('Sharing not available', 'Sharing is not available on this device.');
+        Alert.alert('Sharing not available', ERROR_MESSAGES.sharingError);
       }
-    } catch (error) {
-      Alert.alert('Error', 'An error occurred while creating the PDF');
+    } catch {
+      Alert.alert('Error', ERROR_MESSAGES.pdfCreationError);
     }
   };
 
@@ -214,51 +246,22 @@ const AllEvents: React.FC<AllEventsProps> = ({ navigation }) => {
         </View>
       </View>
       <View style={styles.listHeader}>
-        <Text style={styles.eventsList}>Events List</Text>
+        <Text style={styles.eventsList}>{STRINGS.eventList}</Text>
         <TouchableOpacity style={styles.sortByButton} onPress={toggleSortModal}>
-          <Text style={styles.sortByText}>Sort By</Text>
+          <Text style={styles.sortByText}>{STRINGS.sortBy}</Text>
           <MaterialIcons name="filter-list" size={24} color="black" />
         </TouchableOpacity>
       </View>
-      <Modal
-        transparent={true}
-        visible={isSortModalVisible}
-        onRequestClose={toggleSortModal}
-        animationType="slide"
-      >
-        <TouchableWithoutFeedback onPress={toggleSortModal}>
-          <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
-              <TouchableOpacity
-                style={styles.optionButton}
-                onPress={() => {
-                  sortByName();
-                  setIsSortModalVisible(false);
-                }}
-              >
-                <Text style={styles.optionText}>By Name</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.optionButton}
-                onPress={() => {
-                  sortByDate();
-                  setIsSortModalVisible(false);
-                }}
-              >
-                <Text style={styles.optionText}>By Date</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </TouchableWithoutFeedback>
-      </Modal>
       <FlatList
         data={filteredEvents}
         renderItem={({ item }) => <EventCard event={item} />}
         keyExtractor={item => item.id}
       />
       <TouchableOpacity style={constantStyles.footerButton} onPress={() => navigation.navigate("CreateEvent")}>
-        <Text style={constantStyles.footerButtonText}>+ Register Event</Text>
+        <Text style={constantStyles.footerButtonText}>{STRINGS.registerEventButtonText}</Text>
       </TouchableOpacity>
+
+      {renderSortModal()}
     </SafeAreaView>
   );
 };
