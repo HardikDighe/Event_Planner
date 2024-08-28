@@ -90,13 +90,13 @@ const constantStyles = StyleSheet.create({
 
 export default constantStyles;
 
-export const constantSortedByModalStyles = StyleSheet.create({
+export const SortedByModalStyles = StyleSheet.create({
   
   modalContainer: {
     flex: 1, 
     justifyContent: 'flex-start',
     alignItems: 'flex-end',
-    marginTop: '25%', // Adjust this value to move the modal up or down
+    marginTop: '45%', // Adjust this value to move the modal up or down
     marginRight: 15,  // Adjust this value to move the modal left or right
     // backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },

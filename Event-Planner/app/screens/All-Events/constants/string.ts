@@ -11,11 +11,10 @@ export const STRINGS = {
   allEventsTitle: 'All Events',
   searchPlaceholder: 'Search events...',
   sortBy: 'Sort By',
-  registerEventButtonText: '+ Register Event',
-  sharingNotAvailable: 'Sharing not available',
-  sharingNotAvailableMessage: 'Sharing is not available on this device.',  
+  registerEventButtonText: '+ Register Event', 
   sortByName: 'By Name',
   sortByDate: 'By Date',
+  EVENTS_LIST: "Events List",
 };
 
 export const API_BASE_URL = 'http://localhost:3000';

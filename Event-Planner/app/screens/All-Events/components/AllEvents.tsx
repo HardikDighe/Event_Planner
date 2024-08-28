@@ -9,7 +9,7 @@ import { fetchEvents } from '../api/allevents.api';
 import constantStyles from "../../../../app/(tabs)/constants/styles"
 import { headerstyles } from '../../../../app/(tabs)/constants/styles';
 import Icon from "react-native-vector-icons/MaterialIcons";
-
+import { STRINGS, ERROR_MESSAGES } from '../constants/string';
 
 // Event type definition
 type Event = {
@@ -97,10 +97,10 @@ const EventCard: React.FC<{ event: Event }> = ({ event }) => {
       if (await Sharing.isAvailableAsync()) {
         await Sharing.shareAsync(uri);
       } else {
-        Alert.alert('Sharing not available', 'Sharing is not available on this device.');
+        Alert.alert(ERROR_MESSAGES.sharingError);
       }
     } catch (error) {
-      Alert.alert('Error', 'An error occurred while creating the PDF');
+      Alert.alert(ERROR_MESSAGES.pdfCreationError);
     }
   };
 
@@ -115,7 +115,7 @@ const EventCard: React.FC<{ event: Event }> = ({ event }) => {
       `;
       await Print.printAsync({ html: htmlContent });
     } catch (error) {
-      Alert.alert('Error', 'An error occurred while printing');
+      Alert.alert(ERROR_MESSAGES.printingError);
     }
   };
 
@@ -229,10 +229,10 @@ const AllEvents: React.FC<AllEventsProps> = ({ navigation }) => {
       if (await Sharing.isAvailableAsync()) {
         await Sharing.shareAsync(uri);
       } else {
-        Alert.alert('Sharing not available', 'Sharing is not available on this device.');
+        Alert.alert(ERROR_MESSAGES.sharingError);
       }
     } catch (error) {
-      Alert.alert('Error', 'An error occurred while creating the PDF');
+      Alert.alert(ERROR_MESSAGES.pdfCreationError);
     }
   };
 
@@ -269,7 +269,7 @@ const AllEvents: React.FC<AllEventsProps> = ({ navigation }) => {
                   setIsSortModalVisible(false);
                 }}
               >
-                <Text style={styles.optionText}>By Name</Text>
+                <Text style={styles.optionText}>{STRINGS.sortByName}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.optionButton}
@@ -278,7 +278,7 @@ const AllEvents: React.FC<AllEventsProps> = ({ navigation }) => {
                   setIsSortModalVisible(false);
                 }}
               >
-                <Text style={styles.optionText}>By Date</Text>
+                <Text style={styles.optionText}>{STRINGS.sortByDate}</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -290,7 +290,7 @@ const AllEvents: React.FC<AllEventsProps> = ({ navigation }) => {
         keyExtractor={item => item.id}
       />
       <TouchableOpacity style={constantStyles.footerButton} onPress={() => navigation.navigate("CreateEvent")}>
-        <Text style={constantStyles.footerButtonText}>+ Register Event</Text>
+        <Text style={constantStyles.footerButtonText}>{STRINGS.registerButton}</Text>
       </TouchableOpacity>
     </View>
   );

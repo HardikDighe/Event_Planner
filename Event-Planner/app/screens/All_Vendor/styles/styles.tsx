@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { constantSortedByModalStyles } from "@/app/(tabs)/constants/styles";
+import { SortedByModalStyles } from "@/app/(tabs)/constants/styles";
 
 const styles = StyleSheet.create({
  
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
     color: "#051650",
   },
 
-  ...constantSortedByModalStyles
+  ...SortedByModalStyles
 });
 
 export default styles;
