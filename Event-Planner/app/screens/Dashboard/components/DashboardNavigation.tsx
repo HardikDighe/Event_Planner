@@ -122,7 +122,7 @@ const DashNavigation: React.FC = () => {
          <Stack.Screen
           name="AllVendors"
           component={VendorListScreen} // Ensure SettingNavigation is a stack navigator
-          options={{ headerShown: false }} // Optionally hide header if using custom header in SettingNavigation
+          options={{ headerShown: true}} // Optionally hide header if using custom header in SettingNavigation
         />
           <Stack.Screen
           name="VendorRegistration"

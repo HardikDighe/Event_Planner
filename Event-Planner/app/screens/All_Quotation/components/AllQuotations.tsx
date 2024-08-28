@@ -7,8 +7,7 @@ import {
   TextInput, Modal, TouchableWithoutFeedback
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import Feather from "react-native-vector-icons/Feather";
-// import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+
 import { FontAwesome, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 import * as Sharing from "expo-sharing";

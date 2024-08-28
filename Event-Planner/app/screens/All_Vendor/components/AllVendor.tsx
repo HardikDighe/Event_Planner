@@ -11,6 +11,8 @@ import { Card, IconButton } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import * as Sharing from "expo-sharing";
 import * as FileSystem from "expo-file-system";
+import Icon from "react-native-vector-icons/MaterialIcons";
+
 import * as Print from "expo-print";
 import { fetchAllVendors } from "../api/allvendor.api";
 import styles from "../../../../../Event-Planner/app/screens/All_Vendor/styles/styles";
@@ -43,71 +45,87 @@ type Vendor = {
   items: Item[];
 };
 
-// Header Component
+
 const Header: React.FC<{
   onSearch: (query: string) => void;
   allVendorData: Vendor[];
 }> = ({ onSearch, allVendorData }) => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const [isSearching, setIsSearching] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Function to generate and share PDF
-  const generatePDF = async () => {
-    try {
-      const html = `
-        <html>
-          <body>
-            <h1>Vendor List</h1>
-            <ul>
-              ${allVendorData
-          .map(
-            (vendor) => `
-                <li>
-                  <strong>${vendor.vendorName}</strong><br />
-                  ${vendor.phoneNumber}<br />
-                  ${vendor.address}
-                </li>
-              `
-          )
-          .join("")}
-            </ul>
-          </body>
-        </html>
-      `;
-
-      const { uri } = await Print.printToFileAsync({ html });
-
-      if (await Sharing.isAvailableAsync()) {
-        await Sharing.shareAsync(uri, {
-          mimeType: "application/pdf",
-          dialogTitle: "Share PDF",
-        });
-      } else {
-        alert("Sharing is not available on this device");
-      }
-    } catch (error) {
-      console.error("Error generating PDF:", error);
+  const handleSearchIconClick = () => {
+    setIsSearching((prev) => !prev);
+    if (isSearching) {
+      onSearch(""); // Clear search when closing the search input
+      setSearchQuery(""); // Clear search query
     }
   };
+    // Function to generate and share PDF
+    const generatePDF = async () => {
+      try {
+        const html = `
+          <html>
+            <body>
+              <h1>Vendor List</h1>
+              <ul>
+                ${allVendorData
+            .map(
+              (vendor) => `
+                  <li>
+                    <strong>${vendor.vendorName}</strong><br />
+                    ${vendor.phoneNumber}<br />
+                    ${vendor.address}
+                  </li>
+                `
+            )
+            .join("")}
+              </ul>
+            </body>
+          </html>
+        `;
+  
+        const { uri } = await Print.printToFileAsync({ html });
+  
+        if (await Sharing.isAvailableAsync()) {
+          await Sharing.shareAsync(uri, {
+            mimeType: "application/pdf",
+            dialogTitle: "Share PDF",
+          });
+        } else {
+          Alert.alert("Sharing is not available on this device");
+        }
+      } catch (error) {
+        console.error("Error generating PDF:", error);
+      }
+    };
 
   return (
     <View style={styles.headerContainer}>
-      <TouchableOpacity onPress={() => navigation.goBack()}>
-        <IconButton icon="arrow-left" size={24} />
-      </TouchableOpacity>
-      <Text style={styles.headerText}>All Vendors</Text>
-      <View style={styles.headerIcons}>
+      {isSearching ? (
         <TextInput
           style={styles.searchInput}
-          placeholder="Search..."
           value={searchQuery}
           onChangeText={(text) => {
-            setSearchQuery(text);
-            onSearch(text);
+            setSearchQuery(text); // Update search query
+            onSearch(text); // Pass query to the parent component
           }}
+          placeholder="Search Vendors"
         />
+      ) : (
+        <Text style={styles.headerText}>All Vendors</Text>
+      )}
+      <View style={styles.headerIcons}>
+        <TouchableOpacity onPress={handleSearchIconClick}>
+          <Icon
+            name={isSearching ? "close" : "search"}
+            size={24}
+            color="#000"
+            style={{ marginRight: 16 }}
+          />
+        </TouchableOpacity>
         <TouchableOpacity onPress={generatePDF}>
-          <IconButton icon="file-pdf-box" size={24} />
+          <Icon name="picture-as-pdf" size={24} color="red" />
         </TouchableOpacity>
       </View>
     </View>
