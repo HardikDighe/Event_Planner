@@ -7,7 +7,9 @@ import { useNavigation } from '@react-navigation/native'; // Import useNavigatio
 import styles from '../styles/styles'; // Ensure the path is correct
 import { fetchEvents } from '../api/allevents.api';
 import constantStyles from "../../../../app/(tabs)/constants/styles"
-import { ERROR_MESSAGES, STRINGS } from '../constants/string';
+import { headerstyles } from '../../../../app/(tabs)/constants/styles';
+import Icon from "react-native-vector-icons/MaterialIcons";
+
 
 // Event type definition
 type Event = {
@@ -31,6 +33,54 @@ type AllEventsProps = {
     navigate: (screen: string) => void;
   };
 };
+
+// Header component definition
+const Header: React.FC<{ title: string; onSearch?: (query: string) => void; generatePDF?: () => void; }> = ({ title, onSearch, generatePDF }) => {
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearchIconClick = () => {
+    setIsSearching((prev) => !prev);
+    if (isSearching) {
+      onSearch?.(""); // Clear search when closing the search input
+      setSearchQuery(""); // Clear search query
+    }
+  };
+
+  return (
+    <View style={headerstyles.headerContainer}>
+      {isSearching ? (
+        <TextInput
+          style={headerstyles.searchInput}
+          value={searchQuery}
+          onChangeText={(text) => {
+            setSearchQuery(text); // Update search query
+            onSearch?.(text); // Pass query to the parent component
+          }}
+          placeholder="Search..."
+        />
+      ) : (
+        <Text style={headerstyles.headerText}>{title}</Text>
+      )}
+      <View style={headerstyles.headerIcons}>
+        <TouchableOpacity onPress={handleSearchIconClick}>
+          <MaterialIcons
+            name={isSearching ? "close" : "search"}
+            size={25}
+            color="#000"
+            style={{ marginRight: 16 }}
+          />
+        </TouchableOpacity>
+        {generatePDF && (
+          <TouchableOpacity onPress={generatePDF}>
+            <MaterialIcons name="picture-as-pdf" size={24} color="red" />
+          </TouchableOpacity>
+        )}
+      </View>
+    </View>
+  );
+};
+
 
 // EventCard component
 const EventCard: React.FC<{ event: Event }> = ({ event }) => {
@@ -65,7 +115,7 @@ const EventCard: React.FC<{ event: Event }> = ({ event }) => {
       `;
       await Print.printAsync({ html: htmlContent });
     } catch (error) {
-      Alert.alert(ERROR_MESSAGES.printingError);
+      Alert.alert('Error', 'An error occurred while printing');
     }
   };
 
@@ -76,7 +126,7 @@ const EventCard: React.FC<{ event: Event }> = ({ event }) => {
         <Text style={styles.eventDay}>{event.time}</Text>
       </View>
       <Text style={styles.namePhoneText}>
-        {event.customerData?.name || STRINGS.noName} {event.customerData?.phone || STRINGS.noPhone}
+        {event.customerData?.name || 'No Name'} {event.customerData?.phone || 'No Phone'}
       </Text>
       <View style={styles.cardBody}>
         <View style={styles.eventInfo}>
@@ -110,9 +160,12 @@ const EventCard: React.FC<{ event: Event }> = ({ event }) => {
 const AllEvents: React.FC<AllEventsProps> = ({ navigation }) => {
   const [events, setEvents] = useState<Event[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [locationQuery, setLocationQuery] = useState<string>('');
+  const [dateQuery, setDateQuery] = useState<string>('');
   const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
   const [showSearchBar, setShowSearchBar] = useState<boolean>(false);
   const navigate = useNavigation(); // Use the navigation hook
+
   const [isSortModalVisible, setIsSortModalVisible] = useState(false);
 
   const toggleSortModal = () => {
@@ -159,40 +212,6 @@ const AllEvents: React.FC<AllEventsProps> = ({ navigation }) => {
     setEvents(sortedByDate);
   };
 
-  
-  const renderSortModal = () => (
-    <Modal
-      transparent={true}
-      visible={isSortModalVisible}
-      onRequestClose={toggleSortModal}
-      animationType="slide"
-    >
-      <TouchableWithoutFeedback onPress={toggleSortModal}>
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <TouchableOpacity
-              style={styles.optionButton}
-              onPress={() => {
-                sortByName();
-                toggleSortModal();
-              }}
-            >
-              <Text style={styles.optionText}>By Name</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-            style={styles.optionButton}
-            onPress={() => {
-              sortByDate();
-              toggleSortModal();
-            }}
-          >
-            <Text style={styles.optionText}>By Date</Text>
-          </TouchableOpacity>
-          </View>
-        </View>
-      </TouchableWithoutFeedback>
-    </Modal>
-  );
 
   const handlePrint = async () => {
     try {
@@ -210,59 +229,70 @@ const AllEvents: React.FC<AllEventsProps> = ({ navigation }) => {
       if (await Sharing.isAvailableAsync()) {
         await Sharing.shareAsync(uri);
       } else {
-        Alert.alert('Sharing not available', ERROR_MESSAGES.sharingError);
+        Alert.alert('Sharing not available', 'Sharing is not available on this device.');
       }
-    } catch {
-      Alert.alert('Error', ERROR_MESSAGES.pdfCreationError);
+    } catch (error) {
+      Alert.alert('Error', 'An error occurred while creating the PDF');
     }
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigate.goBack()}>
-          <MaterialIcons name="arrow-back" size={28} color="black" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>All Events</Text>
-        <View style={styles.searchContainer}>
-          {showSearchBar && (
-            <>
-              {/* Search by Event Title */}
-              <TextInput
-                style={styles.searchBar}
-                placeholder="Search events..."
-                value={searchQuery}
-                onChangeText={setSearchQuery}
-              />
-            </>
-          )}
-
-          <TouchableOpacity onPress={() => setShowSearchBar(!showSearchBar)}>
-            <MaterialIcons name="search" size={28} color="black" />
+    <View style={styles.container}>
+      
+      <Header
+        title="All Events"
+        onSearch={(query) => setSearchQuery(query)}
+        generatePDF={handlePrint}
+      />
+      <View style={constantStyles.listHeaderText}>
+        <Text style={constantStyles.listText}>Events List</Text>
+        <View style={constantStyles.sortByContainer}>
+          <TouchableOpacity style={constantStyles.sortByContainer} onPress={toggleSortModal}>
+            <Text style={constantStyles.sortByText}>Sort By</Text>
+            <Icon name="sort" size={24} color="#000" />
           </TouchableOpacity>
-          <TouchableOpacity onPress={handlePrint}>
-            <MaterialIcons name="picture-as-pdf" size={28} color="black" />
-          </TouchableOpacity>
+         </View>
         </View>
-      </View>
-      <View style={styles.listHeader}>
-        <Text style={styles.eventsList}>{STRINGS.eventList}</Text>
-        <TouchableOpacity style={styles.sortByButton} onPress={toggleSortModal}>
-          <Text style={styles.sortByText}>{STRINGS.sortBy}</Text>
-          <MaterialIcons name="filter-list" size={24} color="black" />
-        </TouchableOpacity>
-      </View>
+      <Modal
+        transparent={true}
+        visible={isSortModalVisible}
+        onRequestClose={toggleSortModal}
+        animationType="slide"
+      >
+        <TouchableWithoutFeedback onPress={toggleSortModal}>
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <TouchableOpacity
+                style={styles.optionButton}
+                onPress={() => {
+                  sortByName();
+                  setIsSortModalVisible(false);
+                }}
+              >
+                <Text style={styles.optionText}>By Name</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.optionButton}
+                onPress={() => {
+                  sortByDate();
+                  setIsSortModalVisible(false);
+                }}
+              >
+                <Text style={styles.optionText}>By Date</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
       <FlatList
         data={filteredEvents}
         renderItem={({ item }) => <EventCard event={item} />}
         keyExtractor={item => item.id}
       />
       <TouchableOpacity style={constantStyles.footerButton} onPress={() => navigation.navigate("CreateEvent")}>
-        <Text style={constantStyles.footerButtonText}>{STRINGS.registerEventButtonText}</Text>
+        <Text style={constantStyles.footerButtonText}>+ Register Event</Text>
       </TouchableOpacity>
-
-      {renderSortModal()}
-    </SafeAreaView>
+    </View>
   );
 };
 
