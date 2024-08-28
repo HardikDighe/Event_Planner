@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, FlatList, TouchableOpacity, SafeAreaView, TextInput, Alert, Modal, TouchableWithoutFeedback } from 'react-native';
 import { FontAwesome, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
-import { useNavigation } from '@react-navigation/native'; // Import useNavigation hook
+import { useFocusEffect, useNavigation } from '@react-navigation/native'; // Import useNavigation hook
 import styles from '../styles/styles'; // Ensure the path is correct
 import { fetchEvents } from '../api/allevents.api';
 import constantStyles from "../../../../app/(tabs)/constants/styles"
@@ -173,7 +173,8 @@ const AllEvents: React.FC<AllEventsProps> = ({ navigation }) => {
     setIsSortModalVisible(!isSortModalVisible);
   };
 
-  useEffect(() => {
+  useFocusEffect(
+    useCallback(() => {
     const loadEvents = async () => {
       const data = await fetchEvents();
       setEvents(data);
@@ -181,7 +182,8 @@ const AllEvents: React.FC<AllEventsProps> = ({ navigation }) => {
     };
 
     loadEvents();
-  }, []);
+  }, [])
+)
 
   useEffect(() => {
     if (searchQuery === '') {
