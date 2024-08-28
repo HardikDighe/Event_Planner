@@ -40,6 +40,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginVertical: 16,
   },
+  // headerText: {
+  //   fontSize: 24,
+  //   fontFamily: "Arial",
+  //   color: "#051650",
+  //   flex: 1,
+  //   textAlign: "left",
+  // },
   quotationsListText: {
     fontSize: 18,
     fontWeight: "bold",
@@ -101,7 +108,7 @@ const styles = StyleSheet.create({
     color: "#000",
   },
   balanceInput: {
-    backgroundColor: "#bbdffb",
+    backgroundColor: "grey",
     borderRadius: 4,
     paddingHorizontal: 8,
     fontSize: 14,

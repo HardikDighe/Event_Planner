@@ -12,7 +12,7 @@ import { useNavigation } from "@react-navigation/native";
 import * as Sharing from "expo-sharing";
 import * as FileSystem from "expo-file-system";
 import Icon from "react-native-vector-icons/MaterialIcons";
-
+import { headerstyles } from "../../../../app/(tabs)/constants/styles";
 import * as Print from "expo-print";
 import { fetchAllVendors } from "../api/allvendor.api";
 import styles from "../../../../../Event-Planner/app/screens/All_Vendor/styles/styles";
@@ -101,10 +101,10 @@ const Header: React.FC<{
     };
 
   return (
-    <View style={styles.headerContainer}>
+    <View style={headerstyles.headerContainer}>
       {isSearching ? (
         <TextInput
-          style={styles.searchInput}
+          style={headerstyles.searchInput}
           value={searchQuery}
           onChangeText={(text) => {
             setSearchQuery(text); // Update search query
@@ -113,13 +113,13 @@ const Header: React.FC<{
           placeholder="Search Vendors"
         />
       ) : (
-        <Text style={styles.headerText}>All Vendors</Text>
+        <Text style={headerstyles.headerText}>All Vendors</Text>
       )}
-      <View style={styles.headerIcons}>
+      <View style={headerstyles.headerIcons}>
         <TouchableOpacity onPress={handleSearchIconClick}>
           <Icon
             name={isSearching ? "close" : "search"}
-            size={24}
+            size={25}
             color="#000"
             style={{ marginRight: 16 }}
           />
@@ -323,14 +323,17 @@ const VendorListScreen: React.FC = () => {
   );
 
   return (
-    <View style={styles.container}>
+    <View style={constantStyles.container}>
       <Header onSearch={handleSearch} allVendorData={allVendorData} />
-      <View style={styles.listHeader}>
-        <Text style={styles.listTitle}>Vendor List</Text>
-        <TouchableOpacity style={styles.sortButton} onPress={toggleSortModal}>
-          <Text style={styles.sortText}>Sort By</Text>
-        </TouchableOpacity>
-      </View>
+      <View style={constantStyles.listHeaderText}>
+        <Text style={constantStyles.listText}>Vendors List</Text>
+        <View style={constantStyles.sortByContainer}>
+          <TouchableOpacity style={constantStyles.sortByContainer} onPress={toggleSortModal}>
+            <Text style={constantStyles.sortByText}>Sort By</Text>
+            <Icon name="sort" size={24} color="#000" />
+          </TouchableOpacity>
+         </View>
+        </View>
       <ScrollView>
         {filteredVendors.map((vendor) => (
           <VendorCard key={vendor.id} vendor={vendor} />

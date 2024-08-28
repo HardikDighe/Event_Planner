@@ -5,17 +5,17 @@ import {
   FlatList,
   TouchableOpacity,
   TextInput,
-  Modal,
-  Button,
+  Alert,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import * as Sharing from "expo-sharing";
 import * as Print from "expo-print";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { headerstyles } from "../../../../app/(tabs)/constants/styles";
 import styles from "../../../../..//Event-Planner/app/screens/All_Invoice/styles/styles"; // Import styles
 import { FontAwesome, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
-
 import { fetchInvoices, Invoice } from "../../../screens/All_Invoice/api/allinvoice.api"; // Import the fetch function and types
 import {
   HEADER_TITLE,
@@ -26,7 +26,6 @@ import {
   SORT_BY_TEXT,
   PRINT_ERROR,
   SHARE_ERROR,
-  GENERATE_PDF_ERROR,
 } from "../../../../app/screens/All_Invoice/constants/string"; // Import the strings
 import { FaMobileAlt } from "react-icons/fa";
 import constantStyles from "../../../../app/(tabs)/constants/styles"
@@ -47,7 +46,6 @@ const AllInvoices: React.FC = () => {
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [totalBalance, setTotalBalance] = useState<number>(0);
-  const [modalVisible, setModalVisible] = useState(false);
 
   // Fetch data from API
   useEffect(() => {
@@ -68,21 +66,16 @@ const AllInvoices: React.FC = () => {
     loadInvoices();
   }, []);
 
-  const handleSearchIconClick = () => {
-    setModalVisible(true);
-  };
-
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
-  };
-
+  // Filter invoices based on search query
   const filteredInvoices = invoices.filter((invoice) =>
     invoice.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
     <View style={styles.container}>
-      <Header onSearch={handleSearch} />
+      {/* Header with search functionality */}
+      <Header onSearch={(query) => setSearchQuery(query)} allInvoiceData={[]} />
+
       <View style={styles.invoicesHeader}>
         <Text style={styles.invoicesListText}>{INVOICES_LIST_TEXT}</Text>
         <View style={styles.sortByContainer}>
@@ -90,16 +83,18 @@ const AllInvoices: React.FC = () => {
           <Icon name="sort" size={24} color="#051650" />
         </View>
       </View>
+
       <View style={styles.totalSalesContainer}>
         <Text style={styles.totalSales}>{TOTAL_SALES_TEXT}</Text>
         <Text style={styles.totalAmount}>{totalBalance.toLocaleString()}</Text>
       </View>
-      
+
       <FlatList
         data={filteredInvoices}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => <InvoiceItem item={item} />}
       />
+
       <TouchableOpacity
         style={constantStyles.footerButton}
         onPress={() => navigation.navigate("CreateInvoice")}
@@ -162,7 +157,7 @@ const InvoiceItem: React.FC<{ item: Invoice }> = ({ item }) => {
             <Text style={styles.name}>{item.name}</Text>
             <Text style={styles.phoneNumber}><FaMobileAlt style={styles.icon1} />{item.phoneNumber}</Text>
           </View>
-          <Text style={styles.amount}>₹{item.amount.toLocaleString()}</Text>
+          <Text style={constantStyles.amount}>₹{item.amount.toLocaleString()}</Text>
         </View>
       </View>
       <View style={styles.row}>
@@ -178,55 +173,99 @@ const InvoiceItem: React.FC<{ item: Invoice }> = ({ item }) => {
         </View>
       </View>
       <View style={styles.icons}>
-        <TouchableOpacity onPress={handlePrint} style={constantStyles
-          .footerIcons}>
-          <MaterialIcons name="print" size={24} color="black" style={constantStyles
-            .printIcon} />
+        <TouchableOpacity onPress={handlePrint} style={constantStyles.footerIcons}>
+          <MaterialIcons name="print" size={24} color="black" style={constantStyles.printIcon} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={handleShare} style={constantStyles
-          .footerIcons}>
-          <MaterialCommunityIcons name="share" size={24} style={constantStyles
-            .shareIcon} />
+        <TouchableOpacity onPress={handleShare} style={constantStyles.footerIcons}>
+          <MaterialCommunityIcons name="share" size={24} style={constantStyles.shareIcon} />
         </TouchableOpacity>
       </View>
     </View>
   );
 };
 
-const Header: React.FC<{ onSearch: (query: string) => void }> = ({
-  onSearch,
-}) => {
+const Header: React.FC<{
+  onSearch: (query: string) => void;
+  allInvoiceData: Invoice[];
+}> = ({ onSearch, allInvoiceData }) => {
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const [isSearching, setIsSearching] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleSearchIconClick = () => {
     setIsSearching((prev) => !prev);
     if (isSearching) {
-      onSearch(searchQuery);
+      onSearch(""); // Clear search when closing the search input
+      setSearchQuery(""); // Clear search query
+    }
+  };
+  // Function to generate and share PDF
+  const generatePDF = async () => {
+    try {
+      const html = `
+          <html>
+            <body>
+              <h1>Vendor List</h1>
+              <ul>
+                ${allInvoiceData
+          .map(
+            (Invoice) => `
+                  <li>
+                    <strong>${Invoice.name}</strong><br />
+                    ${Invoice.phoneNumber}<br />
+                    ${Invoice.amount}<br />
+                    ${Invoice.balance}<br />
+                    ${Invoice.date}<br />
+                    ${Invoice.status}<br />
+                  </li>
+                `
+          )
+          .join("")}
+              </ul>
+            </body>
+          </html>
+        `;
+
+      const { uri } = await Print.printToFileAsync({ html });
+
+      if (await Sharing.isAvailableAsync()) {
+        await Sharing.shareAsync(uri, {
+          mimeType: "application/pdf",
+          dialogTitle: "Share PDF",
+        });
+      } else {
+        Alert.alert("Sharing is not available on this device");
+      }
+    } catch (error) {
+      console.error("Error generating PDF:", error);
     }
   };
 
   return (
-    <View style={styles.headerContainer}>
+    <View style={headerstyles.headerContainer}>
       {isSearching ? (
         <TextInput
-          style={styles.searchInput}
+          style={headerstyles.searchInput}
           value={searchQuery}
-          onChangeText={setSearchQuery}
-          placeholder={SEARCH_PLACEHOLDER}
+          onChangeText={(text) => {
+            setSearchQuery(text); // Update search query
+            onSearch(text); // Pass query to the parent component
+          }}
+          placeholder="Search Invoices"
         />
       ) : (
-        <Text style={styles.headerText}>{HEADER_TITLE}</Text>
+        <Text style={headerstyles.headerText}>All Invoices</Text>
       )}
-      <View style={styles.headerIcons}>
+      <View style={headerstyles.headerIcons}>
         <TouchableOpacity onPress={handleSearchIconClick}>
           <Icon
             name={isSearching ? "close" : "search"}
-            size={24}
-            color="#051650"
+            size={25}
+            color="#000"
+            style={{ marginRight: 16 }}
           />
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={generatePDF}>
           <Icon name="picture-as-pdf" size={24} color="red" />
         </TouchableOpacity>
       </View>

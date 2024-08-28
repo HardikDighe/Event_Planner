@@ -2,11 +2,7 @@ import { StyleSheet } from "react-native";
 import { constantSortedByModalStyles } from "@/app/(tabs)/constants/styles";
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-    backgroundColor: "white",
-  },
+ 
   headerContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -44,7 +40,7 @@ const styles = StyleSheet.create({
     padding: 4,
     backgroundColor: "white",
     borderRadius: 4,
-    width: 150,
+    width: 1500,
     marginRight: 16,
   },
   listHeader: {

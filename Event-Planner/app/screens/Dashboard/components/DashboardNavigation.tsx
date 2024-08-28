@@ -147,7 +147,7 @@ const DashNavigation: React.FC = () => {
         <Stack.Screen
           name="AllEvents"
           component={AllEvents} // Ensure SettingNavigation is a stack navigator
-          options={{ headerShown:false}} // Optionally hide header if using custom header in SettingNavigation
+          options={{ headerShown:true}} // Optionally hide header if using custom header in SettingNavigation
         />
          <Stack.Screen
           name="CustomerDetails"

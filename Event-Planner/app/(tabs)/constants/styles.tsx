@@ -2,7 +2,11 @@
 import { StyleSheet } from "react-native";
 
 const constantStyles = StyleSheet.create({
-  
+  container: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: "white",
+  },
   constantbox: {
     backgroundColor: "#fff",
     borderRadius: 8,
@@ -38,7 +42,49 @@ const constantStyles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
-
+  balanceInput: {
+    backgroundColor: "#f5f5f5",
+    borderRadius: 4,
+    paddingHorizontal: 8,
+    fontSize: 14,
+    color: "#051650",
+    borderColor: "#ddd",
+    borderWidth: 1,
+    width: 120,
+    textAlign: "right",
+  },
+  dateBalanceContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    flex: 1,
+  },
+  amount: {
+    fontSize: 16,
+    color: "#03AC13",
+    fontWeight: "bold",
+  },
+  listHeaderText: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginVertical: 16,
+  },
+  listText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#051650",
+  },
+  sortByContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  sortByText: {
+    fontSize: 16,
+    color: "#000",
+    marginRight: 8,
+    fontWeight: "bold",
+  },
   
 })
 
@@ -68,3 +114,33 @@ export const constantSortedByModalStyles = StyleSheet.create({
   },
 })
 // export const constantSortedByModalStyles;
+export const headerstyles = StyleSheet.create({
+  headerText: {
+    fontSize: 24,
+    fontFamily: "Arial",
+    color: "#051650",
+    flex: 1,
+    textAlign: "left",
+  },
+  headerIcons: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  searchInput: {
+    flex: 1,
+    fontSize: 18,
+    paddingHorizontal: 8,
+    backgroundColor: "#fff",
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: "#ddd",
+  },
+  headerContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#f5f5f5",
+    paddingBottom: 8,
+    paddingHorizontal: 16,
+    paddingTop: 16,
+  },
+})
