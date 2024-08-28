@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
@@ -10,7 +10,7 @@ import {
 import Icon from "react-native-vector-icons/MaterialIcons";
 import * as Sharing from "expo-sharing";
 import * as Print from "expo-print";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { headerstyles } from "../../../../app/(tabs)/constants/styles";
@@ -48,7 +48,8 @@ const AllInvoices: React.FC = () => {
   const [totalBalance, setTotalBalance] = useState<number>(0);
 
   // Fetch data from API
-  useEffect(() => {
+  useFocusEffect(
+    useCallback(() => {
     const loadInvoices = async () => {
       try {
         const fetchedInvoices = await fetchInvoices();
@@ -64,7 +65,8 @@ const AllInvoices: React.FC = () => {
       }
     };
     loadInvoices();
-  }, []);
+  }, [])
+)
 
   // Filter invoices based on search query
   const filteredInvoices = invoices.filter((invoice) =>
