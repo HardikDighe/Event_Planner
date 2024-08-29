@@ -3,6 +3,8 @@ import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView } from 
 import axios from 'axios'; // Import axios for making API calls
 import Icon from 'react-native-vector-icons/FontAwesome'; // Import the icon from react-native-vector-icons
 import styles from '../styles/styles';
+import { fetchUsers } from '../api/login.api';
+import { ERROR_MESSAGE, STRINGS } from '../constants/string';
 
 interface FloatingLabelInputProps {
   label: string;
@@ -132,8 +134,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ navigation }) => {
 
     if (valid) {
       try {
-        const response = await axios.get('http://localhost:3000/signup');
-        const users = response.data;
+        const users = await fetchUsers();
 
         const user = users.find((user: any) => user.email === email && user.password === password);
 
@@ -143,11 +144,11 @@ const LoginPage: React.FC<LoginPageProps> = ({ navigation }) => {
           navigation.navigate('Dashboard', { email, password });
         } else {
           // Invalid email or password
-          setLoginError('You don’t have an Account, Please Sign Up');
+          setLoginError(STRINGS.signUpPrompt);
         }
       } catch (error) {
         console.error(error);
-        setLoginError('An error occurred. Please try again.');
+        setLoginError(ERROR_MESSAGE.networkError);
       }
     }
   };
@@ -160,7 +161,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ navigation }) => {
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.mainSection}>
-          <Text style={styles.title}>Login to Your Account</Text>
+          <Text style={styles.title}>{STRINGS.loginTitle}</Text>
           <FloatingLabelInput
             label="Enter your email"
             value={email}
@@ -187,19 +188,19 @@ const LoginPage: React.FC<LoginPageProps> = ({ navigation }) => {
             <Text style={styles.errorText}>{loginError}</Text>
           ) : null}
           <TouchableOpacity style={styles.button} onPress={handleLogin}>
-            <Text style={styles.buttonText}>Login</Text>
+            <Text style={styles.buttonText}>{STRINGS.loginButton}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={handleForgotPassword}>
-            <Text style={styles.linkText}>Forgot Password?</Text>
+            <Text style={styles.linkText}>{STRINGS.forgotPassword}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
-            <Text style={styles.linkText}>Don't have an account? Sign up</Text>
+            <Text style={styles.linkText}>{STRINGS.signUpPrompt}</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
       <View style={styles.footer}>
-        <Text>Contact information</Text>
-        <Text>Privacy Policy | Terms of Service</Text>
+        <Text>{STRINGS.contactInfo}</Text>
+        <Text>{STRINGS.privacyPolicy}</Text>
       </View>
     </View>
   );
