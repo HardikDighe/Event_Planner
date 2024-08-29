@@ -218,47 +218,41 @@ const SignupScreen: React.FC = () => {
        
 
         {/* Modal for Terms and Conditions */}
+       
         <Modal
-          visible={modalVisible}
-          transparent={true}
-          animationType="slide"
-          onRequestClose={() => setModalVisible(false)}
-        >
-          <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
-              <Text style={styles.modalTitle}>Terms and Conditions for Event Planner App</Text>
-              <ScrollView>
-                <Text style={styles.modalSectionTitle}>1. Introduction</Text>
-                <Text style={styles.modalText}>
-                  Welcome to [App Name]! These Terms and Conditions govern your use of our event planner app. By downloading or using the app, you agree to comply with these terms. Please read them carefully.
-                </Text>
-                <Text style={styles.modalSectionTitle}>2. Account Registration and Use</Text>
-                <Text style={styles.modalText}>
-                  To access certain features of the app, you must create an account. You agree to provide accurate and complete information during registration and to keep this information up to date. You are responsible for maintaining the confidentiality of your account and password.
-                </Text>
-                <Text style={styles.modalSectionTitle}>3. User Conduct and Responsibilities</Text>
-                <Text style={styles.modalText}>
-                  Users agree to use the app only for lawful purposes and in a way that does not infringe the rights of, restrict, or inhibit anyone else's use and enjoyment of the app. Users are responsible for any content they post and must ensure it is not illegal, defamatory, or infringing on others' rights.
-                </Text>
-                <Text style={styles.modalSectionTitle}>4. Event Creation and Management</Text>
-                <Text style={styles.modalText}>
-                  When creating events, you agree to provide accurate information and to update this information as necessary. You are solely responsible for managing attendees and ensuring all communications comply with applicable laws and regulations.
-                </Text>
-                <Text style={styles.modalSectionTitle}>5. Privacy and Data Protection</Text>
-                <Text style={styles.modalText}>
-                  We are committed to protecting your privacy. Please review our Privacy Policy to understand how we collect, use, and protect your personal information.
-                </Text>
-              </ScrollView>
-              <TouchableOpacity
-                style={styles.closeButton}
-                onPress={() => setModalVisible(false)}
-              >
-                <Text style={styles.closeButtonText}>Close</Text>
-              </TouchableOpacity>
-            </View>
+        visible={modalVisible}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => setModalVisible(false)}
+      >
+       <ScrollView>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>{Strings.termsAndConditionsTitle}</Text>
+           
+              <Text style={styles.modalSectionTitle}>{Strings.introductionTitle}</Text>
+              <Text style={styles.modalText}>{Strings.introductionText}</Text>
+              <Text style={styles.modalSectionTitle}>{Strings.accountRegistrationTitle}</Text>
+              <Text style={styles.modalText}>{Strings.accountRegistrationText}</Text>
+              <Text style={styles.modalSectionTitle}>{Strings.userConductTitle}</Text>
+              <Text style={styles.modalText}>{Strings.userConductText}</Text>
+              <Text style={styles.modalSectionTitle}>{Strings.eventManagementTitle}</Text>
+              <Text style={styles.modalText}>{Strings.eventManagementText}</Text>
+              <Text style={styles.modalSectionTitle}>{Strings.privacyProtectionTitle}</Text>
+              <Text style={styles.modalText}>{Strings.privacyProtectionText}</Text>
+           
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setModalVisible(false)}
+            >
+              <Text style={styles.closeButtonText}>{Strings.closeButtonText}</Text>
+            </TouchableOpacity>
           </View>
-        </Modal>
+        </View>
+        </ScrollView>
 
+      </Modal>
+      
         <TouchableOpacity style={styles.button} onPress={handleSignup}>
           <Text style={styles.buttonText}>{Strings.signupButton}</Text>
         </TouchableOpacity>
