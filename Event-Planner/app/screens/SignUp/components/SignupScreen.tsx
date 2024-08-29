@@ -8,6 +8,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../../../../app/(tabs)/constants/types'; 
 import { Strings } from '../constants/string';
 import { signupUser } from '../api/signup.api';
+import { theme } from '../styles/styles';
 
 type SignupScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Signup'>;
 
@@ -113,6 +114,7 @@ const SignupScreen: React.FC = () => {
             onChangeText={setFirstName}
             style={styles.inputHalf}
             mode="outlined"
+            theme={theme}
           />
           <PaperTextInput
             label={Strings.lastNameLabel}
@@ -120,6 +122,7 @@ const SignupScreen: React.FC = () => {
             onChangeText={setLastName}
             style={styles.inputHalf}
             mode="outlined"
+            theme={theme}
           />
         </View>
         <PaperTextInput
@@ -130,6 +133,7 @@ const SignupScreen: React.FC = () => {
           mode="outlined"
           keyboardType="phone-pad"
           error={!!phoneError}
+          theme={theme}
         />
         {phoneError ? <Text style={styles.errorText}>{phoneError}</Text> : null}
         <PaperTextInput
@@ -140,6 +144,7 @@ const SignupScreen: React.FC = () => {
           mode="outlined"
           keyboardType="email-address"
           error={!!emailError}
+          theme={theme}
         />
         {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
         <PaperTextInput
@@ -148,6 +153,7 @@ const SignupScreen: React.FC = () => {
           onChangeText={setAddress}
           style={styles.input}
           mode="outlined"
+          theme={theme}
         />
         <PaperTextInput
           label={Strings.firmNameLabel}
@@ -155,6 +161,7 @@ const SignupScreen: React.FC = () => {
           onChangeText={setFirmName}
           style={styles.input}
           mode="outlined"
+          theme={theme}
         />
         <PaperTextInput
           label={Strings.gstinLabel}
@@ -162,6 +169,7 @@ const SignupScreen: React.FC = () => {
           onChangeText={setGstin}
           style={styles.input}
           mode="outlined"
+          theme={theme}
         />
         <View style={styles.passwordContainer}>
           <PaperTextInput
@@ -172,6 +180,7 @@ const SignupScreen: React.FC = () => {
             mode="outlined"
             secureTextEntry={!passwordVisible}
             error={!!passwordError}
+            theme={theme}
           />
           <TouchableOpacity
             onPress={() => setPasswordVisible(!passwordVisible)}
@@ -190,6 +199,7 @@ const SignupScreen: React.FC = () => {
             mode="outlined"
             secureTextEntry={!confirmPasswordVisible}
             error={!!confirmPasswordError}
+            theme={theme}
           />
           <TouchableOpacity
             onPress={() => setConfirmPasswordVisible(!confirmPasswordVisible)}
@@ -215,10 +225,7 @@ const SignupScreen: React.FC = () => {
           </Text>
         </View>
 
-       
-
         {/* Modal for Terms and Conditions */}
-       
         <Modal
         visible={modalVisible}
         transparent={true}
@@ -250,9 +257,7 @@ const SignupScreen: React.FC = () => {
           </View>
         </View>
         </ScrollView>
-
       </Modal>
-      
         <TouchableOpacity style={styles.button} onPress={handleSignup}>
           <Text style={styles.buttonText}>{Strings.signupButton}</Text>
         </TouchableOpacity>

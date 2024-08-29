@@ -1,4 +1,6 @@
 import { StyleSheet } from 'react-native';
+import { DefaultTheme } from 'react-native-paper';
+import { MD3LightTheme, MD3DarkTheme } from 'react-native-paper';
 
 const styles = StyleSheet.create({
   container: {
@@ -6,6 +8,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
+    backgroundColor:'white'
   },
   title: {
     fontSize: 24,
@@ -26,6 +29,7 @@ const styles = StyleSheet.create({
     width: '100%',
     marginBottom: 10,
   },
+ 
   passwordContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -117,4 +121,26 @@ const styles = StyleSheet.create({
   },
 });
 
+
 export default styles;
+
+// theme.ts
+
+
+export 
+const theme = {
+  ...MD3LightTheme, // or MD3DarkTheme if you prefer dark mode
+  colors: {
+    ...MD3LightTheme.colors, // Extend with default light theme colors
+    primary: 'black', // Adjust primary color
+    onPrimary: 'white', // Text color on primary background
+    surface: 'white', // Background color for surfaces
+    onSurface: 'black', // Text color on surface background
+    outline: 'black', // Outline color
+    placeholder: 'gray', // Placeholder color
+    text: 'black', // Text color
+  },
+};
+
+//export theme;
+
