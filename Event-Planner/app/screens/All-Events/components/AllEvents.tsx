@@ -214,6 +214,39 @@ const AllEvents: React.FC<AllEventsProps> = ({ navigation }) => {
     setEvents(sortedByDate);
   };
 
+  const renderSortModal = () => (
+    <Modal
+      transparent={true}
+      visible={isSortModalVisible}
+      onRequestClose={toggleSortModal}
+      animationType="slide"
+    >
+      <TouchableWithoutFeedback onPress={toggleSortModal}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <TouchableOpacity
+              style={styles.optionButton}
+              onPress={() => {
+                sortByName();
+                toggleSortModal();
+              }}
+            >
+              <Text style={styles.optionText}>By Name</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+            style={styles.optionButton}
+            onPress={() => {
+              sortByDate();
+              toggleSortModal();
+            }}
+          >
+            <Text style={styles.optionText}>By Date</Text>
+          </TouchableOpacity>
+          </View>
+        </View>
+      </TouchableWithoutFeedback>
+    </Modal>
+  );
 
   const handlePrint = async () => {
     try {
@@ -255,7 +288,7 @@ const AllEvents: React.FC<AllEventsProps> = ({ navigation }) => {
           </TouchableOpacity>
          </View>
         </View>
-      <Modal
+      {/* <Modal
         transparent={true}
         visible={isSortModalVisible}
         onRequestClose={toggleSortModal}
@@ -285,7 +318,7 @@ const AllEvents: React.FC<AllEventsProps> = ({ navigation }) => {
             </View>
           </View>
         </TouchableWithoutFeedback>
-      </Modal>
+      </Modal> */}
       <FlatList
         data={filteredEvents}
         renderItem={({ item }) => <EventCard event={item} />}
@@ -294,6 +327,8 @@ const AllEvents: React.FC<AllEventsProps> = ({ navigation }) => {
       <TouchableOpacity style={constantStyles.footerButton} onPress={() => navigation.navigate("CreateEvent")}>
         <Text style={constantStyles.footerButtonText}>{STRINGS.registerButton}</Text>
       </TouchableOpacity>
+      
+      {renderSortModal()}
     </View>
   );
 };

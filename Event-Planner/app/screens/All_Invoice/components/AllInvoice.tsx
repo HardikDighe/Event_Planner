@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
+  Modal,
+  TouchableWithoutFeedback,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import * as Sharing from "expo-sharing";
@@ -46,31 +48,85 @@ const AllInvoices: React.FC = () => {
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [totalBalance, setTotalBalance] = useState<number>(0);
+  const [isSortModalVisible, setIsSortModalVisible] = useState(false);
 
   // Fetch data from API
   useFocusEffect(
     useCallback(() => {
-    const loadInvoices = async () => {
-      try {
-        const fetchedInvoices = await fetchInvoices();
-        setInvoices(fetchedInvoices);
-        let balanceSum: number = 0;
-        fetchedInvoices.forEach(invoice => {
-          const amount = Number(invoice.amount);
-          balanceSum += amount;
-        });
-        setTotalBalance(balanceSum);
-      } catch (error) {
-        console.error("Failed to load invoices:", error);
-      }
-    };
-    loadInvoices();
-  }, [])
-)
+      const loadInvoices = async () => {
+        try {
+          const fetchedInvoices = await fetchInvoices();
+          setInvoices(fetchedInvoices);
+          let balanceSum: number = 0;
+          fetchedInvoices.forEach(invoice => {
+            const amount = Number(invoice.amount);
+            balanceSum += amount;
+          });
+          setTotalBalance(balanceSum);
+        } catch (error) {
+          console.error("Failed to load invoices:", error);
+        }
+      };
+      loadInvoices();
+    }, [])
+  )
+
+  const toggleSortModal = () => {
+    console.warn("aaaaa")
+    setIsSortModalVisible(!isSortModalVisible);
+  };
+
+  const sortByName = () => {
+    const sortedByName = [...invoices].sort((a, b) =>
+      a.name.localeCompare(b.name)
+    );
+    setInvoices(sortedByName);
+  };
+
+  const sortByDate = () => {
+    const sortedByDate = [...invoices].sort((a, b) =>
+      new Date(a.date).getTime() - new Date(b.date).getTime()
+    );
+    setInvoices(sortedByDate);
+  };
 
   // Filter invoices based on search query
   const filteredInvoices = invoices.filter((invoice) =>
     invoice.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const renderSortModal = () => (
+    <Modal
+      transparent={true}
+      visible={isSortModalVisible}
+      onRequestClose={toggleSortModal}
+      animationType="slide"
+    >
+      <TouchableWithoutFeedback onPress={toggleSortModal}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <TouchableOpacity
+              style={styles.optionButton}
+              onPress={() => {
+                sortByName();
+                toggleSortModal();
+              }}
+            >
+              <Text style={styles.optionText}>By Name</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.optionButton}
+              onPress={() => {
+                sortByDate();
+                toggleSortModal();
+              }}
+            >
+              <Text style={styles.optionText}>By Date</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </TouchableWithoutFeedback>
+    </Modal>
   );
 
   return (
@@ -80,10 +136,10 @@ const AllInvoices: React.FC = () => {
 
       <View style={styles.invoicesHeader}>
         <Text style={styles.invoicesListText}>{INVOICES_LIST_TEXT}</Text>
-        <View style={styles.sortByContainer}>
+        <TouchableOpacity style={styles.sortByContainer} onPress={toggleSortModal}>
           <Text style={styles.sortByText}>{SORT_BY_TEXT}</Text>
           <Icon name="sort" size={24} color="#051650" />
-        </View>
+        </TouchableOpacity>
       </View>
 
       <View style={styles.totalSalesContainer}>
@@ -103,6 +159,8 @@ const AllInvoices: React.FC = () => {
       >
         <Text style={constantStyles.footerButtonText}>{CREATE_INVOICE_BUTTON_TEXT}</Text>
       </TouchableOpacity>
+
+      {renderSortModal()}
     </View>
   );
 };

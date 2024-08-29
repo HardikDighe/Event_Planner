@@ -1,5 +1,6 @@
 // styles.tsx
 import { StyleSheet } from "react-native";
+import { SortedByModalStyles } from "@/app/(tabs)/constants/styles";
 
 const styles = StyleSheet.create({
   container: {
@@ -7,9 +8,6 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: "#fff",
   },
- 
-
-  
   headerIcons: {
     flexDirection: "row",
     alignItems: "center",
@@ -152,7 +150,9 @@ const styles = StyleSheet.create({
   },
   icon1:{
     color:"#051650",
-  }
+  },
+
+  ...SortedByModalStyles
 });
 
 export default styles;
