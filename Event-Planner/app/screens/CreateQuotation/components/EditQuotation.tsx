@@ -6,7 +6,8 @@ import { shareAsync } from 'expo-sharing';
 import styles from '../../../../app/screens/CreateQuotation/styles/styles';
 import { fetchQuotationDetails, deleteQuotation, updateQuotation } from '../api/Quotation.api';
 import { ERROR_MESSAGES, STRINGS } from '../constants/string';
-import { Item } from '../../../../app/(tabs)/constants/types';
+import { Item, RootStackParamList } from '../../../../app/(tabs)/constants/types';
+import { StackNavigationProp } from '@react-navigation/stack';
 interface FloatingLabelInputProps {
     label: string;
     value: string;
@@ -47,9 +48,12 @@ type EditQuotationRouteParams = {
 };
 
 const EditQuotation = () => {
-    const navigation = useNavigation();
+    // const navigation = useNavigation();
     const route = useRoute();
     const { quotationId } = route.params as EditQuotationRouteParams;
+
+    const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+
 
     // Define and initialize state variables
     const [quotationDetails, setQuotationDetails] = useState<any>();
@@ -138,16 +142,17 @@ const EditQuotation = () => {
                             <th>Total Price</th>
                             <th>Misc</th>
                         </tr>
-                        ${quotationDetails.items.map(item => `
-                            <tr>
+                        ${quotationDetails.items.map((item: Item) => 
+                            `<tr>
                                 <td>${item.itemName}</td>
-                                <td>${item.itemQuantity}</td>
-                                <td>${item.itemPrice}</td>
-                                <td>${item.itemDiscount}</td>
-                                <td>${item.itemTotalPrice}</td>
-                                <td>${item.itemMisc}</td>
-                            </tr>
-                        `).join('')}
+                                <td>${item.quantity}</td>
+                                <td>${item.price}</td>
+                                <td>${item.discount}</td>
+                                <td>${item.payableAmount}</td>
+                                <td>${item.miscellaneous}</td>
+                            </tr>`
+                        ).join('')}
+                        
                     </table>
                 </body>
             </html>
@@ -266,24 +271,25 @@ const EditQuotation = () => {
                     onChangeText={(text) => setQuotationDetails({ ...quotationDetails, venueDetails: text })}
                 />
 
-                {quotationDetails.items.map((item, index) => (
-                    <View key={index} style={styles.itemContainer}>
-                        <Text>Item Name: {item.itemName}</Text>
-                        <Text>Quantity: {item.itemQuantity}</Text>
-                        <Text>Price: {item.itemPrice}</Text>
-                        <Text>Discount: {item.itemDiscount}</Text>
-                        <Text>Total Price: {item.itemTotalPrice}</Text>
-                        <Text>Misc: {item.itemMisc}</Text>
-                        <View style={styles.itemButtons}>
-                            <TouchableOpacity onPress={() => handleItemEdit(index)} style={styles.editButton}>
-                                <Text style={styles.buttonText}>Edit</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={() => handleItemDelete(index)} style={styles.deleteButton}>
-                                <Text style={styles.buttonText}>Delete</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                ))}
+{quotationDetails.items.map((item: Item, index: number) => (
+    <View key={index} style={styles.itemContainer}>
+        <Text>Item Name: {item.itemName}</Text>
+        <Text>Quantity: {item.quantity}</Text>
+        <Text>Price: {item.price}</Text>
+        <Text>Discount: {item.discount}</Text>
+        <Text>Total Price: {item.payableAmount}</Text>
+        <Text>Misc: {item.miscellaneous}</Text>
+        <View style={styles.itemButtons}>
+            <TouchableOpacity onPress={() => handleItemEdit(index)} style={styles.editButton}>
+                <Text style={styles.buttonText}>Edit</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => handleItemDelete(index)} style={styles.deleteButton}>
+                <Text style={styles.buttonText}>Delete</Text>
+            </TouchableOpacity>
+        </View>
+    </View>
+))}
+
 
 
 
