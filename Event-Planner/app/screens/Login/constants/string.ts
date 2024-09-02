@@ -16,15 +16,15 @@ export const STRINGS = {
 export const ERROR_MESSAGE  ={ 
     networkError: 'A network error occurred',
     invalidEmailError: 'Invalid email address',
-    fetchingError:'An error occurred while fetching users'
-    
+    fetchingError:'An error occurred while fetching users',
+    tokenError:'Failed to retrieve the authentication token.'
 }
 
-export const ENDPOINT ="/signup"
+export const ENDPOINT ="/auth/login"
 
   
 // constants.ts
-export const API_URL = 'http://localhost:3000';
+export const API_URL = 'http://192.168.2.132:8080';
 export const MIN_PASSWORD_LENGTH = 8;
 
   

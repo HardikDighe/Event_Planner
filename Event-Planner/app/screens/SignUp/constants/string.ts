@@ -35,6 +35,6 @@ export const Strings = {
   };
   
   export const Constants = {
-    SIGNUP_API_ENDPOINT: 'http://localhost:3000/signup',
+    SIGNUP_API_ENDPOINT: 'http://192.168.2.132:8080/auth/create_user',
   };
   

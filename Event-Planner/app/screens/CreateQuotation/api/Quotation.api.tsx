@@ -3,7 +3,7 @@ import { Alert } from 'react-native';
 import { ENDPOINTS, ERROR_MESSAGES, ALERT_MESSAGES } from '../constants/string';
 // import { STRINGS } from '../constants/string';
 
-export const API_BASE_URL = 'http://localhost:3000';
+export const API_BASE_URL = 'http://192.168.2.132:8080';
 
 export const saveQuotation = async (quotationData: Object): Promise<boolean> => {
     try {

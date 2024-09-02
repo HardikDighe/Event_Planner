@@ -3,7 +3,7 @@ import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView } from 
 import axios from 'axios'; // Import axios for making API calls
 import Icon from 'react-native-vector-icons/FontAwesome'; // Import the icon from react-native-vector-icons
 import styles from '../styles/styles';
-import { fetchUsers } from '../api/login.api';
+import { loginUser } from '../api/login.api';
 import { ERROR_MESSAGE, STRINGS } from '../constants/string';
 
 interface FloatingLabelInputProps {
@@ -134,18 +134,30 @@ const LoginPage: React.FC<LoginPageProps> = ({ navigation }) => {
 
     if (valid) {
       try {
-        const users = await fetchUsers();
+        // const users = await fetchUsers();
 
-        const user = users.find((user: any) => user.email === email && user.password === password);
+        // const user = users.find((user: any) => user.email === email && user.password === password);
 
-        if (user) {
-          // Successful login
-          setLoginError('');
-          navigation.navigate('Dashboard', { email, password });
-        } else {
-          // Invalid email or password
-          setLoginError(STRINGS.signUpPrompt);
-        }
+        // if (user) {
+        //   // Successful login
+        //   setLoginError('');
+        //   navigation.navigate('Dashboard', { email, password });
+        // } else {
+        //   // Invalid email or password
+        //   setLoginError(STRINGS.signUpPrompt);
+        // }
+
+        const data = await loginUser(email, password);
+
+      if (data.token) {
+        // Successful login, save token and navigate
+        setLoginError('');
+        navigation.navigate('Dashboard', { email, token: data.token });
+      } else {
+        // Invalid email or password
+        setLoginError(STRINGS.signUpPrompt);
+      }
+
       } catch (error) {
         console.error(error);
         setLoginError(ERROR_MESSAGE.networkError);
