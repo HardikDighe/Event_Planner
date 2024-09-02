@@ -1,8 +1,10 @@
 import axios from "axios";
+import { API_BASE_URL } from "@/app/(tabs)/constants/constant.api";
+import { AllQuotation_API_ENDPOINT } from "../constants/string";
 
 export const fetchQuotations = async () => {
   try {
-    const response = await axios.get("http://localhost:3000/demoQuotation");
+    const response = await axios.get(`${API_BASE_URL}${AllQuotation_API_ENDPOINT}`);
     const data = response.data;
 
     if (!Array.isArray(data)) {

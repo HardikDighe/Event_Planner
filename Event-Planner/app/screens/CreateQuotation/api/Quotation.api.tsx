@@ -1,9 +1,8 @@
 import axios from 'axios';
 import { Alert } from 'react-native';
 import { ENDPOINTS, ERROR_MESSAGES, ALERT_MESSAGES } from '../constants/string';
-// import { STRINGS } from '../constants/string';
+import { API_BASE_URL } from '@/app/(tabs)/constants/constant.api';
 
-export const API_BASE_URL = 'http://192.168.2.132:8080';
 
 export const saveQuotation = async (quotationData: Object): Promise<boolean> => {
     try {

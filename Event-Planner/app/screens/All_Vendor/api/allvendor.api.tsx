@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { Alert } from 'react-native';
-import { API_BASE_URL, ENDPOINTS, ERROR_MESSAGES, ALERT_MESSAGES } from '../../VendorRegistration/constants/string';
+import { ENDPOINTS, ERROR_MESSAGES, ALERT_MESSAGES } from '../../VendorRegistration/constants/string';
+import { API_BASE_URL } from '@/app/(tabs)/constants/constant.api';
 
 export const fetchAllVendors = async (): Promise<any[]> => {
     try {

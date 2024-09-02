@@ -24,9 +24,7 @@ const strings = {
   };
   
   export default strings;
-
-  // apiConfig.ts
-export const API_BASE_URL = 'http://localhost:3000';
+  
 
 export const ENDPOINTS = {
   getVendors: '/AllVendors',

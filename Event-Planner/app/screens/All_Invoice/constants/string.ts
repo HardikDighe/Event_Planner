@@ -8,3 +8,4 @@ export const SORT_BY_TEXT = "Sort By";
 export const PRINT_ERROR = "Failed to print:";
 export const SHARE_ERROR = "Failed to share:";
 export const GENERATE_PDF_ERROR = "Failed to generate PDF:";
+export const AllInvoice_API_ENDPOINT ='/AllInvoice'

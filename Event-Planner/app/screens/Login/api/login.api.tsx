@@ -1,12 +1,13 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import { ERROR_MESSAGE, API_URL, ENDPOINT } from '../constants/string';
+import { ERROR_MESSAGE, ENDPOINT } from '../constants/string';
+import { API_BASE_URL } from '@/app/(tabs)/constants/constant.api';
 
 // Function to log in the user and store the token
 export const loginUser = async (email: string, password: string) => {
   try {
     const response = await axios.post(
-      `${API_URL}${ENDPOINT}`,
+      `${API_BASE_URL}${ENDPOINT}`,
       { email, password },
       {
         headers: { 'Content-Type': 'application/json' },

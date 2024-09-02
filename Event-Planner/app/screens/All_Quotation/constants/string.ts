@@ -8,3 +8,4 @@ export const PRINT_ERROR = "Failed to print:";
 export const SHARE_ERROR = "Failed to share:";
 export const GENERATE_PDF_ERROR = "Failed to generate PDF:";
 export const EMPTY_SEARCH_QUERY = "";
+export const AllQuotation_API_ENDPOINT ='demoQuotation'

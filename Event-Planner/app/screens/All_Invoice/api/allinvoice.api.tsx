@@ -1,5 +1,6 @@
 import axios from 'axios';
-
+import { API_BASE_URL } from '@/app/(tabs)/constants/constant.api';
+import { AllInvoice_API_ENDPOINT } from '../constants/string';
 export type Invoice = {
   id: string;
   name: string;
@@ -12,7 +13,7 @@ export type Invoice = {
 
 export const fetchInvoices = async (): Promise<Invoice[]> => {
   try {
-    const response = await axios.get("http://localhost:3000/CreateInvoice");
+    const response = await axios.get(`${API_BASE_URL}${AllInvoice_API_ENDPOINT}`);
     const data = response.data;
 
     // Map the data to the required format
