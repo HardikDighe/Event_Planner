@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Alert } from 'react-native';
-import { API_BASE_URL, ENDPOINTS, ERROR_MESSAGES, ALERT_MESSAGES } from '../constants/string'; // Adjust the import path
-
+import { ENDPOINTS, ERROR_MESSAGES, ALERT_MESSAGES } from '../constants/string'; // Adjust the import path
+import { API_BASE_URL } from '@/app/(tabs)/constants/constant.api';
 export const saveCreateEvent = async (eventData: {
   eventTitle: string;
   date: string;

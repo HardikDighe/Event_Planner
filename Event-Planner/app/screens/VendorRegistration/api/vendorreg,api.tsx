@@ -1,6 +1,7 @@
 import axios, { AxiosError } from "axios";
 import { Item } from "../../../../app/(tabs)/constants/types";
-
+import { API_BASE_URL } from "@/app/(tabs)/constants/constant.api";
+import { ENDPOINTS } from "../constants/string";
 export interface VendorData {
   vendorName: string;
   phoneNumber: string;
@@ -12,7 +13,7 @@ export interface VendorData {
 export const saveVendorData = async (vendorData: VendorData) => {
   try {
     const response = await axios.post(
-      "http://localhost:3000/AllVendors",
+      `${API_BASE_URL}${ENDPOINTS.getVendors}`,
       vendorData,
       {
         headers: {
