@@ -10,6 +10,7 @@ import { saveQuotation, deleteQuotation, fetchQuotationId } from '../api/Quotati
 // import { fetchQuotationId } from '../api/getQuotationId.api';
 import { STRINGS, ERROR_MESSAGES, HEADERS } from '../../../../app/screens/CreateQuotation/constants/string';
 import { RootStackParamList, Item } from "../../../../app/(tabs)/constants/types";
+ 
 
 interface FloatingLabelInputProps {
     label: string;
@@ -34,38 +35,6 @@ const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({ label, value, o
             useNativeDriver: false, // Use native driver for better performance, but it may not work with all properties
         }).start();
     }, [isFocused, value]);
-
-    // const labelStyle = {
-    //     position: 'absolute',
-    //     left: 10,
-    //     top: animatedIsFocused.interpolate({
-    //         inputRange: [0, 1],
-    //         outputRange: [18, -8], // Adjust these values as needed
-    //     }),
-    //     backgroundColor: '#fff',
-    //     paddingHorizontal: 2,
-    //     fontSize: animatedIsFocused.interpolate({
-    //         inputRange: [0, 1],
-    //         outputRange: [16, 12], // Adjust font size during animation
-    //     }),
-    //     color: isFocused ? '#000' : '#aaa', // Optional: change color based on focus
-    // };
-
-    // const labelStyle: TextStyle = {
-    //     position: 'absolute',
-    //     left: 10,
-    //     top: animatedIsFocused.interpolate({
-    //         inputRange: [0, 1],
-    //         outputRange: [18, -8], // Adjust these values as needed
-    //     }),
-    //     backgroundColor: '#fff',
-    //     paddingHorizontal: 2,
-    //     fontSize: animatedIsFocused.interpolate({
-    //         inputRange: [0, 1],
-    //         outputRange: [16, 12], // Adjust font size during animation
-    //     }),
-    //     color: isFocused ? '#000' : '#aaa', // Optional: change color based on focus
-    // };
 
     const labelStyle: Animated.WithAnimatedObject<TextStyle> = {
         position: 'absolute',
@@ -410,8 +379,7 @@ const CreateQuotation: React.FC<Props> = () => {
                         <Text style={styles.label1}>Date:</Text>
                         <Text>{quotationDate.toDateString()}</Text>
                     </View>
-                </View>
-
+                </View> 
                 <FloatingLabelInput
                     label="Enter Customer Name"
                     value={customerName}

@@ -17,8 +17,6 @@ export const STRINGS = {
   EVENTS_LIST: "Events List",
 };
 
-export const API_BASE_URL = 'http://localhost:3000';
-
 export const ENDPOINTS = {
   fetchEvents: '/EventRegistration',
 };
