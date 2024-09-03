@@ -20,7 +20,7 @@ export const ERROR_MESSAGE  ={
     tokenError:'Failed to retrieve the authentication token.'
 }
 
-export const ENDPOINT ="/Signup"
+export const ENDPOINT ="/auth/login"
 
   
 // constants.ts

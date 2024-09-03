@@ -14,7 +14,7 @@ export const loginUser = async (email: string, password: string) => {
         withCredentials: true,
       }
     );
-
+console.warn("aaaaaaaaa")
     const token = response.data.token; // Assuming the token is returned as response.data.token
 
     // Store the token in AsyncStorage
