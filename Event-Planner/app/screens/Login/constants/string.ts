@@ -20,11 +20,10 @@ export const ERROR_MESSAGE  ={
     tokenError:'Failed to retrieve the authentication token.'
 }
 
-export const ENDPOINT ="/auth/login"
+export const ENDPOINT ="/Signup"
 
   
 // constants.ts
-export const API_URL = 'http://192.168.2.132:8080';
 export const MIN_PASSWORD_LENGTH = 8;
 
   
