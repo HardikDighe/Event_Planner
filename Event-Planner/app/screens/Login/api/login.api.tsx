@@ -10,24 +10,41 @@ export const loginUser = async (email: string, password: string) => {
       `${API_BASE_URL}${ENDPOINT}`,
       { email, password },
       {
-        headers: { 'Content-Type': 'application/json' },
-        withCredentials: true,
+        headers: { 'Content-Type': 'application/json' }
       }
     );
-console.warn("aaaaaaaaa")
+
     const token = response.data.token; // Assuming the token is returned as response.data.token
 
     // Store the token in AsyncStorage
     await AsyncStorage.setItem('authToken', token);
 
     // Set the token in Axios default headers
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+     axios.defaults.headers.common['Authorization'] = `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ5b2dlc2gxMjM0QGdtYWlsLmNvbSIsImlhdCI6MTcyNTQyNjQxMCwiZXhwIjoxNzI1NDMwMDEwfQ.sxi5Zl7izO9QwNbNLxWWqAIIotlBkbX35bunoUsIK0PYG08BWnbaelFfmF3Dkf4lvhxe50yCoLwZc2Oh43Wx3w`;
 
     return response.data;
   } catch (error) {
     throw new Error(ERROR_MESSAGE.networkError);
   }
 };
+
+// Function to sign up a new user
+// export const signUpUser = async (email: string, password: string) => {
+//   try {
+//     const response = await axios.post(
+//       `${API_BASE_URL}${ENDPOINTS.signup}`,
+//       { email, password },
+//       {
+//         headers: { 'Content-Type': 'application/json' },
+//         withCredentials: true,
+//       }
+//     );
+
+//     return response.data;
+//   } catch (error) {
+//     throw new Error(ERROR_MESSAGE.networkError);
+//   }
+// };
 
 // Function to get the token from AsyncStorage
 export const getAuthToken = async () => {
