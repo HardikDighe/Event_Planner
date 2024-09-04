@@ -20,7 +20,7 @@ export const loginUser = async (email: string, password: string) => {
     await AsyncStorage.setItem('authToken', token);
 
     // Set the token in Axios default headers
-     axios.defaults.headers.common['Authorization'] = `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ5b2dlc2gxMjM0QGdtYWlsLmNvbSIsImlhdCI6MTcyNTQyNjQxMCwiZXhwIjoxNzI1NDMwMDEwfQ.sxi5Zl7izO9QwNbNLxWWqAIIotlBkbX35bunoUsIK0PYG08BWnbaelFfmF3Dkf4lvhxe50yCoLwZc2Oh43Wx3w`;
+     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
     return response.data;
   } catch (error) {
