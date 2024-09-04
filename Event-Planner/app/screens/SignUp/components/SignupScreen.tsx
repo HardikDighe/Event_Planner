@@ -85,6 +85,7 @@ const SignupScreen: React.FC = () => {
           firmName,
           gstin,
           password,
+          confirmPassword,
         };
   
         const data = await signupUser(userData);
