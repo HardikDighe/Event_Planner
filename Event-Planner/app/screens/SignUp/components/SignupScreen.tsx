@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Alert,Modal } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Alert, Modal } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { TextInput as PaperTextInput, Provider as PaperProvider } from 'react-native-paper';
 import styles from '../styles/styles';
@@ -10,10 +10,13 @@ import { Strings } from '../constants/string';
 import { signupUser } from '../api/signup.api';
 import { theme } from '../styles/styles';
 
+// The rest of your SignupScreen code...
+
+
 type SignupScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Signup'>;
 
 const SignupScreen: React.FC = () => {
-  const navigation = useNavigation<SignupScreenNavigationProp>(); // Use typed navigation
+  const navigation = useNavigation<SignupScreenNavigationProp>();
   const [firstName, setFirstName] = useState<string>('');
   const [lastName, setLastName] = useState<string>('');
   const [phoneNumber, setPhoneNumber] = useState<string>('');
@@ -30,7 +33,7 @@ const SignupScreen: React.FC = () => {
   const [passwordError, setPasswordError] = useState<string>('');
   const [confirmPasswordError, setConfirmPasswordError] = useState<string>('');
   const [privacyPolicyAccepted, setPrivacyPolicyAccepted] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false); // State for modal visibility
+  const [modalVisible, setModalVisible] = useState(false);
   
   const handleSignup = async () => {
     let valid = true;
@@ -102,7 +105,6 @@ const SignupScreen: React.FC = () => {
     }
   };
   
-
   return (
     <PaperProvider>
       <ScrollView contentContainerStyle={styles.container}>
@@ -228,37 +230,37 @@ const SignupScreen: React.FC = () => {
 
         {/* Modal for Terms and Conditions */}
         <Modal
-        visible={modalVisible}
-        transparent={true}
-        animationType="slide"
-        onRequestClose={() => setModalVisible(false)}
-      >
-       <ScrollView>
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>{Strings.termsAndConditionsTitle}</Text>
-           
-              <Text style={styles.modalSectionTitle}>{Strings.introductionTitle}</Text>
-              <Text style={styles.modalText}>{Strings.introductionText}</Text>
-              <Text style={styles.modalSectionTitle}>{Strings.accountRegistrationTitle}</Text>
-              <Text style={styles.modalText}>{Strings.accountRegistrationText}</Text>
-              <Text style={styles.modalSectionTitle}>{Strings.userConductTitle}</Text>
-              <Text style={styles.modalText}>{Strings.userConductText}</Text>
-              <Text style={styles.modalSectionTitle}>{Strings.eventManagementTitle}</Text>
-              <Text style={styles.modalText}>{Strings.eventManagementText}</Text>
-              <Text style={styles.modalSectionTitle}>{Strings.privacyProtectionTitle}</Text>
-              <Text style={styles.modalText}>{Strings.privacyProtectionText}</Text>
-           
-            <TouchableOpacity
-              style={styles.closeButton}
-              onPress={() => setModalVisible(false)}
-            >
-              <Text style={styles.closeButtonText}>{Strings.closeButtonText}</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-        </ScrollView>
-      </Modal>
+          visible={modalVisible}
+          transparent={true}
+          animationType="slide"
+          onRequestClose={() => setModalVisible(false)}
+        >
+          <ScrollView>
+            <View style={styles.modalContainer}>
+              <View style={styles.modalContent}>
+                <Text style={styles.modalTitle}>{Strings.termsAndConditionsTitle}</Text>
+                <Text style={styles.modalSectionTitle}>{Strings.introductionTitle}</Text>
+                <Text style={styles.modalText}>{Strings.introductionText}</Text>
+                <Text style={styles.modalSectionTitle}>{Strings.accountRegistrationTitle}</Text>
+                <Text style={styles.modalText}>{Strings.accountRegistrationText}</Text>
+                <Text style={styles.modalSectionTitle}>{Strings.userConductTitle}</Text>
+                <Text style={styles.modalText}>{Strings.userConductText}</Text>
+                <Text style={styles.modalSectionTitle}>{Strings.eventManagementTitle}</Text>
+                <Text style={styles.modalText}>{Strings.eventManagementText}</Text>
+                <Text style={styles.modalSectionTitle}>{Strings.privacyProtectionTitle}</Text>
+                <Text style={styles.modalText}>{Strings.privacyProtectionText}</Text>
+                
+                <TouchableOpacity
+                  style={styles.closeButton}
+                  onPress={() => setModalVisible(false)}
+                >
+                  <Text style={styles.closeButtonText}>{Strings.closeButtonText}</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </ScrollView>
+        </Modal>
+
         <TouchableOpacity style={styles.button} onPress={handleSignup}>
           <Text style={styles.buttonText}>{Strings.signupButton}</Text>
         </TouchableOpacity>

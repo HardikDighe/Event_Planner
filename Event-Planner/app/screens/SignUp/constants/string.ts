@@ -34,4 +34,4 @@ export const Strings = {
   closeButtonText: 'Close',
 };
 
-export const SIGNUP_API_ENDPOINT = '/auth/create_user';
+export const SIGNUP_API_ENDPOINT = '/user/create_user';
