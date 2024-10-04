@@ -131,8 +131,15 @@ const CreateQuotation: React.FC<Props> = () => {
     }, []);
 
     const validateCustomerName = () => {
+        const trimmedName = customerName.trim();
+        const alphabetRegex = /^[A-Za-z\s]+$/;
+        
         if (customerName.trim().length === 0) {
             setCustomerNameError('Customer Name is required');
+            return false;
+        }
+        if (!alphabetRegex.test(trimmedName)) {
+            setCustomerNameError('Customer Name can only contain alphabets');
             return false;
         }
         setCustomerNameError('');
